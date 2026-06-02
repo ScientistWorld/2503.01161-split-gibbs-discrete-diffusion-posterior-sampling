@@ -76,3 +76,6 @@ The main comparison is against the paper's Table 2 synthetic posterior-recovery 
 # Reproduction Milestones
 
 **Current: core_claim**
+
+## Stop Justification
+- Completed at milestone `core_claim`.
