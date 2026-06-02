@@ -27,8 +27,8 @@
 #   milestone: core_claim
 #   notes: "Reproduced the core claim. Environment packaged."
 
-action: pending
-gpus: 1
-test: false
+action: submit
+gpus: 0
+test: true
 milestone: none
-notes: ""
+notes: "Retry after switching to Docker Hub base image; run CPU synthetic SGDD for D=2,5,10 and validate scoring."
