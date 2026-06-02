@@ -10,6 +10,10 @@ mkdir -p scoring
 OUTPUT="${SCORES_OUTPUT:-scoring/scores_train.json}"
 
 if [ "$#" -gt 0 ]; then
+  if [ "$#" -eq 1 ] && [ "$1" != "--run" ]; then
+    python -m eval.train.evaluate_synthetic --checkpoints-dir "$1" --output "${OUTPUT}"
+    exit 0
+  fi
   if [ "$1" = "--run" ]; then
     python -m eval.train.evaluate_synthetic "$@" --output "${OUTPUT}"
     exit 0
