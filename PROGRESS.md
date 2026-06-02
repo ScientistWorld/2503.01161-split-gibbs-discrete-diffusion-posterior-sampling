@@ -25,3 +25,4 @@ No full reproduction job has completed yet. A CPU job is being submitted to run 
 
 - The markdown paper did not include all low-level synthetic operator details; the released author code was inspected to recover the exact SingleModal setup.
 - A tiny login-node smoke test could not run because the local Python outside the compute container lacks `numpy`; dependencies are declared in `environment/setup.sh`, so execution is being tested through the scheduler.
+- The first container build failed because the base image used `ghcr.io`; it was changed to the portable Docker Hub image `python:3.11-slim-bookworm`.

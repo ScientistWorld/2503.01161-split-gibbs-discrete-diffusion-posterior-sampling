@@ -8,3 +8,4 @@
 - Read the paper and identified SGDD's synthetic posterior-recovery experiment as the minimum core-claim target.
 - Implemented the synthetic problem, SGDD sampler, and method-agnostic evaluator.
 - Prepared a CPU reproduction job to validate the implementation end-to-end.
+- Fixed the first container portability failure by switching to a Docker Hub base image.

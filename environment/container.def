@@ -18,7 +18,7 @@
 
 # --- CPU-only base (default) ---
 Bootstrap: docker
-From: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
+From: python:3.11-slim-bookworm
 
 # --- GPU / CUDA base (uncomment if your paper needs GPU) ---
 # Bootstrap: docker
