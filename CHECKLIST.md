@@ -13,3 +13,5 @@
 - [x] Add direct-MH sanity baseline generation while keeping default scores paper-compatible.
 - [x] Replace exact synthetic prior default with Euler reverse discrete-diffusion prior sampler.
 - [x] Make evaluation paths and gradient-constraint metadata method-agnostic.
+- [x] Validate corrected Euler-prior SGDD on `D=2`, `D=5`, and `D=10`.
+- [x] Include generated direct-MH sanity artifacts in the standard scoring path.

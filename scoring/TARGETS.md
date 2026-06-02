@@ -14,4 +14,4 @@ For each experiment, `scripts/evaluate.sh` reports:
 
 The generated artifact format is method-agnostic: write `samples.npz` under `checkpoints/<method>_synthetic_d<D>/` with a `samples` array of integer categorical states. Each run should also write `metadata.json` with `uses_likelihood_gradient` set to `0` or `1`; the evaluator requires this for methods other than the included SGDD and direct-MH implementations.
 
-The included `direct_mh` baseline is a sanity check for the evaluator and is written under `checkpoints/direct_mh_synthetic_d<D>/`. It is not a paper Table 2 baseline; the paper baseline numbers remain in `scoring/reference.json`. To include this sanity baseline in a manual evaluation run, set `INCLUDE_SANITY_BASELINES=1`.
+The included `direct_mh` baseline is a sanity check for the evaluator and is written under `checkpoints/direct_mh_synthetic_d<D>/`. It is not a paper Table 2 baseline; the paper baseline numbers remain in `scoring/reference.json`. Standard reproduction jobs include this baseline in `scoring/scores.json`; manual evaluations can do the same with `INCLUDE_SANITY_BASELINES=1`.

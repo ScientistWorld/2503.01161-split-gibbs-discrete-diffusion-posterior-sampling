@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim**
+**Current: core_claim_plus**
 
 ## Progress Log
 
@@ -17,5 +17,10 @@
 - Replaced the default prior step with a closed-form concrete-score Euler CTMC sampler and restored the paper's synthetic `K=10`, `T=10`, `H=20` defaults.
 - Fixed evaluator issues: method-agnostic artifact paths, explicit run arguments, and metadata-based `uses_likelihood_gradient`.
 
+### [2026-06-02 22:35] - core_claim_plus
+- Corrected CPU compute-container job `cb3d9782-268` completed on `synthetic_d2`, `synthetic_d5`, and `synthetic_d10`.
+- SGDD preserves `uses_likelihood_gradient=0`, is close to the paper's `D=2` result, and improves over the paper's SGDD results on `D=5` and `D=10`.
+- Updated the standard run path to include the generated direct-MH sanity baseline in `scoring/scores.json`.
+
 ## Stop Justification
-- Not stopped; submitting a CPU job to validate the corrected Euler-prior SGDD implementation on all synthetic Table 2 dimensions.
+- Not stopped; submitting a short CPU validation job to refresh scores with the included direct-MH sanity baseline.

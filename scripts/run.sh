@@ -15,13 +15,15 @@ cd /home/user
 
 DIMS="${RUN_DIMS:-2 5 10}"
 
-for DIM in ${DIMS}; do
-  bash scripts/method.sh "${DIM}"
-done
+if [ "${RUN_GENERATE:-1}" = "1" ]; then
+  for DIM in ${DIMS}; do
+    bash scripts/method.sh "${DIM}"
+  done
 
-for DIM in ${DIMS}; do
-  bash scripts/baseline.sh direct_mh "${DIM}"
-done
+  for DIM in ${DIMS}; do
+    bash scripts/baseline.sh direct_mh "${DIM}"
+  done
+fi
 
-bash scripts/evaluate.sh
+INCLUDE_SANITY_BASELINES=1 bash scripts/evaluate.sh
 python validate.py --compare
