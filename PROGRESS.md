@@ -18,10 +18,13 @@ The successful job `77dd1983-26f` produced:
 
 All retained reproduced runs preserve `uses_likelihood_gradient=0`. The results are not exact matches, but they beat the paper's gradient-based DPS baseline on Hellinger and total variation for `D=5` and `D=10`, including the hardest synthetic setting, and therefore support the core claim.
 
+The audit on 2026-06-02 confirmed that this supports `core_claim_plus`: the same SGDD method is evaluated on two synthetic settings beyond a single minimal run.
+
 ## Deviations From Paper
 
 - This reproduction targets the synthetic Table 2 setting rather than the image inpainting or text infilling experiments. The synthetic task is sufficient for the core algorithmic claim and does not require training a diffusion model.
 - The implementation uses the analytic factorized prior score for the synthetic task, matching the paper's synthetic setup.
+- The paper's appendix lists `K=10` SGDD iterations and `T=10` Metropolis-Hastings likelihood updates for the synthetic setting. The runnable default uses `K=50` and `T=200` to obtain stable retained samples in this compact implementation. The algorithmic steps are unchanged.
 
 ## What Remains
 

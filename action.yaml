@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: true
-milestone: core_claim
-notes: "CPU container validation: rerun SGDD synthetic targets D=5 and D=10 via scripts/run.sh and compare corrected scores."
+milestone: core_claim_plus
+notes: "Audited inherited SGDD synthetic reproduction; implementation and evaluation are sound, validation passes, and retained D=5/D=10 Table 2 settings support core_claim_plus."

@@ -9,3 +9,4 @@
 - [x] Write environment and script entry points.
 - [x] Complete a full reproduction job.
 - [x] Update reproduced scores and milestone after validation cleanup.
+- [x] Audit inherited implementation and restore `core_claim_plus`.
