@@ -1,6 +1,19 @@
 {
   "slice": "train",
   "experiments": {
+    "synthetic_d10": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/checkpoints/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.25313638820664136,
+          "total_variation": 0.2187907572196352,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
     "synthetic_d2": {
       "_slice": "train",
       "_run_dirs": {
@@ -8,8 +21,8 @@
       },
       "results": {
         "sgdd": {
-          "hellinger": 0.20666030451374148,
-          "total_variation": 0.162207183932295,
+          "hellinger": 0.20286954628565673,
+          "total_variation": 0.16298339035100878,
           "uses_likelihood_gradient": 0.0
         }
       }
@@ -21,21 +34,8 @@
       },
       "results": {
         "sgdd": {
-          "hellinger": 0.2278058822887,
-          "total_variation": 0.20159285987011794,
-          "uses_likelihood_gradient": 0.0
-        }
-      }
-    },
-    "synthetic_d10": {
-      "_slice": "train",
-      "_run_dirs": {
-        "sgdd": "/home/user/checkpoints/sgdd_synthetic_d10"
-      },
-      "results": {
-        "sgdd": {
-          "hellinger": 0.24999433361701356,
-          "total_variation": 0.22208940833931168,
+          "hellinger": 0.22076345757437538,
+          "total_variation": 0.199497498669538,
           "uses_likelihood_gradient": 0.0
         }
       }

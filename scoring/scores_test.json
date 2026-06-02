@@ -8,8 +8,8 @@
       },
       "results": {
         "sgdd": {
-          "hellinger": 0.2584077439224848,
-          "total_variation": 0.22538587551830844,
+          "hellinger": 0.2659435378206232,
+          "total_variation": 0.2351910833679134,
           "uses_likelihood_gradient": 0.0
         }
       }
@@ -21,8 +21,8 @@
       },
       "results": {
         "sgdd": {
-          "hellinger": 0.2044028956833526,
-          "total_variation": 0.16733480922345023,
+          "hellinger": 0.20891060753027274,
+          "total_variation": 0.1699449565257395,
           "uses_likelihood_gradient": 0.0
         }
       }
@@ -34,8 +34,8 @@
       },
       "results": {
         "sgdd": {
-          "hellinger": 0.22290674806424435,
-          "total_variation": 0.20488173806737248,
+          "hellinger": 0.22031505367377052,
+          "total_variation": 0.19557892711445285,
           "uses_likelihood_gradient": 0.0
         }
       }
