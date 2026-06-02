@@ -1,0 +1,127 @@
+{
+  "paper": {
+    "arxiv_id": "2503.01161",
+    "title": "Split Gibbs Discrete Diffusion Posterior Sampling",
+    "date": "",
+    "topics": [
+      "paper-type-metric-method",
+      "domain-ai-ml",
+      "area-diffusion-models",
+      "category-sampling",
+      "method-split-gibbs-sampling",
+      "secondary-domain-ai-ml",
+      "secondary-area-diffusion-models",
+      "secondary-category-inverse-problems",
+      "secondary-method-posterior-sampling",
+      "selection-category-scientific-optimization"
+    ]
+  },
+  "reproduction": {
+    "milestone": "core_claim_plus",
+    "status": "done",
+    "error": null,
+    "scaffold": "codex",
+    "model": "gpt-5.5",
+    "profile": "gpt-5.5-medium",
+    "effort": "medium",
+    "gpu_hours_used": 0.0,
+    "current_iteration_gpu_budget": 30,
+    "current_iteration_gpu_hours_used": 0.0,
+    "total_gpu_hours_used": 0.0,
+    "current_iteration_cpu_hours_used": 0.005,
+    "total_cpu_hours_used": 0.005,
+    "gpu_budget": 30,
+    "duration_sec": 660.9,
+    "cost_usd": null,
+    "input_tokens": 3033385,
+    "output_tokens": 23724,
+    "cached_input_tokens": 2732800,
+    "cache_creation_tokens": null,
+    "reasoning_tokens": 0,
+    "total_input_tokens": 3033385,
+    "num_turns": 82,
+    "duration_api_ms": null,
+    "num_runs": 1,
+    "iteration_count": 0,
+    "workflow": "standard",
+    "workflow_step": 0,
+    "total_gpu_jobs": 1,
+    "time_breakdown": {
+      "working": 535.1541450023651,
+      "building": 9.761155605316162,
+      "installing": 19.33400869369507,
+      "waiting": 20.910532236099243
+    }
+  },
+  "agents": [
+    {
+      "scaffold": "codex",
+      "model": "gpt-5.5",
+      "profile": "gpt-5.5-medium",
+      "effort": "medium",
+      "role": "reproducer",
+      "is_iteration": false,
+      "iteration": 1,
+      "workflow": "standard",
+      "workflow_step": 0,
+      "started_at": 1780433087.7724895,
+      "finished_at": 1780434111.2671835,
+      "duration_sec": 660.9,
+      "blocked_sec": 362.6,
+      "status": "done",
+      "error": null,
+      "milestone": "core_claim_plus",
+      "gpu_budget": 30,
+      "gpu_hours_used": 0.0,
+      "total_gpu_hours_used": 0.0,
+      "cpu_hours_used": 0.005,
+      "time_breakdown": {
+        "working": 535.1541450023651,
+        "building": 9.761155605316162,
+        "installing": 19.33400869369507,
+        "waiting": 20.910532236099243
+      },
+      "cost_usd": null,
+      "input_tokens": 3033385,
+      "output_tokens": 23724,
+      "cached_input_tokens": 2732800,
+      "cache_creation_tokens": null,
+      "reasoning_tokens": 0,
+      "total_input_tokens": 3033385,
+      "num_turns": 82,
+      "duration_api_ms": null,
+      "tool_uses": {
+        "shell": 68,
+        "file_edit": 14
+      },
+      "gpu_jobs": [
+        {
+          "run_id": "77dd1983-26f",
+          "command": "bash /home/user/scripts/run.sh",
+          "num_gpus": 0,
+          "num_cpus": 1,
+          "resource": "gpu-cpu",
+          "hive_job_id": "480e8075",
+          "status": "completed",
+          "returncode": 0,
+          "duration_sec": 16.7,
+          "submitted_at": 1780434021.3090692,
+          "started_at": 1780434023.065318,
+          "completed_at": 1780434039.716042
+        }
+      ],
+      "progress_log": "### [2026-06-02 00:00] - none\n- Read the paper and identified SGDD's synthetic posterior-recovery experiment as the minimum core-claim target.\n- Implemented the synthetic problem, SGDD sampler, and method-agnostic evaluator.\n- Prepared a CPU reproduction job to validate the implementation end-to-end.\n- Fixed the first container portability failure by switching to a Docker Hub base image.\n\n### [2026-06-02 21:05] - core_claim_plus\n- Ran the SGDD synthetic posterior sampler for `D=2`, `D=5`, and `D=10` inside the compute container.\n- Validation passed with method/evaluation separation intact.\n- Reproduced the paper's gradient-free posterior recovery claim on all three synthetic Table 2 settings."
+    }
+  ],
+  "components": {
+    "has_container": true,
+    "has_method_code": true,
+    "has_evaluation": true,
+    "has_download_script": true,
+    "has_reproduce_script": true,
+    "has_method_script": true,
+    "has_baseline": true,
+    "has_reference": true,
+    "has_data": true
+  }
+}
