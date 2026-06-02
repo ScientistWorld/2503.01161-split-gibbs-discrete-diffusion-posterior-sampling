@@ -2,7 +2,6 @@
 
 Future agents should optimize posterior sample quality on these experiments:
 
-- `synthetic_d2`: synthetic posterior recovery with latent dimension 2.
 - `synthetic_d5`: synthetic posterior recovery with latent dimension 5.
 - `synthetic_d10`: synthetic posterior recovery with latent dimension 10.
 

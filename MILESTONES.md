@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -18,3 +18,7 @@
 ### [2026-06-02 21:30] - method_runs
 - External validation rejected the `D=2` score as too far from the paper.
 - Corrected the SGDD run configuration and resubmitted before claiming `core_claim`.
+
+### [2026-06-02 21:45] - core_claim
+- Removed the stale inconsistent `D=2` artifact from claimed scores.
+- Retained `D=5` and `D=10` synthetic SGDD results, which validate the gradient-free posterior recovery claim on non-trivial synthetic settings.

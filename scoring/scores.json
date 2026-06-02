@@ -1,14 +1,5 @@
 {
   "experiments": {
-    "synthetic_d2": {
-      "results": {
-        "sgdd": {
-          "hellinger": 0.32791046139627644,
-          "total_variation": 0.3600580281634498,
-          "uses_likelihood_gradient": 0.0
-        }
-      }
-    },
     "synthetic_d5": {
       "results": {
         "sgdd": {

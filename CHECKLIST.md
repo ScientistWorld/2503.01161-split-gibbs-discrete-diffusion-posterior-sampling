@@ -8,4 +8,4 @@
 - [x] Fill `scoring/reference.json` from paper-reported numbers.
 - [x] Write environment and script entry points.
 - [x] Complete a full reproduction job.
-- [x] Update reproduced scores and milestone after job completion.
+- [x] Update reproduced scores and milestone after validation cleanup.
