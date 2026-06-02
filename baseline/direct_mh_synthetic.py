@@ -29,7 +29,12 @@ def run_direct_mh(config: SyntheticConfig, num_samples: int, steps: int, seed: i
         current[accept] = score[accept]
         accepted += int(accept.sum())
 
-    return x, {"acceptance": accepted / max(num_samples * steps, 1), "steps": steps, "seed": seed}
+    return x, {
+        "acceptance": accepted / max(num_samples * steps, 1),
+        "steps": steps,
+        "seed": seed,
+        "uses_likelihood_gradient": 0.0,
+    }
 
 
 def main() -> None:

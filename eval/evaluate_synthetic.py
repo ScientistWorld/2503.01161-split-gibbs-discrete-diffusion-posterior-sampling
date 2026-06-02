@@ -11,7 +11,21 @@ import numpy as np
 from data.synthetic_sgdd import SyntheticConfig, empirical_first2, exact_posterior_first2, hellinger, total_variation
 
 
-def evaluate_run(run_dir: Path, config: SyntheticConfig) -> dict[str, float]:
+def _read_constraint_metadata(run_dir: Path, method: str) -> float:
+    metadata_path = run_dir / "metadata.json"
+    if metadata_path.exists():
+        metadata = json.loads(metadata_path.read_text())
+        if "uses_likelihood_gradient" in metadata:
+            return float(metadata["uses_likelihood_gradient"])
+    if method in {"sgdd", "direct_mh"}:
+        return 0.0
+    raise ValueError(
+        f"{run_dir} is missing metadata.json with uses_likelihood_gradient; "
+        "future methods must declare this constraint metric explicitly."
+    )
+
+
+def evaluate_run(run_dir: Path, config: SyntheticConfig, method: str) -> dict[str, float]:
     artifact = np.load(run_dir / "samples.npz")
     samples = artifact["samples"]
     target = exact_posterior_first2(config)
@@ -19,7 +33,7 @@ def evaluate_run(run_dir: Path, config: SyntheticConfig) -> dict[str, float]:
     return {
         "hellinger": hellinger(empirical, target),
         "total_variation": total_variation(empirical, target),
-        "uses_likelihood_gradient": 0.0,
+        "uses_likelihood_gradient": _read_constraint_metadata(run_dir, method),
     }
 
 
@@ -34,7 +48,7 @@ def main() -> None:
     for experiment, method, run_dir in args.run:
         dim = int(experiment.rsplit("_d", 1)[1])
         config = SyntheticConfig(dim=dim, vocab_size=args.vocab_size)
-        metrics = evaluate_run(Path(run_dir), config)
+        metrics = evaluate_run(Path(run_dir), config, method)
         scores["experiments"].setdefault(experiment, {"results": {}})
         scores["experiments"][experiment]["results"][method] = metrics
 

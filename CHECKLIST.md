@@ -11,3 +11,5 @@
 - [x] Update reproduced scores and milestone after validation cleanup.
 - [x] Audit inherited implementation and restore `core_claim_plus`.
 - [x] Add direct-MH sanity baseline generation while keeping default scores paper-compatible.
+- [x] Replace exact synthetic prior default with Euler reverse discrete-diffusion prior sampler.
+- [x] Make evaluation paths and gradient-constraint metadata method-agnostic.

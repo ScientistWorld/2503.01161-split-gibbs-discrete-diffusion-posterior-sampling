@@ -4,5 +4,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: core_claim_plus
-notes: "Refresh SGDD D=5/D=10 synthetic results and regenerate direct-MH sanity baseline artifacts through scripts/run.sh."
+milestone: core_claim
+notes: "Validate corrected Euler-prior SGDD on synthetic D=2/D=5/D=10 and regenerate direct-MH sanity artifacts through scripts/run.sh."

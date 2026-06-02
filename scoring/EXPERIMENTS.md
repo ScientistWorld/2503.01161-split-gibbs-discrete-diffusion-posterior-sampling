@@ -1,5 +1,9 @@
 # Experiments
 
+## synthetic_d2
+
+Measures the smallest synthetic posterior-recovery setting from the paper's main table, where all methods should approximate the posterior reasonably well.
+
 ## synthetic_d5
 
 Measures whether posterior recovery remains effective as nuisance dimensions are added while scoring the same two-dimensional marginal.

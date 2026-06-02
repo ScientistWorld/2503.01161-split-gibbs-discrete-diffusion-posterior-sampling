@@ -13,7 +13,7 @@ set -e
 
 cd /home/user
 
-DIMS="${RUN_DIMS:-5 10}"
+DIMS="${RUN_DIMS:-2 5 10}"
 
 for DIM in ${DIMS}; do
   bash scripts/method.sh "${DIM}"

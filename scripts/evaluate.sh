@@ -26,17 +26,48 @@ cd /home/user
 
 mkdir -p scoring
 
+if [ "$#" -gt 0 ]; then
+  if [ "$1" = "--run" ]; then
+    python -m eval.evaluate_synthetic "$@" --output scoring/scores.json
+    exit 0
+  fi
+  if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+    echo "Usage: bash scripts/evaluate.sh METHOD RUN_DIR [EXPERIMENT]" >&2
+    echo "   or: bash scripts/evaluate.sh --run EXPERIMENT METHOD RUN_DIR [--run ...]" >&2
+    exit 2
+  fi
+  METHOD="$1"
+  RUN_DIR="$2"
+  if [ "$#" -eq 3 ]; then
+    EXPERIMENT="$3"
+  else
+    DIM_FROM_PATH="$(printf '%s\n' "${RUN_DIR}" | sed -n 's/.*_d\([0-9][0-9]*\).*/\1/p' | tail -1)"
+    if [ -z "${DIM_FROM_PATH}" ]; then
+      echo "Could not infer experiment from ${RUN_DIR}; pass EXPERIMENT explicitly." >&2
+      exit 2
+    fi
+    EXPERIMENT="synthetic_d${DIM_FROM_PATH}"
+  fi
+  python -m eval.evaluate_synthetic --run "${EXPERIMENT}" "${METHOD}" "${RUN_DIR}" --output scoring/scores.json
+  exit 0
+fi
+
 RUN_ARGS=()
-EVAL_DIMS="${EVAL_DIMS:-5 10}"
+EVAL_DIMS="${EVAL_DIMS:-2 5 10}"
 INCLUDE_SANITY_BASELINES="${INCLUDE_SANITY_BASELINES:-0}"
+EVAL_METHODS="${EVAL_METHODS:-sgdd}"
 
 for DIM in ${EVAL_DIMS}; do
-  if [ -f "checkpoints/sgdd_synthetic_d${DIM}/samples.npz" ]; then
-    RUN_ARGS+=(--run "synthetic_d${DIM}" "sgdd" "checkpoints/sgdd_synthetic_d${DIM}")
+  METHODS="${EVAL_METHODS}"
+  if [ "${INCLUDE_SANITY_BASELINES}" = "1" ]; then
+    METHODS="${METHODS} direct_mh"
   fi
-  if [ "${INCLUDE_SANITY_BASELINES}" = "1" ] && [ -f "checkpoints/direct_mh_synthetic_d${DIM}/samples.npz" ]; then
-    RUN_ARGS+=(--run "synthetic_d${DIM}" "direct_mh" "checkpoints/direct_mh_synthetic_d${DIM}")
-  fi
+  for METHOD in ${METHODS}; do
+    RUN_DIR="checkpoints/${METHOD}_synthetic_d${DIM}"
+    if [ -f "${RUN_DIR}/samples.npz" ]; then
+      RUN_ARGS+=(--run "synthetic_d${DIM}" "${METHOD}" "${RUN_DIR}")
+    fi
+  done
 done
 
 if [ "${#RUN_ARGS[@]}" -eq 0 ]; then
