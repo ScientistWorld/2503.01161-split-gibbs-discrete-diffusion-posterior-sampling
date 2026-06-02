@@ -6,4 +6,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Sample-half split plus held-out coordinate pairs for D>2; 12 train values and 12 test values populated for sgdd; SGDD quality metrics mean abs train/test gap 0.0039, max 0.0084."
+notes: "Packaging audit passed: procedural synthetic data needs no external downloads; no shared paths or missing fetches found."
