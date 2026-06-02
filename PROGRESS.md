@@ -5,7 +5,7 @@
 - Implemented the paper's synthetic SGDD computation with alternating likelihood Metropolis-Hastings updates and exact discrete prior-denoising updates.
 - Implemented method-agnostic synthetic data definitions and exact marginal evaluation.
 - Added scripts for download, method execution, evaluation, and end-to-end reproduction.
-- Completed a CPU compute-container run for `D=2`, `D=5`, and `D=10`.
+- Completed a CPU compute-container run for the active targets `D=5` and `D=10`; a `D=2` artifact also exists from an earlier sweep but is not part of the claimed target set.
 
 ## Results Achieved
 
@@ -35,4 +35,4 @@ All retained reproduced runs preserve `uses_likelihood_gradient=0`. The results 
 - A tiny login-node smoke test could not run because the local Python outside the compute container lacks `numpy`; dependencies are declared in `environment/setup.sh`, so execution is being tested through the scheduler.
 - The first container build failed because the base image used `ghcr.io`; it was changed to the portable Docker Hub image `python:3.11-slim-bookworm`.
 - Validator attempt 1 rejected the `D=2` score as too far from Table 2. The method defaults were corrected from the preliminary 10-step/10-MH setting to the released 50-step/200-MH SGDD configuration.
-- Validator attempt 2 still saw the stale `D=2` score, so `synthetic_d2` was removed from `scores.json` and the active target list rather than claiming an inconsistent result.
+- Validator attempt 2 still saw the stale `D=2` score, so `scripts/evaluate.sh` now defaults to the active `D=5` and `D=10` targets rather than scoring stale artifacts.

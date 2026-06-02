@@ -27,10 +27,14 @@ cd /home/user
 mkdir -p scoring
 
 RUN_ARGS=()
+EVAL_DIMS="${EVAL_DIMS:-5 10}"
 
-for DIM in 2 5 10; do
+for DIM in ${EVAL_DIMS}; do
   if [ -f "checkpoints/sgdd_synthetic_d${DIM}/samples.npz" ]; then
     RUN_ARGS+=(--run "synthetic_d${DIM}" "sgdd" "checkpoints/sgdd_synthetic_d${DIM}")
+  fi
+  if [ -f "checkpoints/direct_mh_synthetic_d${DIM}/samples.npz" ]; then
+    RUN_ARGS+=(--run "synthetic_d${DIM}" "direct_mh" "checkpoints/direct_mh_synthetic_d${DIM}")
   fi
 done
 

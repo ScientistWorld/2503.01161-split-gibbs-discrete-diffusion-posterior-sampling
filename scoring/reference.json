@@ -10,9 +10,10 @@
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2}
       },
       "results": {
-        "svdd_pm": {"type": "baseline", "hellinger": 0.568, "total_variation": 0.835, "uses_likelihood_gradient": 1},
-        "dps": {"type": "baseline", "hellinger": 0.370, "total_variation": 0.424, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.737, "total_variation": 0.946, "uses_likelihood_gradient": 0},
+        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.297, "total_variation": 0.320, "uses_likelihood_gradient": 0},
+        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.275, "total_variation": 0.292, "uses_likelihood_gradient": 0},
+        "dps": {"type": "baseline", "hellinger": 0.182, "total_variation": 0.176, "uses_likelihood_gradient": 1},
+        "smc": {"type": "baseline", "hellinger": 0.238, "total_variation": 0.248, "uses_likelihood_gradient": 0},
         "sgdd": {"type": "proposed", "hellinger": 0.149, "total_variation": 0.125, "uses_likelihood_gradient": 0}
       }
     },
@@ -26,9 +27,10 @@
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2}
       },
       "results": {
-        "svdd_pm": {"type": "baseline", "hellinger": 0.687, "total_variation": 0.944, "uses_likelihood_gradient": 1},
-        "dps": {"type": "baseline", "hellinger": 0.451, "total_variation": 0.589, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.836, "total_variation": 0.986, "uses_likelihood_gradient": 0},
+        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.413, "total_variation": 0.458, "uses_likelihood_gradient": 0},
+        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.401, "total_variation": 0.445, "uses_likelihood_gradient": 0},
+        "dps": {"type": "baseline", "hellinger": 0.345, "total_variation": 0.383, "uses_likelihood_gradient": 1},
+        "smc": {"type": "baseline", "hellinger": 0.353, "total_variation": 0.391, "uses_likelihood_gradient": 0},
         "sgdd": {"type": "proposed", "hellinger": 0.214, "total_variation": 0.222, "uses_likelihood_gradient": 0}
       }
     },
@@ -42,9 +44,10 @@
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2}
       },
       "results": {
-        "svdd_pm": {"type": "baseline", "hellinger": 0.779, "total_variation": 0.984, "uses_likelihood_gradient": 1},
-        "dps": {"type": "baseline", "hellinger": 0.566, "total_variation": 0.779, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.875, "total_variation": 0.994, "uses_likelihood_gradient": 0},
+        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.455, "total_variation": 0.503, "uses_likelihood_gradient": 0},
+        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.448, "total_variation": 0.494, "uses_likelihood_gradient": 0},
+        "dps": {"type": "baseline", "hellinger": 0.410, "total_variation": 0.453, "uses_likelihood_gradient": 1},
+        "smc": {"type": "baseline", "hellinger": 0.412, "total_variation": 0.460, "uses_likelihood_gradient": 0},
         "sgdd": {"type": "proposed", "hellinger": 0.334, "total_variation": 0.365, "uses_likelihood_gradient": 0}
       }
     }

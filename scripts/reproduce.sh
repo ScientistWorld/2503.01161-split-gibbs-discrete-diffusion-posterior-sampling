@@ -18,7 +18,7 @@ set -e
 
 cd /home/user
 
-for DIM in 2 5 10; do
+for DIM in 5 10; do
   bash scripts/method.sh "${DIM}"
 done
 

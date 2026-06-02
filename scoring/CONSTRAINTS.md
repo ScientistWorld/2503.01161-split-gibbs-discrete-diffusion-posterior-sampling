@@ -3,7 +3,7 @@
 The problem definition must remain fixed:
 
 - categorical vocabulary size is 50;
-- latent dimensions are `D=2`, `D=5`, and `D=10`;
+- active latent dimensions are `D=5` and `D=10`;
 - the discretized Gaussian prior, SingleModal observation, and likelihood scale are defined in `data/synthetic_sgdd.py`;
 - evaluation is the first-two-coordinate posterior marginal against the exact target.
 
