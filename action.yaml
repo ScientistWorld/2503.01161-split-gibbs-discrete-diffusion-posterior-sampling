@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: ""
+notes: "Improvements: added held-out coordinate-pair scoring for D>2, added coordinate_marginal_tv triangulation, completed metric descriptions, confirmed train/test scripts and artifact attachment. Notes: next runner must regenerate scores.json for the new metric."
