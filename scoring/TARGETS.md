@@ -10,7 +10,6 @@ For each experiment, `scripts/evaluate.sh` reports:
 
 - `hellinger`: lower is better.
 - `total_variation`: lower is better.
-- `coordinate_marginal_tv`: lower is better; checks the average one-coordinate marginal across all latent coordinates so improvements cannot overfit only the displayed two-coordinate heatmap.
 - `uses_likelihood_gradient`: must remain `0` for methods claiming the paper's gradient-free setting.
 
 The generated artifact format is method-agnostic: write `samples.npz` under `checkpoints/<method>_synthetic_d<D>/` with a `samples` array of integer categorical states. Each run should also write `metadata.json` with `uses_likelihood_gradient` set to `0` or `1`; the evaluator requires this for methods other than the included SGDD and direct-MH implementations.

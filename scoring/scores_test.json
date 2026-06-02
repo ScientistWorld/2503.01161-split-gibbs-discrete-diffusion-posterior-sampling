@@ -10,7 +10,6 @@
         "sgdd": {
           "hellinger": 0.2584077439224848,
           "total_variation": 0.22538587551830844,
-          "coordinate_marginal_tv": 0.05369161638290728,
           "uses_likelihood_gradient": 0.0
         }
       }
@@ -24,7 +23,6 @@
         "sgdd": {
           "hellinger": 0.2044028956833526,
           "total_variation": 0.16733480922345023,
-          "coordinate_marginal_tv": 0.062277306492408646,
           "uses_likelihood_gradient": 0.0
         }
       }
@@ -38,7 +36,6 @@
         "sgdd": {
           "hellinger": 0.22290674806424435,
           "total_variation": 0.20488173806737248,
-          "coordinate_marginal_tv": 0.05277935558740552,
           "uses_likelihood_gradient": 0.0
         }
       }

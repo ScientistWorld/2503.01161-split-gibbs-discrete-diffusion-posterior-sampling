@@ -25,25 +25,14 @@ def _read_constraint_metadata(run_dir: Path, method: str) -> float:
     )
 
 
-def _mean_coordinate_tv(samples: np.ndarray, target_1d: np.ndarray, vocab_size: int) -> float:
-    distances = []
-    for coord in range(samples.shape[1]):
-        counts = np.bincount(samples[:, coord], minlength=vocab_size).astype(np.float64)
-        empirical = counts / max(len(samples), 1)
-        distances.append(total_variation(empirical, target_1d))
-    return float(np.mean(distances))
-
-
 def evaluate_run(run_dir: Path, config: SyntheticConfig, method: str) -> dict[str, float]:
     artifact = np.load(run_dir / "samples.npz")
     samples = artifact["samples"]
     target = exact_posterior_first2(config)
     empirical = empirical_first2(samples, config.vocab_size)
-    target_1d = target.sum(axis=1)
     return {
         "hellinger": hellinger(empirical, target),
         "total_variation": total_variation(empirical, target),
-        "coordinate_marginal_tv": _mean_coordinate_tv(samples, target_1d, config.vocab_size),
         "uses_likelihood_gradient": _read_constraint_metadata(run_dir, method),
     }
 

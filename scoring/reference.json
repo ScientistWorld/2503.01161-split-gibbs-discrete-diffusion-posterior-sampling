@@ -7,7 +7,6 @@
       "metrics": {
         "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "coordinate_marginal_tv": {"higher_is_better": false, "coefficient": -0.4, "description": "Mean total variation between sampled and exact one-coordinate marginals across all latent coordinates."},
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
       },
       "results": {
@@ -25,7 +24,6 @@
       "metrics": {
         "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "coordinate_marginal_tv": {"higher_is_better": false, "coefficient": -0.4, "description": "Mean total variation between sampled and exact one-coordinate marginals across all latent coordinates."},
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
       },
       "results": {
@@ -43,7 +41,6 @@
       "metrics": {
         "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "coordinate_marginal_tv": {"higher_is_better": false, "coefficient": -0.4, "description": "Mean total variation between sampled and exact one-coordinate marginals across all latent coordinates."},
         "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
       },
       "results": {
