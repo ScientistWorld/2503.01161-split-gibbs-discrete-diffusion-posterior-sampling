@@ -36,4 +36,4 @@ case "${NAME}" in
     ;;
 esac
 
-bash scripts/evaluate.sh
+INCLUDE_SANITY_BASELINES=1 bash scripts/evaluate.sh

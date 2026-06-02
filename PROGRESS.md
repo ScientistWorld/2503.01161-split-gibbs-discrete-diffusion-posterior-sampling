@@ -6,6 +6,7 @@
 - Implemented method-agnostic synthetic data definitions and exact marginal evaluation.
 - Added scripts for download, method execution, evaluation, and end-to-end reproduction.
 - Completed a CPU compute-container run for the active targets `D=5` and `D=10`; a `D=2` artifact also exists from an earlier sweep but is not part of the claimed target set.
+- Updated the run and reproduce entry points so they regenerate SGDD outputs and the included direct-MH sanity baseline artifacts before validation.
 
 ## Results Achieved
 
@@ -30,6 +31,7 @@ The audit on 2026-06-02 confirmed that this supports `core_claim_plus`: the same
 
 - If the core result is confirmed, optionally add image or text posterior sampling experiments.
 - Add paper baselines such as SMC or DPS if extending beyond the synthetic core reproduction.
+- The next submitted job will refresh the active SGDD scores and regenerate direct-MH sanity artifacts for `D=5` and `D=10`. The official `scoring/scores.json` remains reference-compatible by default; direct-MH scoring is opt-in via `INCLUDE_SANITY_BASELINES=1`.
 - Recover an acceptable `D=2` run if extending the synthetic sweep; the preliminary `D=2` artifact was removed from claimed scores because validation found it too far from Table 2.
 
 ## Issues Encountered

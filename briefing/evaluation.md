@@ -13,3 +13,5 @@ Metrics:
 - `uses_likelihood_gradient`: constraint metric indicating whether the method relies on likelihood gradients. The target method is gradient-free, so lower is better.
 
 The main comparison is against the corresponding rows of the paper's Table 2 synthetic posterior-recovery results.
+
+The package also includes a direct Metropolis-Hastings sanity baseline. It is useful for checking that evaluation changes when generated artifacts change, but it is not one of the paper's main Table 2 baselines.

@@ -22,4 +22,9 @@ for DIM in 5 10; do
   bash scripts/method.sh "${DIM}"
 done
 
+for DIM in 5 10; do
+  bash scripts/baseline.sh direct_mh "${DIM}"
+done
+
+bash scripts/evaluate.sh
 python validate.py --compare
