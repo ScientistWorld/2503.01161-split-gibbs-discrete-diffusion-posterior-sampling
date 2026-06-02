@@ -19,6 +19,7 @@ if [ "$#" -gt 0 ]; then
     exit 0
   fi
   if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+    echo "Usage: bash scripts/evaluate_test.sh [CHECKPOINTS_DIR]" >&2
     echo "Usage: bash scripts/evaluate_test.sh METHOD RUN_DIR [EXPERIMENT]" >&2
     echo "   or: bash scripts/evaluate_test.sh --run EXPERIMENT METHOD RUN_DIR [--run ...]" >&2
     exit 2

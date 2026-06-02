@@ -1,9 +1,9 @@
-# This iteration submits a compute job.
-# Once action is set to 'submit', STOP immediately.
+# This iteration is complete.
+# Once action is set to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "CPU-only run of evaluate_train.sh and evaluate_test.sh over all discovered checkpoint artifacts."
+notes: "Sample-half split plus held-out coordinate pairs for D>2; 24 train values and 24 test values populated; SGDD quality metrics mean abs train/test gap 0.0039, max 0.0084; direct_mh sanity baseline included and often stronger than SGDD."
