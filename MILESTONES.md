@@ -32,4 +32,4 @@
 - Optional direct-MH sanity metrics are regenerated separately in `scoring/sanity_scores.json`.
 
 ## Stop Justification
-- Stopping at `core_claim_plus`: the paper's core synthetic SGDD claim is reproduced on all synthetic Table 2 dimensions with the gradient-free constraint measured and validation passing. Higher milestones would require implementing additional image/text experiments or more paper baselines beyond the completed synthetic reproduction.
+- Completed at milestone `core_claim_plus`.
