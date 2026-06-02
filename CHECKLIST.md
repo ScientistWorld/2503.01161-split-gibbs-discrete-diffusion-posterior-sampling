@@ -7,5 +7,5 @@
 - [x] Implement reusable evaluation that does not import `method/`.
 - [x] Fill `scoring/reference.json` from paper-reported numbers.
 - [x] Write environment and script entry points.
-- [ ] Complete a full reproduction job.
-- [ ] Update reproduced scores and milestone after job completion.
+- [x] Complete a full reproduction job.
+- [x] Update reproduced scores and milestone after job completion.

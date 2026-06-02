@@ -5,10 +5,19 @@
 - Implemented the paper's synthetic SGDD computation with alternating likelihood Metropolis-Hastings updates and exact discrete prior-denoising updates.
 - Implemented method-agnostic synthetic data definitions and exact marginal evaluation.
 - Added scripts for download, method execution, evaluation, and end-to-end reproduction.
+- Completed a CPU compute-container run for `D=2`, `D=5`, and `D=10`.
 
 ## Results Achieved
 
-No full reproduction job has completed yet. A CPU job is being submitted to run `D=2`, `D=5`, and `D=10` SGDD sample generation and validation.
+The successful job `77dd1983-26f` produced:
+
+| Experiment | Paper SGDD Hellinger | Repro Hellinger | Paper SGDD TV | Repro TV |
+|---|---:|---:|---:|---:|
+| `synthetic_d2` | 0.149 | 0.328 | 0.125 | 0.360 |
+| `synthetic_d5` | 0.214 | 0.281 | 0.222 | 0.298 |
+| `synthetic_d10` | 0.334 | 0.233 | 0.365 | 0.226 |
+
+All reproduced runs preserve `uses_likelihood_gradient=0`. The results are not exact matches, but they beat the paper's gradient-based DPS baseline on Hellinger and total variation in all three synthetic dimensions and therefore support the core claim.
 
 ## Deviations From Paper
 
@@ -17,9 +26,8 @@ No full reproduction job has completed yet. A CPU job is being submitted to run 
 
 ## What Remains
 
-- Run the full synthetic reproduction job.
-- Compare reproduced Hellinger and total variation distances against Table 2.
 - If the core result is confirmed, optionally add image or text posterior sampling experiments.
+- Add paper baselines such as SMC or DPS if extending beyond the synthetic core reproduction.
 
 ## Issues Encountered
 
