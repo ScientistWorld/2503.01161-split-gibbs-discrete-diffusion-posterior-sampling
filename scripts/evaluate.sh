@@ -25,10 +25,11 @@ set -e
 cd /home/user
 
 mkdir -p scoring
+OUTPUT="${SCORES_OUTPUT:-scoring/scores.json}"
 
 if [ "$#" -gt 0 ]; then
   if [ "$1" = "--run" ]; then
-    python -m eval.evaluate_synthetic "$@" --output scoring/scores.json
+    python -m eval.evaluate_synthetic "$@" --output "${OUTPUT}"
     exit 0
   fi
   if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
@@ -48,7 +49,7 @@ if [ "$#" -gt 0 ]; then
     fi
     EXPERIMENT="synthetic_d${DIM_FROM_PATH}"
   fi
-  python -m eval.evaluate_synthetic --run "${EXPERIMENT}" "${METHOD}" "${RUN_DIR}" --output scoring/scores.json
+  python -m eval.evaluate_synthetic --run "${EXPERIMENT}" "${METHOD}" "${RUN_DIR}" --output "${OUTPUT}"
   exit 0
 fi
 
@@ -75,4 +76,4 @@ if [ "${#RUN_ARGS[@]}" -eq 0 ]; then
   exit 1
 fi
 
-python -m eval.evaluate_synthetic "${RUN_ARGS[@]}" --output scoring/scores.json
+python -m eval.evaluate_synthetic "${RUN_ARGS[@]}" --output "${OUTPUT}"

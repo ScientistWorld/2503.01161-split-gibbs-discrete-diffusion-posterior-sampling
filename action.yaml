@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim_plus
-notes: "Refresh standard scores with the included direct-MH sanity baseline after corrected Euler-prior SGDD succeeded on D=2/D=5/D=10."
+notes: "Validate the corrected scoring split: SGDD-only official scores.json plus optional direct-MH sanity_scores.json."

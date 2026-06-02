@@ -29,7 +29,7 @@ All retained reproduced SGDD runs preserve `uses_likelihood_gradient=0`. The cor
 
 ## What Remains
 
-- Refresh `scoring/scores.json` so the generated direct-MH sanity baseline is scored by the default job, not only by opt-in manual evaluation.
+- Re-run validation after moving direct-MH sanity metrics to `scoring/sanity_scores.json`; `scoring/scores.json` must remain restricted to methods present in `reference.json`.
 - If extending beyond the synthetic core, add image or text posterior sampling experiments.
 - Add paper baselines such as SMC or DPS if extending beyond the synthetic core reproduction.
 - Paper baselines such as SMC or DPS remain paper-reported references rather than reproduced implementations.
@@ -41,3 +41,4 @@ All retained reproduced SGDD runs preserve `uses_likelihood_gradient=0`. The cor
 - The first container build failed because the base image used `ghcr.io`; it was changed to the portable Docker Hub image `python:3.11-slim-bookworm`.
 - Validator attempt 1 rejected the old `D=2` score as too far from Table 2; the corrected Euler-prior job now lands near the paper's reported `D=2` result.
 - The continuation audit found stale score provenance, an SGDD-specific evaluator path convention, and a hard-coded constraint metric. The evaluator now supports explicit method/run arguments, uses method-agnostic checkpoint naming, and reads `uses_likelihood_gradient` from run metadata.
+- Job `af393454-f57` correctly computed direct-MH sanity metrics, but validation failed because `direct_mh` is not a paper-reported reference method. The standard score file now remains SGDD-only and sanity metrics are written to `scoring/sanity_scores.json`.

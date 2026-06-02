@@ -25,5 +25,6 @@ if [ "${RUN_GENERATE:-1}" = "1" ]; then
   done
 fi
 
-INCLUDE_SANITY_BASELINES=1 bash scripts/evaluate.sh
+bash scripts/evaluate.sh
+INCLUDE_SANITY_BASELINES=1 SCORES_OUTPUT=scoring/sanity_scores.json bash scripts/evaluate.sh
 python validate.py --compare

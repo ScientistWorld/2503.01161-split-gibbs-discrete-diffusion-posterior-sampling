@@ -20,7 +20,11 @@
 ### [2026-06-02 22:35] - core_claim_plus
 - Corrected CPU compute-container job `cb3d9782-268` completed on `synthetic_d2`, `synthetic_d5`, and `synthetic_d10`.
 - SGDD preserves `uses_likelihood_gradient=0`, is close to the paper's `D=2` result, and improves over the paper's SGDD results on `D=5` and `D=10`.
-- Updated the standard run path to include the generated direct-MH sanity baseline in `scoring/scores.json`.
+- Updated the standard run path to evaluate the generated direct-MH sanity baseline separately from the paper-compatible `scoring/scores.json`.
+
+### [2026-06-02 22:45] - core_claim_plus
+- Job `af393454-f57` failed validation only because the direct-MH sanity baseline was placed in `scoring/scores.json`, where the validator expects methods from `reference.json`.
+- Moved direct-MH sanity evaluation to `scoring/sanity_scores.json` and restored `scoring/scores.json` as the official paper-comparison output.
 
 ## Stop Justification
-- Not stopped; submitting a short CPU validation job to refresh scores with the included direct-MH sanity baseline.
+- Not stopped; submitting a CPU validation job to confirm the corrected scoring split passes validation.

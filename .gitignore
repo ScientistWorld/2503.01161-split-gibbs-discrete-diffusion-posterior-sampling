@@ -173,6 +173,7 @@ mcr_cache/
 *.bundle.lock
 
 # Experiment tracking
+scoring/sanity_scores.json
 wandb/
 .wandb/
 mlruns/

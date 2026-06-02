@@ -36,4 +36,4 @@ case "${NAME}" in
     ;;
 esac
 
-INCLUDE_SANITY_BASELINES=1 bash scripts/evaluate.sh
+INCLUDE_SANITY_BASELINES=1 SCORES_OUTPUT=scoring/sanity_scores.json bash scripts/evaluate.sh

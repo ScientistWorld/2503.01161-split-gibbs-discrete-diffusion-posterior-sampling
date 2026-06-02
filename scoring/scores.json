@@ -6,11 +6,6 @@
           "hellinger": 0.16153992868906722,
           "total_variation": 0.13209929519017288,
           "uses_likelihood_gradient": 0.0
-        },
-        "direct_mh": {
-          "hellinger": 0.1297124725945928,
-          "total_variation": 0.10104806853114791,
-          "uses_likelihood_gradient": 0.0
         }
       }
     },
@@ -20,11 +15,6 @@
           "hellinger": 0.16519695341648036,
           "total_variation": 0.15158287483714739,
           "uses_likelihood_gradient": 0.0
-        },
-        "direct_mh": {
-          "hellinger": 0.1593220942870377,
-          "total_variation": 0.1357898213723493,
-          "uses_likelihood_gradient": 0.0
         }
       }
     },
@@ -33,11 +23,6 @@
         "sgdd": {
           "hellinger": 0.1810130483149546,
           "total_variation": 0.16260217713142777,
-          "uses_likelihood_gradient": 0.0
-        },
-        "direct_mh": {
-          "hellinger": 0.17604440920559444,
-          "total_variation": 0.15107012880520976,
           "uses_likelihood_gradient": 0.0
         }
       }
