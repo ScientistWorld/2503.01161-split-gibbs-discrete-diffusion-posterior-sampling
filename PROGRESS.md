@@ -2,36 +2,26 @@
 
 ## What Works
 
-<!-- What has been successfully reproduced so far. -->
+- Implemented the paper's synthetic SGDD computation with alternating likelihood Metropolis-Hastings updates and exact discrete prior-denoising updates.
+- Implemented method-agnostic synthetic data definitions and exact marginal evaluation.
+- Added scripts for download, method execution, evaluation, and end-to-end reproduction.
 
-## Results
+## Results Achieved
 
-<!-- Reproduced numbers compared to the paper's reported numbers. -->
+No full reproduction job has completed yet. A CPU job is being submitted to run `D=2`, `D=5`, and `D=10` SGDD sample generation and validation.
 
-## Remaining
+## Deviations From Paper
 
-<!-- What still needs to be done to reach higher milestones. -->
+- This reproduction targets the synthetic Table 2 setting rather than the image inpainting or text infilling experiments. The synthetic task is sufficient for the core algorithmic claim and does not require training a diffusion model.
+- The implementation uses the analytic factorized prior score for the synthetic task, matching the paper's synthetic setup.
 
-## Issues
+## What Remains
 
-<!-- Blockers, bugs, or difficulties encountered. -->
+- Run the full synthetic reproduction job.
+- Compare reproduced Hellinger and total variation distances against Table 2.
+- If the core result is confirmed, optionally add image or text posterior sampling experiments.
 
-## Deviations from Paper
+## Issues Encountered
 
-<!-- Do not edit this section unless you deviated from the paper's original setup.
-     For each deviation, document: what the paper used, what you substituted, and why.
-
-     ACCEPTABLE deviations (data/resource/scale substitutions — milestones still valid):
-       - Replaced a proprietary dataset with a public one
-       - Used a smaller model of the same architecture
-       - Scaled down training (fewer epochs, smaller batch)
-       - Used a different library for the same algorithm
-
-     UNACCEPTABLE deviations (algorithm substitutions — milestones above 'none' are void):
-       - Replaced the paper's algorithm with a fundamentally different one
-       - Wrote a generic model trained to approximate the method's outputs
-         instead of implementing the method's computational steps
-
-     The test: could someone reading your code identify which algorithm from
-     the paper you implemented? If not, you replaced the method. -->
-
+- The markdown paper did not include all low-level synthetic operator details; the released author code was inspected to recover the exact SingleModal setup.
+- A tiny login-node smoke test could not run because the local Python outside the compute container lacks `numpy`; dependencies are declared in `environment/setup.sh`, so execution is being tested through the scheduler.

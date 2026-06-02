@@ -84,6 +84,7 @@ shared/
 .envrc
 .claude/
 .codex/
+.git-shims/
 
 # Agent-generated scaffolding files
 codex/
@@ -94,6 +95,7 @@ CLAUDE.md
 # Python package / build directories (agents install under many names)
 .python_packages/
 .cache/
+method/author_code/
 # Pip cache variants (beyond .cache/)
 .pip_cache/
 .pip-cache/

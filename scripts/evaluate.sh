@@ -26,5 +26,17 @@ cd /home/user
 
 mkdir -p scoring
 
-# TODO: implement evaluation using code in eval/
-# Must write scoring/scores.json at the end
+RUN_ARGS=()
+
+for DIM in 2 5 10; do
+  if [ -f "checkpoints/sgdd_synthetic_d${DIM}/samples.npz" ]; then
+    RUN_ARGS+=(--run "synthetic_d${DIM}" "sgdd" "checkpoints/sgdd_synthetic_d${DIM}")
+  fi
+done
+
+if [ "${#RUN_ARGS[@]}" -eq 0 ]; then
+  echo "No generated sample artifacts found under checkpoints/." >&2
+  exit 1
+fi
+
+python -m eval.evaluate_synthetic "${RUN_ARGS[@]}" --output scoring/scores.json

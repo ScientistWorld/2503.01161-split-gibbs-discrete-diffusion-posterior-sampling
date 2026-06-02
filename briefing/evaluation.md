@@ -1,15 +1,15 @@
 # Evaluation
 
-How success is measured. Describe only the metrics, targets, and evaluation procedure — do NOT describe the paper's method or how they achieved these results. Think of this as a general evaluation protocal for other scientists trying to solve the same problem, where they should not see this paper's solution.
+The benchmark evaluates three synthetic dimensions: `D=2`, `D=5`, and `D=10`. For each dimension, a method writes integer samples to:
 
-## Metrics
+`checkpoints/sgdd_synthetic_d<D>/samples.npz`
 
-<!-- What metrics are used? How are they computed? What does higher/lower mean? -->
+The file must contain a `samples` array with shape `[num_samples, D]` and entries in `[0, 49]`. `scripts/evaluate.sh` calls only `eval/` code, computes the exact first-two-coordinate posterior marginal from the public problem definition in `data/`, and writes `scoring/scores.json`.
 
-## Baselines and Targets
+Metrics:
 
-<!-- What performance levels exist as reference points? Include the paper's reported numbers as targets, and any standard baselines. A scientist agent should know what "good" looks like. -->
+- `hellinger`: Hellinger distance between empirical and exact first-two-coordinate marginals. Lower is better.
+- `total_variation`: Total variation distance between empirical and exact first-two-coordinate marginals. Lower is better.
+- `uses_likelihood_gradient`: constraint metric indicating whether the method relies on likelihood gradients. The target method is gradient-free, so lower is better.
 
-## Evaluation Protocol
-
-<!-- How should evaluation be run? What data split, what conditions? Any important details about how to compare fairly (e.g., fixed seeds, specific test sets, averaging over runs). -->
+The main comparison is against the paper's Table 2 synthetic posterior-recovery results.

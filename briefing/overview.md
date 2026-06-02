@@ -1,14 +1,5 @@
 # Overview
 
-- **Paper ID:** <!-- e.g. 1706.03762 -->
-- **Title:** <!-- e.g. Attention Is All You Need -->
-- **Domain:** <!-- e.g. Computer Vision / Object Detection -->
-- **TL;DR:** <!-- One sentence: what this paper does and why it matters -->
+This workspace reproduces the core synthetic result from "Split Gibbs Discrete Diffusion Posterior Sampling." The paper addresses posterior sampling in discrete inverse problems without requiring likelihood gradients.
 
-## Short Summary
-
-<!-- 3-5 sentences covering the problem, approach, and main findings -->
-
-## Key Results
-
-<!-- 2-3 bullet points: main findings or numbers in bullet points -->
+The implemented benchmark runs SGDD on the paper's synthetic categorical posterior-recovery task for `D=2`, `D=5`, and `D=10`, then evaluates generated samples against the exact posterior marginal using Hellinger and total variation distances.

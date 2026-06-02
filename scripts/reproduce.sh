@@ -18,7 +18,8 @@ set -e
 
 cd /home/user
 
-# TODO: implement full reproduction pipeline
-# e.g.:
-#   bash scripts/baseline.sh
-#   bash scripts/method.sh
+for DIM in 2 5 10; do
+  bash scripts/method.sh "${DIM}"
+done
+
+python validate.py --compare

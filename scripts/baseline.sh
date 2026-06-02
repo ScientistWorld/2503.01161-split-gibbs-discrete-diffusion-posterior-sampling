@@ -17,4 +17,23 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+NAME="${1:-direct_mh}"
+DIM="${2:-2}"
+
+case "${NAME}" in
+  direct_mh)
+    python -m baseline.direct_mh_synthetic \
+      --dim "${DIM}" \
+      --vocab-size 50 \
+      --num-samples "${NUM_SAMPLES:-10000}" \
+      --steps 100 \
+      --seed 1 \
+      --output-dir "checkpoints/direct_mh_synthetic_d${DIM}"
+    ;;
+  *)
+    echo "Unknown baseline: ${NAME}" >&2
+    exit 2
+    ;;
+esac
+
+bash scripts/evaluate.sh

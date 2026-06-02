@@ -13,8 +13,8 @@ set -e
 
 cd /home/user
 
-# Example: train a model
-python method/train.py --epochs 10 --lr 0.001
+for DIM in 2 5 10; do
+  bash scripts/method.sh "${DIM}"
+done
 
-# Example: evaluate
-bash scripts/evaluate.sh checkpoints/best.pt
+python validate.py --compare
