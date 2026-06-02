@@ -2,8 +2,8 @@
 
 This evaluator is method-agnostic: it reads generated sample artifacts and
 metadata from checkpoint directories, then scores a deterministic held-out half
-of each sample set against the exact posterior marginal. In default final-test
-mode it mirrors the experiment/method keys present in scoring/scores_train.json.
+of each sample set against exact posterior marginals. In default final-test mode
+it mirrors the experiment/method keys present in scoring/scores_train.json.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from data.synthetic_sgdd import SyntheticConfig, empirical_first2, exact_posterior_first2, hellinger, total_variation
+from data.synthetic_sgdd import SyntheticConfig, exact_posterior_first2, hellinger, total_variation
 
 
 SPLIT_SEED = 250301161
@@ -42,17 +42,46 @@ def _sample_slice(samples: np.ndarray) -> np.ndarray:
     return samples[np.sort(keep)]
 
 
+def _coordinate_pair(config: SyntheticConfig) -> tuple[int, int]:
+    if config.dim < 2:
+        raise ValueError("Synthetic evaluation requires at least two coordinates")
+    if config.dim == 2:
+        return (0, 1)
+    if config.dim <= 5:
+        return (1, config.dim - 1)
+    return (2, config.dim - 3)
+
+
+def _empirical_pair(samples: np.ndarray, vocab_size: int, pair: tuple[int, int]) -> np.ndarray:
+    hist = np.zeros((vocab_size, vocab_size), dtype=np.float64)
+    np.add.at(hist, (samples[:, pair[0]], samples[:, pair[1]]), 1.0)
+    return hist / max(len(samples), 1)
+
+
+def _mean_coordinate_tv(samples: np.ndarray, target_1d: np.ndarray, vocab_size: int) -> float:
+    distances = []
+    for coord in range(samples.shape[1]):
+        counts = np.bincount(samples[:, coord], minlength=vocab_size).astype(np.float64)
+        empirical = counts / max(len(samples), 1)
+        distances.append(total_variation(empirical, target_1d))
+    return float(np.mean(distances))
+
+
 def evaluate_run(run_dir: Path, config: SyntheticConfig, method: str) -> dict[str, float]:
     artifact = np.load(run_dir / "samples.npz")
     samples = artifact["samples"]
     samples = _sample_slice(samples)
     if len(samples) == 0:
         raise ValueError(f"{run_dir}/samples.npz has no samples in the {SLICE_NAME} slice")
+    if samples.ndim != 2 or samples.shape[1] != config.dim:
+        raise ValueError(f"{run_dir}/samples.npz has samples with shape {samples.shape}, expected (*, {config.dim})")
     target = exact_posterior_first2(config)
-    empirical = empirical_first2(samples, config.vocab_size)
+    empirical = _empirical_pair(samples, config.vocab_size, _coordinate_pair(config))
+    target_1d = target.sum(axis=1)
     return {
         "hellinger": hellinger(empirical, target),
         "total_variation": total_variation(empirical, target),
+        "coordinate_marginal_tv": _mean_coordinate_tv(samples, target_1d, config.vocab_size),
         "uses_likelihood_gradient": _read_constraint_metadata(run_dir, method),
     }
 
