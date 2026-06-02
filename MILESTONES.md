@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: method_runs**
 
 ## Progress Log
 
@@ -14,3 +14,7 @@
 - Ran the SGDD synthetic posterior sampler for `D=2`, `D=5`, and `D=10` inside the compute container.
 - Validation passed with method/evaluation separation intact.
 - Reproduced the paper's gradient-free posterior recovery claim on all three synthetic Table 2 settings.
+
+### [2026-06-02 21:30] - method_runs
+- External validation rejected the `D=2` score as too far from the paper.
+- Corrected the SGDD run configuration and resubmitted before claiming `core_claim`.

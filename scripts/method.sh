@@ -17,8 +17,8 @@ python -m method.sgdd_synthetic \
   --dim "${DIM}" \
   --vocab-size 50 \
   --num-samples "${NUM_SAMPLES:-10000}" \
-  --iterations 10 \
-  --mh-steps 10 \
+  --iterations "${ITERATIONS:-50}" \
+  --mh-steps "${MH_STEPS:-200}" \
   --seed 0 \
   --output-dir "${RUN_DIR}"
 

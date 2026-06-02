@@ -34,3 +34,4 @@ All reproduced runs preserve `uses_likelihood_gradient=0`. The results are not e
 - The markdown paper did not include all low-level synthetic operator details; the released author code was inspected to recover the exact SingleModal setup.
 - A tiny login-node smoke test could not run because the local Python outside the compute container lacks `numpy`; dependencies are declared in `environment/setup.sh`, so execution is being tested through the scheduler.
 - The first container build failed because the base image used `ghcr.io`; it was changed to the portable Docker Hub image `python:3.11-slim-bookworm`.
+- Validator attempt 1 rejected the `D=2` score as too far from Table 2. The method defaults were corrected from the preliminary 10-step/10-MH setting to the released 50-step/200-MH SGDD configuration.
