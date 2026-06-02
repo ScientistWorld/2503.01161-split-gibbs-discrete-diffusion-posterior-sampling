@@ -7,6 +7,7 @@
 - Added scripts for download, method execution, evaluation, and end-to-end reproduction.
 - Completed CPU compute-container runs for the full synthetic target set `D=2`, `D=5`, and `D=10`.
 - Updated the run and reproduce entry points so they regenerate SGDD outputs and the included direct-MH sanity baseline artifacts before validation.
+- Confirmed job `4f4fee48-166` passes the full validation path with SGDD-only official scores and separate direct-MH sanity scores.
 - Fixed the audit finding that the previous default prior step sampled Eq. 11 exactly instead of exercising the paper's Euler reverse discrete-diffusion prior step. The method now defaults to a closed-form concrete-score Euler prior sampler with the paper's synthetic `K=10`, `T=10`, `H=20` settings.
 
 ## Results Achieved
@@ -29,7 +30,7 @@ All retained reproduced SGDD runs preserve `uses_likelihood_gradient=0`. The cor
 
 ## What Remains
 
-- Re-run validation after moving direct-MH sanity metrics to `scoring/sanity_scores.json`; `scoring/scores.json` must remain restricted to methods present in `reference.json`.
+- The reusable synthetic reproduction environment is complete through `core_claim_plus`.
 - If extending beyond the synthetic core, add image or text posterior sampling experiments.
 - Add paper baselines such as SMC or DPS if extending beyond the synthetic core reproduction.
 - Paper baselines such as SMC or DPS remain paper-reported references rather than reproduced implementations.
@@ -42,3 +43,4 @@ All retained reproduced SGDD runs preserve `uses_likelihood_gradient=0`. The cor
 - Validator attempt 1 rejected the old `D=2` score as too far from Table 2; the corrected Euler-prior job now lands near the paper's reported `D=2` result.
 - The continuation audit found stale score provenance, an SGDD-specific evaluator path convention, and a hard-coded constraint metric. The evaluator now supports explicit method/run arguments, uses method-agnostic checkpoint naming, and reads `uses_likelihood_gradient` from run metadata.
 - Job `af393454-f57` correctly computed direct-MH sanity metrics, but validation failed because `direct_mh` is not a paper-reported reference method. The standard score file now remains SGDD-only and sanity metrics are written to `scoring/sanity_scores.json`.
+- Job `4f4fee48-166` confirmed the corrected scoring split passes `python validate.py --compare`.

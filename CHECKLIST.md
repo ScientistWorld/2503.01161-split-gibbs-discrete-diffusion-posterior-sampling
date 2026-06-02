@@ -15,3 +15,4 @@
 - [x] Make evaluation paths and gradient-constraint metadata method-agnostic.
 - [x] Validate corrected Euler-prior SGDD on `D=2`, `D=5`, and `D=10`.
 - [x] Score generated direct-MH sanity artifacts without breaking the paper-compatible `scores.json`.
+- [x] Confirm final compute-container validation passes after the scoring split fix.
