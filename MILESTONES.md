@@ -31,5 +31,10 @@
 - Official `scoring/scores.json` contains the corrected SGDD results for all three synthetic Table 2 dimensions.
 - Optional direct-MH sanity metrics are regenerated separately in `scoring/sanity_scores.json`.
 
+### [2026-06-02 23:00] - core_claim_plus
+- Final verification job `56df88b2-3db` completed successfully on a CPU node.
+- Regenerated auxiliary train/test scores after deterministic split cleanup.
+- `python validate.py --compare` passed with no validation warnings.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

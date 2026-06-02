@@ -8,13 +8,14 @@ The workspace started at `core_claim_plus` with a working synthetic reproduction
 
 - Minor: `coordinate_marginal_tv` had been introduced into the official metric definitions and train/test score files, but it is not a paper-reported Table 2 metric and the official `scores.json` did not include it. This made the scoring rubric internally inconsistent.
 - Minor: `scoring/DIRECTION.md` named method-family details too specifically for a from-scratch scientist-facing direction document.
-- Cosmetic: `validate.py --compare` emits heuristic warnings for train/test evaluators because they use a seeded RNG to split existing generated samples. The evaluators still read `samples.npz` artifacts and do not rerun the method.
+- Cosmetic: `validate.py --compare` emitted heuristic warnings for train/test evaluators because they used a seeded RNG to split existing generated samples. The evaluators still read `samples.npz` artifacts and do not rerun the method.
 
 ## Fixes Applied
 
 - Removed `coordinate_marginal_tv` from `scoring/reference.json`, `scoring/TARGETS.md`, the official evaluator, the train/test evaluators, and the existing train/test score files.
 - Rephrased `scoring/DIRECTION.md` to describe allowed work as discrete posterior-sampling methodology without naming the paper's specific algorithmic construction.
-- Re-ran `python validate.py --compare`; all checks passed.
+- Replaced the seeded RNG train/test split with a deterministic hash over sample indices, regenerated the auxiliary train/test score files in CPU job `56df88b2-3db`, and re-ran `python validate.py --compare`.
+- Final validation passed with no warnings: import separation, artifact-driven evaluation, train/test independence, method-key sync, and shared-path checks all passed.
 
 ## Final Judgment
 
