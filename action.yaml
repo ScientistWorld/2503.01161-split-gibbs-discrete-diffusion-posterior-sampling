@@ -1,5 +1,5 @@
-action: done
+action: submit
 gpus: 0
-test: false
+test: true
 milestone: core_claim_plus
-notes: "Final verification passed; scoring/docs are aligned and the synthetic core-claim-plus gym is ready."
+notes: "CPU-only final verification job to regenerate train/test scores after deterministic split cleanup and run validate.py --compare."

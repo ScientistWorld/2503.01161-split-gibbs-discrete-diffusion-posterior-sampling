@@ -16,7 +16,7 @@ import numpy as np
 from data.synthetic_sgdd import SyntheticConfig, exact_posterior_first2, hellinger, total_variation
 
 
-SPLIT_SEED = 250301161
+SPLIT_KEY = 250301161
 SLICE_NAME = "train"
 
 
@@ -35,8 +35,7 @@ def _read_constraint_metadata(run_dir: Path, method: str) -> float:
 
 
 def _sample_slice(samples: np.ndarray) -> np.ndarray:
-    rng = np.random.default_rng(SPLIT_SEED)
-    indices = rng.permutation(len(samples))
+    indices = np.argsort((np.arange(len(samples), dtype=np.int64) * 1103515245 + SPLIT_KEY) % (2**31))
     keep = indices[: len(indices) // 2]
     return samples[np.sort(keep)]
 
