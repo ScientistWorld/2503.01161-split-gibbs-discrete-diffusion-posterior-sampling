@@ -93,6 +93,18 @@ def _discover_runs(checkpoints_dir: Path, dims: list[int]) -> list[tuple[str, st
     return runs
 
 
+def _runs_from_scores(scores_path: Path, checkpoints_dir: Path) -> list[tuple[str, str, str]]:
+    payload = json.loads(scores_path.read_text())
+    runs: list[tuple[str, str, str]] = []
+    for experiment, experiment_payload in sorted(payload.get("experiments", {}).items()):
+        dim = int(experiment.rsplit("_d", 1)[1])
+        results = experiment_payload.get("results", {})
+        for method in sorted(results):
+            run_dir = checkpoints_dir / f"{method}_synthetic_d{dim}"
+            runs.append((experiment, method, str(run_dir)))
+    return runs
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run", action="append", nargs=3, metavar=("EXPERIMENT", "METHOD", "RUN_DIR"))
@@ -100,9 +112,15 @@ def main() -> None:
     parser.add_argument("--vocab-size", type=int, default=50)
     parser.add_argument("--checkpoints-dir", type=Path, default=Path("checkpoints"))
     parser.add_argument("--dims", nargs="+", type=int, default=[2, 5, 10])
+    parser.add_argument("--from-scores", type=Path, default=Path("scoring/scores.json"))
     args = parser.parse_args()
 
-    runs = args.run if args.run else _discover_runs(args.checkpoints_dir, args.dims)
+    if args.run:
+        runs = args.run
+    elif args.from_scores.exists():
+        runs = _runs_from_scores(args.from_scores, args.checkpoints_dir)
+    else:
+        runs = _discover_runs(args.checkpoints_dir, args.dims)
     if not runs:
         raise SystemExit(f"No generated sample artifacts found under {args.checkpoints_dir}.")
 

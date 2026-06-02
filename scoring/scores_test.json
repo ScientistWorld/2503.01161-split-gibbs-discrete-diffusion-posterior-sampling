@@ -4,16 +4,9 @@
     "synthetic_d10": {
       "_slice": "test",
       "_run_dirs": {
-        "direct_mh": "/home/user/checkpoints/direct_mh_synthetic_d10",
         "sgdd": "/home/user/checkpoints/sgdd_synthetic_d10"
       },
       "results": {
-        "direct_mh": {
-          "hellinger": 0.24274556120643428,
-          "total_variation": 0.20586625961384739,
-          "coordinate_marginal_tv": 0.03325397927049699,
-          "uses_likelihood_gradient": 0.0
-        },
         "sgdd": {
           "hellinger": 0.2584077439224848,
           "total_variation": 0.22538587551830844,
@@ -25,16 +18,9 @@
     "synthetic_d2": {
       "_slice": "test",
       "_run_dirs": {
-        "direct_mh": "/home/user/checkpoints/direct_mh_synthetic_d2",
         "sgdd": "/home/user/checkpoints/sgdd_synthetic_d2"
       },
       "results": {
-        "direct_mh": {
-          "hellinger": 0.18560270751728022,
-          "total_variation": 0.14912572232257523,
-          "coordinate_marginal_tv": 0.028662581096539387,
-          "uses_likelihood_gradient": 0.0
-        },
         "sgdd": {
           "hellinger": 0.2044028956833526,
           "total_variation": 0.16733480922345023,
@@ -46,16 +32,9 @@
     "synthetic_d5": {
       "_slice": "test",
       "_run_dirs": {
-        "direct_mh": "/home/user/checkpoints/direct_mh_synthetic_d5",
         "sgdd": "/home/user/checkpoints/sgdd_synthetic_d5"
       },
       "results": {
-        "direct_mh": {
-          "hellinger": 0.22603367877018055,
-          "total_variation": 0.19538481508365468,
-          "coordinate_marginal_tv": 0.031568603305544604,
-          "uses_likelihood_gradient": 0.0
-        },
         "sgdd": {
           "hellinger": 0.22290674806424435,
           "total_variation": 0.20488173806737248,
