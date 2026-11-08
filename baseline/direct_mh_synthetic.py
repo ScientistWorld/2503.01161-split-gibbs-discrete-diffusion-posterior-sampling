@@ -1,57 +1,52 @@
-"""Direct Metropolis-Hastings baseline without a diffusion prior step."""
+"""Direct single-site Metropolis-Hastings on p_0(x) p(y|x), without split Gibbs.
+
+This sampler uses the prior's clean marginal (the sigma -> 0 concrete score)
+and the black-box likelihood. On the synthetic task the prior is exact, which
+makes long-run MCMC a strong comparator rather than a weak baseline.
+
+    python -m baseline.direct_mh_synthetic --problem PROBLEM.json --output-dir OUT
+"""
 
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 import numpy as np
 
-from data.synthetic_sgdd import SyntheticConfig, log_likelihood, prior_probs_1d
+from data.synthetic_sgdd import SyntheticProblem, load_problem, log_likelihood, prior_probs_1d, save_samples
 
 
-def run_direct_mh(config: SyntheticConfig, num_samples: int, steps: int, seed: int) -> tuple[np.ndarray, dict[str, float]]:
-    rng = np.random.default_rng(seed)
-    prior = prior_probs_1d(config)
-    x = rng.integers(0, config.vocab_size, size=(num_samples, config.dim), dtype=np.int64)
-    current = log_likelihood(x, config) + np.log(prior[x] + 1e-300).sum(axis=1)
+def run_direct_mh(problem: SyntheticProblem, steps: int, seed_offset: int = 0) -> tuple[np.ndarray, dict]:
+    rng = np.random.default_rng(problem.seed + seed_offset)
+    log_prior = np.log(prior_probs_1d(problem) + 1e-300)
+    n = problem.num_samples
+    x = rng.integers(0, problem.vocab_size, size=(n, problem.dim), dtype=np.int64)
+    current = log_likelihood(x, problem) + log_prior[x].sum(axis=1)
+    rows = np.arange(n)
     accepted = 0
-
     for _ in range(steps):
         proposal = x.copy()
-        rows = np.arange(num_samples)
-        cols = rng.integers(0, config.dim, size=num_samples)
-        proposal[rows, cols] = rng.integers(0, config.vocab_size, size=num_samples)
-        score = log_likelihood(proposal, config) + np.log(prior[proposal] + 1e-300).sum(axis=1)
-        accept = np.log(rng.random(num_samples) + 1e-300) < np.minimum(score - current, 0.0)
+        cols = rng.integers(0, problem.dim, size=n)
+        proposal[rows, cols] = rng.integers(0, problem.vocab_size, size=n)
+        score = log_likelihood(proposal, problem) + log_prior[proposal].sum(axis=1)
+        accept = np.log(rng.random(n) + 1e-300) < np.minimum(score - current, 0.0)
         x[accept] = proposal[accept]
         current[accept] = score[accept]
         accepted += int(accept.sum())
-
-    return x, {
-        "acceptance": accepted / max(num_samples * steps, 1),
-        "steps": steps,
-        "seed": seed,
-        "uses_likelihood_gradient": 0.0,
-    }
+    return x, {"method": "direct_mh", "steps": steps, "acceptance": accepted / max(n * steps, 1)}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dim", type=int, default=2)
-    parser.add_argument("--vocab-size", type=int, default=50)
-    parser.add_argument("--num-samples", type=int, default=10000)
+    parser.add_argument("--problem", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--steps", type=int, default=100)
-    parser.add_argument("--seed", type=int, default=1)
-    parser.add_argument("--output-dir", type=Path, default=Path("checkpoints/direct_mh_synthetic_d2"))
+    parser.add_argument("--seed-offset", type=int, default=0)
     args = parser.parse_args()
-
-    config = SyntheticConfig(dim=args.dim, vocab_size=args.vocab_size)
-    samples, meta = run_direct_mh(config, args.num_samples, args.steps, args.seed)
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(args.output_dir / "samples.npz", samples=samples)
-    (args.output_dir / "metadata.json").write_text(json.dumps(meta, indent=2) + "\n")
+    problem = load_problem(args.problem)
+    samples, meta = run_direct_mh(problem, args.steps, args.seed_offset)
+    save_samples(args.output_dir, samples, meta)
 
 
 if __name__ == "__main__":

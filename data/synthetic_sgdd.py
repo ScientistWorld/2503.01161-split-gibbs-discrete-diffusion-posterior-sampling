@@ -1,100 +1,145 @@
-"""Synthetic posterior recovery problem used by SGDD.
+"""Public problem definition for the synthetic discrete posterior-sampling task.
 
-This module is method-agnostic. It defines the finite categorical Gaussian
-prior, the SingleModal inverse observation from the authors' code, and exact
-posterior marginals for evaluating generated samples.
+This module is method-agnostic. It turns a problem specification (a JSON file
+written by the evaluator, see ``load_problem``) into the two ingredients a
+posterior sampler is allowed to use:
+
+* the prior over each categorical coordinate (a discretized Gaussian), whose
+  uniform-kernel noised marginals ``noised_prior_probs`` give the closed-form
+  concrete score of the synthetic discrete diffusion prior;
+* the observation log-likelihood ``log_likelihood`` of full token sequences.
+
+It deliberately contains no posterior, no evaluation targets and no metrics.
+The evaluator builds its own copy of the problem from the specification, so
+editing this file changes what a sampler sees, not what it is scored against.
+
+Specification fields (all written by the evaluator):
+
+``instance_id``      opaque name of the problem instance
+``dim``              number of categorical coordinates D
+``vocab_size``       number of categories per coordinate N
+``num_samples``      exact number of samples the sampler must return
+``seed``             seed the sampler should use (all methods get the same one)
+``prior``            {"type": "discretized_gaussian", "std", "grid_min", "grid_max"}
+``likelihood``       {"type": "coordinatewise" | "l1_norm", "sigma", "observation"}
+
+``coordinatewise``: observation is a length-D vector y and
+    log p(y|x) = -mean_d (|x_d - c| - y_d)^2 / sigma^2
+``l1_norm``: observation is a scalar y and
+    log p(y|x) = -(sum_d |x_d - c| - y)^2 / sigma^2
+where c = (N - 1) / 2 is the centre token.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 
 
+LIKELIHOOD_TYPES = ("coordinatewise", "l1_norm")
+
+
 @dataclass(frozen=True)
-class SyntheticConfig:
-    dim: int = 2
-    vocab_size: int = 50
-    prior_std: float = 2.0
-    likelihood_sigma: float = 3.0
-    grid_min: float = -5.0
-    grid_max: float = 5.0
+class SyntheticProblem:
+    instance_id: str
+    dim: int
+    vocab_size: int
+    num_samples: int
+    seed: int
+    prior_std: float
+    grid_min: float
+    grid_max: float
+    likelihood_type: str
+    likelihood_sigma: float
+    observation: tuple[float, ...]
+
+    @property
+    def center(self) -> float:
+        return (self.vocab_size - 1) / 2.0
 
 
-def grid_values(config: SyntheticConfig) -> np.ndarray:
-    return np.linspace(config.grid_min, config.grid_max, config.vocab_size, dtype=np.float64)
+def problem_from_spec(spec: dict) -> SyntheticProblem:
+    prior = spec["prior"]
+    likelihood = spec["likelihood"]
+    if prior.get("type") != "discretized_gaussian":
+        raise ValueError(f"Unsupported prior type: {prior.get('type')}")
+    kind = likelihood["type"]
+    if kind not in LIKELIHOOD_TYPES:
+        raise ValueError(f"Unsupported likelihood type: {kind}")
+    dim = int(spec["dim"])
+    obs = np.atleast_1d(np.asarray(likelihood["observation"], dtype=np.float64))
+    if kind == "coordinatewise":
+        if obs.size == 1:
+            obs = np.full(dim, float(obs[0]))
+        if obs.size != dim:
+            raise ValueError("coordinatewise observation must have one value per coordinate")
+    elif obs.size != 1:
+        raise ValueError("l1_norm observation must be a scalar")
+    return SyntheticProblem(
+        instance_id=str(spec.get("instance_id", "instance")),
+        dim=dim,
+        vocab_size=int(spec["vocab_size"]),
+        num_samples=int(spec["num_samples"]),
+        seed=int(spec["seed"]),
+        prior_std=float(prior["std"]),
+        grid_min=float(prior["grid_min"]),
+        grid_max=float(prior["grid_max"]),
+        likelihood_type=kind,
+        likelihood_sigma=float(likelihood["sigma"]),
+        observation=tuple(float(v) for v in obs),
+    )
 
 
-def prior_logits_1d(config: SyntheticConfig) -> np.ndarray:
-    grid = grid_values(config)
-    return -0.5 * (grid / config.prior_std) ** 2
+def load_problem(path: str | Path) -> SyntheticProblem:
+    return problem_from_spec(json.loads(Path(path).read_text()))
 
 
-def normalize_log_probs(logits: np.ndarray, axis: int | None = None) -> np.ndarray:
-    shifted = logits - np.max(logits, axis=axis, keepdims=True)
-    probs = np.exp(shifted)
-    return probs / probs.sum(axis=axis, keepdims=True)
+def grid_values(problem: SyntheticProblem) -> np.ndarray:
+    return np.linspace(problem.grid_min, problem.grid_max, problem.vocab_size, dtype=np.float64)
 
 
-def prior_probs_1d(config: SyntheticConfig) -> np.ndarray:
-    return normalize_log_probs(prior_logits_1d(config))
+def prior_probs_1d(problem: SyntheticProblem) -> np.ndarray:
+    """Prior probability of each token for one coordinate (coordinates are i.i.d.)."""
+    logits = -0.5 * (grid_values(problem) / problem.prior_std) ** 2
+    probs = np.exp(logits - logits.max())
+    return probs / probs.sum()
 
 
-def center_index(config: SyntheticConfig) -> float:
-    return (config.vocab_size - 1) / 2.0
+def noised_prior_probs(prior_1d: np.ndarray, sigma: float) -> np.ndarray:
+    """Uniform-kernel forward marginal p_sigma = e^-sigma p_0 + (1 - e^-sigma) / N.
 
-
-def observation_value(config: SyntheticConfig) -> float:
-    """Scalar paper-style synthetic observation y from x = discretize(5/3)."""
-    x_obs = int(((5.0 / 3.0 - config.grid_min) / (config.grid_max - config.grid_min)) * config.vocab_size)
-    x_obs = min(max(x_obs, 0), config.vocab_size - 1)
-    return float(abs(x_obs - center_index(config)))
-
-
-def observation(config: SyntheticConfig) -> np.ndarray:
-    """Vector observation used by the coordinate-wise SingleModal operator."""
-    return np.full(config.dim, observation_value(config), dtype=np.float64)
-
-
-def singlemodal_loss_per_dim(tokens: np.ndarray, config: SyntheticConfig) -> np.ndarray:
-    """Per-coordinate squared residual for the synthetic SingleModal operator."""
-    y = observation_value(config)
-    return (np.abs(tokens.astype(np.float64) - center_index(config)) - y) ** 2
-
-
-def log_likelihood(tokens: np.ndarray, config: SyntheticConfig) -> np.ndarray:
-    """Log p(y|x), matching the authors' BaseOperator scaling."""
-    losses = singlemodal_loss_per_dim(tokens, config).mean(axis=-1)
-    return -losses / (config.likelihood_sigma**2)
-
-
-def exact_posterior_first2(config: SyntheticConfig) -> np.ndarray:
-    """Exact posterior marginal over the first two dimensions.
-
-    The synthetic prior is factorized and the SingleModal likelihood is a mean
-    of coordinate-wise losses, so the posterior also factorizes. The likelihood
-    contribution is scaled by 1 / D because the authors' synthetic loss uses a
-    mean over dimensions.
+    Ratios p_sigma(v) / p_sigma(c) are the concrete score of the synthetic
+    discrete diffusion prior at noise level sigma.
     """
-    prior = prior_probs_1d(config)
-    tokens = np.arange(config.vocab_size)
-    per_dim_loglike = -singlemodal_loss_per_dim(tokens, config)
-    per_dim_loglike /= config.dim * (config.likelihood_sigma**2)
-    marginal_1d = normalize_log_probs(np.log(prior + 1e-300) + per_dim_loglike)
-    return np.outer(marginal_1d, marginal_1d)
+    keep = np.exp(-sigma)
+    return keep * prior_1d + (1.0 - keep) / len(prior_1d)
 
 
-def empirical_first2(samples: np.ndarray, vocab_size: int) -> np.ndarray:
-    hist = np.zeros((vocab_size, vocab_size), dtype=np.float64)
-    np.add.at(hist, (samples[:, 0], samples[:, 1]), 1.0)
-    return hist / max(len(samples), 1)
+def forward_operator(tokens: np.ndarray, problem: SyntheticProblem) -> np.ndarray:
+    """G(x): |x_d - c| per coordinate, or its sum over coordinates for l1_norm."""
+    dist = np.abs(np.asarray(tokens, dtype=np.float64) - problem.center)
+    if problem.likelihood_type == "l1_norm":
+        return dist.sum(axis=-1)
+    return dist
 
 
-def hellinger(empirical: np.ndarray, target: np.ndarray) -> float:
-    affinity = np.sqrt(empirical * target).sum()
-    return float(np.sqrt(max(0.0, 1.0 - affinity)))
+def log_likelihood(tokens: np.ndarray, problem: SyntheticProblem) -> np.ndarray:
+    """log p(y | x) for an array of token sequences with trailing axis D."""
+    g = forward_operator(tokens, problem)
+    if problem.likelihood_type == "l1_norm":
+        loss = (g - problem.observation[0]) ** 2
+    else:
+        loss = ((g - np.asarray(problem.observation)) ** 2).mean(axis=-1)
+    return -loss / problem.likelihood_sigma**2
 
 
-def total_variation(empirical: np.ndarray, target: np.ndarray) -> float:
-    return float(0.5 * np.abs(empirical - target).sum())
+def save_samples(output_dir: str | Path, samples: np.ndarray, metadata: dict | None = None) -> None:
+    """Write the sampler output contract: ``samples.npz`` with an integer array."""
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(out / "samples.npz", samples=np.asarray(samples, dtype=np.int64))
+    if metadata is not None:
+        (out / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")

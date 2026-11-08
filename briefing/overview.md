@@ -1,5 +1,5 @@
 # Overview
 
-This workspace reproduces the core synthetic result from "Split Gibbs Discrete Diffusion Posterior Sampling." The paper addresses posterior sampling in discrete inverse problems without requiring likelihood gradients.
+This workspace is a gym built from "Split Gibbs Discrete Diffusion Posterior Sampling" (SGDD). The paper addresses posterior sampling in discrete-state spaces with a discrete diffusion prior, without likelihood gradients.
 
-The implemented benchmark runs SGDD on the paper's synthetic categorical posterior-recovery task for `D=2`, `D=5`, and `D=10`, then evaluates generated samples against the exact posterior marginal using Hellinger and total variation distances.
+The gym uses the paper's synthetic posterior-recovery task, where the exact posterior is computable: `D = 2, 5, 10` with the coordinatewise observation of Table 2, plus a coupled `D = 10` task built on the paper's stated forward model `G(x) = ||f(x)||_1`. Methods are samplers. The evaluators run them on public train instances and on hidden test instances with a fixed sample budget, then score the samples' pair marginals against the exact posterior.

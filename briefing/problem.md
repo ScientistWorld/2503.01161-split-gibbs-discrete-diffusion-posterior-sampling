@@ -1,7 +1,12 @@
 # Problem
 
-The task is posterior sampling for discrete inverse problems. Given a discrete latent vector `x` with a known prior and an observation `y` produced by a likelihood model, produce samples from the posterior distribution `p(x | y)`.
+The task is posterior sampling for discrete inverse problems. A latent vector `x` of `D` categorical tokens (50 values per coordinate) has a known prior `p(x)`, and an observation `y` is generated through a known forward model and noise level. A sampler must return draws from the posterior `p(x | y) ∝ p(x) p(y | x)`.
 
-The reusable benchmark in this workspace focuses on the paper's synthetic posterior-recovery setting. Latents are categorical vectors of dimension `D` with 50 possible values per coordinate. The prior is a discretized Gaussian over each coordinate, and the observation is produced by a non-invertible coordinate-wise transform. Evaluation compares the empirical first-two-coordinate marginal from generated samples against the exact posterior marginal.
+The prior is the same on every coordinate: a Gaussian with standard deviation 2 discretized on 50 evenly spaced points in `[-5, 5]`, independent across coordinates. It is the clean-data distribution of a discrete diffusion model with a uniform transition kernel, so its noised marginals `p_sigma` (and therefore the model's concrete score) are available in closed form through `data/synthetic_sgdd.py`. The likelihood is `log p(y | x) = -loss(G(x), y) / sigma^2` with `sigma = 3`, where `c = 24.5` is the centre token, and the forward model is one of:
 
-Success means producing posterior samples whose empirical distribution is close to the exact posterior while preserving the intended discrete sampling setting. Evaluation code is method-agnostic and reads generated sample artifacts from `checkpoints/`.
+- `coordinatewise`: `G(x)_d = |x_d - c|`, one observation per coordinate, loss = mean over coordinates of the squared residual. The posterior is bimodal on each coordinate.
+- `l1_norm`: `G(x) = sum_d |x_d - c|`, a single scalar observation, loss = squared residual. The observation lies in the prior's upper tail, so the posterior couples all coordinates.
+
+There are four experiments: `coordinatewise` with `D = 2, 5, 10`, and `l1_norm` with `D = 10`. Each experiment is scored on problem instances that differ only in the observation `y` and the seed. The train instances are public. The test instances use different, hidden observations of the same kind.
+
+A sampler receives a problem file describing one instance, including the number of samples to return and a seed. It must return exactly that many samples. Success means the samples' joint distribution is close to the exact posterior, both on the first two coordinates and on every other pair of coordinates.

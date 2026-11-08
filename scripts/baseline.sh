@@ -1,39 +1,15 @@
 #!/bin/bash
-# Run a baseline method from the paper.
-#
-# Baselines are simple reference methods the paper compares against. 
-# Implement this only if applicable, i.e. the paper has baselines.
-# You do not need to implement all baselines to begin — 
-# just enough to validate that the evaluation pipeline works 
-# and provide a reference point. You can decide to expand more baselines later.
-# Each baseline must be actually run and scored through evaluate.sh
-# so the numbers are verified, not self-reported.
-# You can decide what this baseline script should do yourself.
-#
-# Usage:
-#   bash scripts/baseline.sh <name>
-
-set -e
-
+# Run baselines on the public train instances and score them.
+#   bash scripts/baseline.sh                # direct_mh svdd_pm smc
+#   bash scripts/baseline.sh svdd_pm smc    # selected baselines
+# svdd_pm and smc are the paper's SVDD-PM and SMC baselines (Appendix C.2);
+# direct_mh is direct Metropolis-Hastings on prior x likelihood.
+set -euo pipefail
 cd /home/user
-
-NAME="${1:-direct_mh}"
-DIM="${2:-2}"
-
-case "${NAME}" in
-  direct_mh)
-    python -m baseline.direct_mh_synthetic \
-      --dim "${DIM}" \
-      --vocab-size 50 \
-      --num-samples "${NUM_SAMPLES:-10000}" \
-      --steps 100 \
-      --seed 1 \
-      --output-dir "checkpoints/direct_mh_synthetic_d${DIM}"
-    ;;
-  *)
-    echo "Unknown baseline: ${NAME}" >&2
-    exit 2
-    ;;
-esac
-
-INCLUDE_SANITY_BASELINES=1 SCORES_OUTPUT=scoring/sanity_scores.json bash scripts/evaluate.sh
+if [ "$#" -gt 0 ]; then
+  BASELINES=("$@")
+else
+  BASELINES=(direct_mh svdd_pm smc)
+fi
+python -m eval.train.evaluate_synthetic --methods "${BASELINES[@]}" --output checkpoints/train/scores_baselines.json
+cat checkpoints/train/scores_baselines.json

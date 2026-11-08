@@ -1,54 +1,83 @@
 {
+  "_note": "Gym scale: every method returns exactly 50,000 samples per problem instance (the paper used 10,000), and the hidden test runs each sampler on held-out observations, so Table 2 numbers are not on this scale. They are kept unchanged under '_paper_*' keys. Non-underscore results are this gym's own measurements on the hidden test (sgdd = reference, K=10, T=10, H=20 as in Appendix C.3). Gradient-free sampling is an eligibility rule (scoring/CONSTRAINTS.md), not a self-reported metric.",
   "experiments": {
     "synthetic_d2": {
-      "description": "Synthetic posterior recovery with D=2, Table 2.",
-      "weight": 0.34,
+      "description": "Table 2 synthetic posterior recovery, D=2, coordinatewise observation |x_d - c| with sigma=3.",
+      "weight": 0.2,
       "primary_metric": "hellinger",
       "metrics": {
-        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
+        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Hellinger distance between the empirical and exact posterior marginal of the first two coordinates (Table 2 metric)."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "Total variation distance on the same first-two-coordinate posterior marginal (Table 2 metric)."},
+        "all_pairs_hellinger": {"higher_is_better": false, "coefficient": -0.5, "description": "Mean Hellinger distance over every coordinate pair: the whole joint posterior, not only the reported pair, must be sampled."}
       },
       "results": {
-        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.297, "total_variation": 0.320, "uses_likelihood_gradient": 0},
-        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.275, "total_variation": 0.292, "uses_likelihood_gradient": 0},
-        "dps": {"type": "baseline", "hellinger": 0.182, "total_variation": 0.176, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.238, "total_variation": 0.248, "uses_likelihood_gradient": 0},
-        "sgdd": {"type": "proposed", "hellinger": 0.149, "total_variation": 0.125, "uses_likelihood_gradient": 0}
+        "sgdd": {"type": "proposed", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "direct_mh": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "svdd_pm": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "smc": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "_paper_svdd_pm_m20": {"type": "baseline", "hellinger": 0.297, "total_variation": 0.320},
+        "_paper_svdd_pm_m100": {"type": "baseline", "hellinger": 0.275, "total_variation": 0.292},
+        "_paper_smc": {"type": "baseline", "hellinger": 0.238, "total_variation": 0.248},
+        "_paper_dps": {"type": "baseline", "hellinger": 0.182, "total_variation": 0.176},
+        "_paper_sgdd": {"type": "proposed", "hellinger": 0.149, "total_variation": 0.125}
       }
     },
     "synthetic_d5": {
-      "description": "Synthetic posterior recovery with D=5, Table 2.",
-      "weight": 0.33,
+      "description": "Table 2 synthetic posterior recovery, D=5, coordinatewise observation.",
+      "weight": 0.25,
       "primary_metric": "hellinger",
       "metrics": {
-        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
+        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Hellinger distance between the empirical and exact posterior marginal of the first two coordinates (Table 2 metric)."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "Total variation distance on the same first-two-coordinate posterior marginal (Table 2 metric)."},
+        "all_pairs_hellinger": {"higher_is_better": false, "coefficient": -0.5, "description": "Mean Hellinger distance over every coordinate pair: the whole joint posterior, not only the reported pair, must be sampled."}
       },
       "results": {
-        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.413, "total_variation": 0.458, "uses_likelihood_gradient": 0},
-        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.401, "total_variation": 0.445, "uses_likelihood_gradient": 0},
-        "dps": {"type": "baseline", "hellinger": 0.345, "total_variation": 0.383, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.353, "total_variation": 0.391, "uses_likelihood_gradient": 0},
-        "sgdd": {"type": "proposed", "hellinger": 0.214, "total_variation": 0.222, "uses_likelihood_gradient": 0}
+        "sgdd": {"type": "proposed", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "direct_mh": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "svdd_pm": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "smc": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "_paper_svdd_pm_m20": {"type": "baseline", "hellinger": 0.413, "total_variation": 0.458},
+        "_paper_svdd_pm_m100": {"type": "baseline", "hellinger": 0.401, "total_variation": 0.445},
+        "_paper_smc": {"type": "baseline", "hellinger": 0.353, "total_variation": 0.391},
+        "_paper_dps": {"type": "baseline", "hellinger": 0.345, "total_variation": 0.383},
+        "_paper_sgdd": {"type": "proposed", "hellinger": 0.214, "total_variation": 0.222}
       }
     },
     "synthetic_d10": {
-      "description": "Synthetic posterior recovery with D=10, Table 2.",
-      "weight": 0.33,
+      "description": "Table 2 synthetic posterior recovery, D=10, coordinatewise observation.",
+      "weight": 0.25,
       "primary_metric": "hellinger",
       "metrics": {
-        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Distance between sampled and exact two-coordinate posterior marginals."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "L1-style discrepancy on the same two-coordinate posterior marginal."},
-        "uses_likelihood_gradient": {"higher_is_better": false, "coefficient": -0.2, "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."}
+        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Hellinger distance between the empirical and exact posterior marginal of the first two coordinates (Table 2 metric)."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "Total variation distance on the same first-two-coordinate posterior marginal (Table 2 metric)."},
+        "all_pairs_hellinger": {"higher_is_better": false, "coefficient": -0.5, "description": "Mean Hellinger distance over every coordinate pair: the whole joint posterior, not only the reported pair, must be sampled."}
       },
       "results": {
-        "svdd_pm_m20": {"type": "baseline", "hellinger": 0.455, "total_variation": 0.503, "uses_likelihood_gradient": 0},
-        "svdd_pm_m100": {"type": "baseline", "hellinger": 0.448, "total_variation": 0.494, "uses_likelihood_gradient": 0},
-        "dps": {"type": "baseline", "hellinger": 0.410, "total_variation": 0.453, "uses_likelihood_gradient": 1},
-        "smc": {"type": "baseline", "hellinger": 0.412, "total_variation": 0.460, "uses_likelihood_gradient": 0},
-        "sgdd": {"type": "proposed", "hellinger": 0.334, "total_variation": 0.365, "uses_likelihood_gradient": 0}
+        "sgdd": {"type": "proposed", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "direct_mh": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "svdd_pm": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "smc": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "_paper_svdd_pm_m20": {"type": "baseline", "hellinger": 0.455, "total_variation": 0.503},
+        "_paper_svdd_pm_m100": {"type": "baseline", "hellinger": 0.448, "total_variation": 0.494},
+        "_paper_smc": {"type": "baseline", "hellinger": 0.412, "total_variation": 0.460},
+        "_paper_dps": {"type": "baseline", "hellinger": 0.410, "total_variation": 0.453},
+        "_paper_sgdd": {"type": "proposed", "hellinger": 0.334, "total_variation": 0.365}
+      }
+    },
+    "synthetic_l1_d10": {
+      "description": "Added experiment (not in Table 2): D=10 with the paper's stated forward model G(x)=||f(x)||_1, a single scalar observation of the summed distances sum_d |x_d - c| (sigma=3), placed in the prior's upper tail. The posterior couples all coordinates. No paper numbers exist for it.",
+      "weight": 0.3,
+      "primary_metric": "hellinger",
+      "metrics": {
+        "hellinger": {"higher_is_better": false, "coefficient": -1.0, "description": "Hellinger distance between the empirical and exact posterior marginal of the first two coordinates."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.6, "description": "Total variation distance on the same first-two-coordinate posterior marginal."},
+        "all_pairs_hellinger": {"higher_is_better": false, "coefficient": -0.5, "description": "Mean Hellinger distance over every coordinate pair: the whole joint posterior, not only the reported pair, must be sampled."}
+      },
+      "results": {
+        "sgdd": {"type": "proposed", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "direct_mh": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "svdd_pm": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null},
+        "smc": {"type": "baseline", "hellinger": null, "total_variation": null, "all_pairs_hellinger": null}
       }
     }
   }
