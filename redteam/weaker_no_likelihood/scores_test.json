@@ -1,0 +1,44 @@
+{
+  "slice": "test",
+  "experiments": {
+    "synthetic_d10": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/weaker_no_likelihood/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.2947425468070563,
+          "total_variation": 0.27273971269854436,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/weaker_no_likelihood/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.5004650953636977,
+          "total_variation": 0.5452047911880863,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/weaker_no_likelihood/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.3432584363788304,
+          "total_variation": 0.3423199576944491,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

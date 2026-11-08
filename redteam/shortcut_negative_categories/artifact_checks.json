@@ -1,0 +1,16 @@
+{
+  "2": {
+    "samples": 10000,
+    "invalid_tokens": 20000
+  },
+  "5": {
+    "samples": 10000,
+    "invalid_tokens": 50000,
+    "fraction_coordinate0_equals2": 0.0315
+  },
+  "10": {
+    "samples": 10000,
+    "invalid_tokens": 100000,
+    "fraction_coordinate0_equals2": 0.0318
+  }
+}

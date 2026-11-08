@@ -1,0 +1,44 @@
+{
+  "slice": "test",
+  "experiments": {
+    "synthetic_d10": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/corrected_euler/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.2558493875293036,
+          "total_variation": 0.22420819176622964,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/corrected_euler/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.2034757150636273,
+          "total_variation": 0.16830517956712926,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/corrected_euler/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.22298407965616412,
+          "total_variation": 0.20262881667806365,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

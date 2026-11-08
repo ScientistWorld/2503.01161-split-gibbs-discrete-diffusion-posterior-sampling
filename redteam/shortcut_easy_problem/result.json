@@ -1,0 +1,11 @@
+{
+  "train_exit_code": 0,
+  "test_exit_code": 0,
+  "elapsed_seconds": 1.7718217049259692,
+  "rank_gain_vs_reference": 0.35145617496020204,
+  "weighted_contributions": {
+    "synthetic_d2": 0.1056983776915436,
+    "synthetic_d5": 0.11142859528100595,
+    "synthetic_d10": 0.1343292019876525
+  }
+}

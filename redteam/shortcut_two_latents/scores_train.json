@@ -1,0 +1,44 @@
+{
+  "slice": "train",
+  "experiments": {
+    "synthetic_d2": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_two_latents/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.18761528940308614,
+          "total_variation": 0.15018026786851713,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_two_latents/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.22224340000717266,
+          "total_variation": 0.19200741806611415,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d10": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_two_latents/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.24753597879582168,
+          "total_variation": 0.21446569587587677,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

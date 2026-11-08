@@ -1,0 +1,44 @@
+{
+  "slice": "train",
+  "experiments": {
+    "synthetic_d2": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_exact_answers/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.04492426345525877,
+          "total_variation": 0.03481282427690657,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_exact_answers/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.053421026033065526,
+          "total_variation": 0.04109640536477607,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d10": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_exact_answers/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.06050810348792924,
+          "total_variation": 0.04912233466045138,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

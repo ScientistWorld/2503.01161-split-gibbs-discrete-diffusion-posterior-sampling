@@ -1,0 +1,44 @@
+{
+  "slice": "test",
+  "experiments": {
+    "synthetic_d10": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/checkpoints/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.2659435378206232,
+          "total_variation": 0.2351910833679134,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/checkpoints/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.20891060753027274,
+          "total_variation": 0.1699449565257395,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/checkpoints/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.22031505367377052,
+          "total_variation": 0.19557892711445285,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

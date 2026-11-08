@@ -1,0 +1,166 @@
+{
+  "experiments": {
+    "synthetic_d2": {
+      "description": "Synthetic posterior recovery with D=2, Table 2.",
+      "weight": 0.34,
+      "primary_metric": "hellinger",
+      "metrics": {
+        "hellinger": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Distance between sampled and exact two-coordinate posterior marginals."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.6,
+          "description": "L1-style discrepancy on the same two-coordinate posterior marginal."
+        },
+        "uses_likelihood_gradient": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."
+        }
+      },
+      "results": {
+        "svdd_pm_m20": {
+          "type": "baseline",
+          "hellinger": 0.297,
+          "total_variation": 0.32,
+          "uses_likelihood_gradient": 0
+        },
+        "svdd_pm_m100": {
+          "type": "baseline",
+          "hellinger": 0.275,
+          "total_variation": 0.292,
+          "uses_likelihood_gradient": 0
+        },
+        "dps": {
+          "type": "baseline",
+          "hellinger": 0.182,
+          "total_variation": 0.176,
+          "uses_likelihood_gradient": 1
+        },
+        "smc": {
+          "type": "baseline",
+          "hellinger": 0.238,
+          "total_variation": 0.248,
+          "uses_likelihood_gradient": 0
+        },
+        "sgdd": {
+          "type": "proposed",
+          "hellinger": 0.149,
+          "total_variation": 0.125,
+          "uses_likelihood_gradient": 0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "description": "Synthetic posterior recovery with D=5, Table 2.",
+      "weight": 0.33,
+      "primary_metric": "hellinger",
+      "metrics": {
+        "hellinger": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Distance between sampled and exact two-coordinate posterior marginals."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.6,
+          "description": "L1-style discrepancy on the same two-coordinate posterior marginal."
+        },
+        "uses_likelihood_gradient": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."
+        }
+      },
+      "results": {
+        "svdd_pm_m20": {
+          "type": "baseline",
+          "hellinger": 0.413,
+          "total_variation": 0.458,
+          "uses_likelihood_gradient": 0
+        },
+        "svdd_pm_m100": {
+          "type": "baseline",
+          "hellinger": 0.401,
+          "total_variation": 0.445,
+          "uses_likelihood_gradient": 0
+        },
+        "dps": {
+          "type": "baseline",
+          "hellinger": 0.345,
+          "total_variation": 0.383,
+          "uses_likelihood_gradient": 1
+        },
+        "smc": {
+          "type": "baseline",
+          "hellinger": 0.353,
+          "total_variation": 0.391,
+          "uses_likelihood_gradient": 0
+        },
+        "sgdd": {
+          "type": "proposed",
+          "hellinger": 0.214,
+          "total_variation": 0.222,
+          "uses_likelihood_gradient": 0
+        }
+      }
+    },
+    "synthetic_d10": {
+      "description": "Synthetic posterior recovery with D=10, Table 2.",
+      "weight": 0.33,
+      "primary_metric": "hellinger",
+      "metrics": {
+        "hellinger": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Distance between sampled and exact two-coordinate posterior marginals."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.6,
+          "description": "L1-style discrepancy on the same two-coordinate posterior marginal."
+        },
+        "uses_likelihood_gradient": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Constraint indicator for methods that rely on likelihood gradients rather than gradient-free categorical sampling."
+        }
+      },
+      "results": {
+        "svdd_pm_m20": {
+          "type": "baseline",
+          "hellinger": 0.455,
+          "total_variation": 0.503,
+          "uses_likelihood_gradient": 0
+        },
+        "svdd_pm_m100": {
+          "type": "baseline",
+          "hellinger": 0.448,
+          "total_variation": 0.494,
+          "uses_likelihood_gradient": 0
+        },
+        "dps": {
+          "type": "baseline",
+          "hellinger": 0.41,
+          "total_variation": 0.453,
+          "uses_likelihood_gradient": 1
+        },
+        "smc": {
+          "type": "baseline",
+          "hellinger": 0.412,
+          "total_variation": 0.46,
+          "uses_likelihood_gradient": 0
+        },
+        "sgdd": {
+          "type": "proposed",
+          "hellinger": 0.334,
+          "total_variation": 0.365,
+          "uses_likelihood_gradient": 0
+        }
+      }
+    }
+  }
+}

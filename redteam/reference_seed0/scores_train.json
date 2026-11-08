@@ -1,0 +1,44 @@
+{
+  "slice": "train",
+  "experiments": {
+    "synthetic_d2": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/reference_seed0/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.20286954628565673,
+          "total_variation": 0.16298339035100878,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/reference_seed0/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.22076345757437538,
+          "total_variation": 0.199497498669538,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    },
+    "synthetic_d10": {
+      "_slice": "train",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/reference_seed0/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.25313638820664136,
+          "total_variation": 0.2187907572196352,
+          "uses_likelihood_gradient": 0.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/user/eval/test/evaluate_synthetic.py", line 136, in <module>
+    main()
+  File "/home/user/eval/test/evaluate_synthetic.py", line 126, in main
+    metrics = evaluate_run(Path(run_dir), config, method)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/eval/test/evaluate_synthetic.py", line 65, in evaluate_run
+    raise ValueError(f"{run_dir}/samples.npz has no samples in the {SLICE_NAME} slice")
+ValueError: /home/user/redteam/shortcut_empty/outputs/sgdd_synthetic_d10/samples.npz has no samples in the test slice
