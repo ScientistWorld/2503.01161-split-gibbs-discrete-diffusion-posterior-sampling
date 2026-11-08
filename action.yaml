@@ -1,2 +1,8 @@
-action: done
-notes: "Audit complete: 18 checks; honest improvement and ablation exceed seed spread; simple baseline beats reference; seven paying shortcuts including one tie; REDTEAM.md committed and gym source restored."
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: pending
+gpus: 0
+test: false
+milestone: core_claim_plus
+notes: ""
