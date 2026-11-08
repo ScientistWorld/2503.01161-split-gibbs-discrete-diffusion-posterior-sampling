@@ -14,6 +14,6 @@ The middle Table 2 setting. More nuisance coordinates share one observation-to-l
 
 The largest Table 2 setting. With many coordinates, any per-coordinate bias accumulates over the joint and the all-pairs check.
 
-## synthetic_l1_d10
+## synthetic_chain_d10
 
-Added experiment, not in the paper's table. Ten coordinates are observed only through one noisy scalar summary of all of them, with the observation in the prior's upper tail. The posterior couples every coordinate and sits far from the prior. This tests whether a sampler stays accurate when the posterior is not a product of independent pieces, which is where the paper's own synthetic settings show the most room for improvement.
+Added experiment, not in the paper's table. Ten coordinates are observed only through the distances between neighbours, which mirrors the paper's pairwise measurements on images. Many configurations explain the data almost equally well: steps can go either way, and the whole chain can shift. The prior decides between them. This tests whether a sampler can find and correctly weight many separated modes when the posterior does not split into independent pieces. It carries the largest weight because it is where accurate posterior sampling is hardest and where the paper's own settings leave the most room for improvement.

@@ -21,13 +21,14 @@ Specification fields (all written by the evaluator):
 ``num_samples``      exact number of samples the sampler must return
 ``seed``             seed the sampler should use (all methods get the same one)
 ``prior``            {"type": "discretized_gaussian", "std", "grid_min", "grid_max"}
-``likelihood``       {"type": "coordinatewise" | "l1_norm", "sigma", "observation"}
+``likelihood``       {"type": "coordinatewise" | "chain", "sigma", "observation"}
 
 ``coordinatewise``: observation is a length-D vector y and
     log p(y|x) = -mean_d (|x_d - c| - y_d)^2 / sigma^2
-``l1_norm``: observation is a scalar y and
-    log p(y|x) = -(sum_d |x_d - c| - y)^2 / sigma^2
-where c = (N - 1) / 2 is the centre token.
+    where c = (N - 1) / 2 is the centre token;
+``chain``: observation is a length-(D-1) vector y of distances between
+    neighbouring coordinates and
+    log p(y|x) = -sum_d (|x_{d+1} - x_d| - y_d)^2 / sigma^2.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ from pathlib import Path
 import numpy as np
 
 
-LIKELIHOOD_TYPES = ("coordinatewise", "l1_norm")
+LIKELIHOOD_TYPES = ("coordinatewise", "chain")
 
 
 @dataclass(frozen=True)
@@ -76,8 +77,8 @@ def problem_from_spec(spec: dict) -> SyntheticProblem:
             obs = np.full(dim, float(obs[0]))
         if obs.size != dim:
             raise ValueError("coordinatewise observation must have one value per coordinate")
-    elif obs.size != 1:
-        raise ValueError("l1_norm observation must be a scalar")
+    elif obs.size != dim - 1:
+        raise ValueError("chain observation must have one value per neighbouring pair (dim - 1)")
     return SyntheticProblem(
         instance_id=str(spec.get("instance_id", "instance")),
         dim=dim,
@@ -119,18 +120,18 @@ def noised_prior_probs(prior_1d: np.ndarray, sigma: float) -> np.ndarray:
 
 
 def forward_operator(tokens: np.ndarray, problem: SyntheticProblem) -> np.ndarray:
-    """G(x): |x_d - c| per coordinate, or its sum over coordinates for l1_norm."""
-    dist = np.abs(np.asarray(tokens, dtype=np.float64) - problem.center)
-    if problem.likelihood_type == "l1_norm":
-        return dist.sum(axis=-1)
-    return dist
+    """G(x): |x_d - c| per coordinate, or |x_{d+1} - x_d| per neighbouring pair for chain."""
+    values = np.asarray(tokens, dtype=np.float64)
+    if problem.likelihood_type == "chain":
+        return np.abs(np.diff(values, axis=-1))
+    return np.abs(values - problem.center)
 
 
 def log_likelihood(tokens: np.ndarray, problem: SyntheticProblem) -> np.ndarray:
     """log p(y | x) for an array of token sequences with trailing axis D."""
     g = forward_operator(tokens, problem)
-    if problem.likelihood_type == "l1_norm":
-        loss = (g - problem.observation[0]) ** 2
+    if problem.likelihood_type == "chain":
+        loss = ((g - np.asarray(problem.observation)) ** 2).sum(axis=-1)
     else:
         loss = ((g - np.asarray(problem.observation)) ** 2).mean(axis=-1)
     return -loss / problem.likelihood_sigma**2

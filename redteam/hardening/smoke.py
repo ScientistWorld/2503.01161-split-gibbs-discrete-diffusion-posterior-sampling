@@ -34,8 +34,9 @@ def brute_force_pairs(spec):
     log_w = np.log(te._prior_1d(spec))[grids].sum(axis=1)
     dist = np.abs(grids - (vocab - 1) / 2.0)
     lik = spec["likelihood"]
-    if lik["type"] == "l1_norm":
-        loss = (dist.sum(axis=1) - lik["observation"]) ** 2
+    if lik["type"] == "chain":
+        gaps = np.abs(np.diff(grids.astype(np.float64), axis=1))
+        loss = ((gaps - np.asarray(lik["observation"])) ** 2).sum(axis=1)
     else:
         loss = ((dist - np.asarray(lik["observation"])) ** 2).mean(axis=1)
     log_w = log_w - loss / lik["sigma"] ** 2
@@ -51,14 +52,14 @@ def brute_force_pairs(spec):
 
 def check_targets():
     cases = [
-        ("coordinatewise", 3, [7.5, 9.5, 8.5]),
-        ("l1_norm", 3, 40.0),
-        ("l1_norm", 4, 47.0),
+        ("coordinatewise", 3, 3.0, [7.5, 9.5, 8.5]),
+        ("chain", 3, 1.0, [12, 5]),
+        ("chain", 4, 1.0, [9, 17, 3]),
     ]
-    for kind, dim, obs in cases:
+    for kind, dim, sigma, obs in cases:
         spec = {
             "instance_id": "smoke", "dim": dim, "vocab_size": 50, "num_samples": 10, "seed": 0,
-            "prior": dict(te.PRIOR), "likelihood": {"type": kind, "sigma": 3.0, "observation": obs},
+            "prior": dict(te.PRIOR), "likelihood": {"type": kind, "sigma": sigma, "observation": obs},
         }
         truth = brute_force_pairs(spec)
         for label, got in (("test", te.pair_targets(spec)), ("train", tr.exact_pair_marginals(spec))):
@@ -96,7 +97,7 @@ def check_samplers():
         print(f"{label}: failed samplers {sorted(failed)}", flush=True)
         if failed != EXPECTED_FAILURES:
             raise SystemExit(f"{label}: unexpected failure set {sorted(failed)}")
-        print(f"{label} smoke sgdd: {scores['experiments']['synthetic_l1_d10']['results']['sgdd']}", flush=True)
+        print(f"{label} smoke sgdd: {scores['experiments']['synthetic_chain_d10']['results']['sgdd']}", flush=True)
 
 
 if __name__ == "__main__":

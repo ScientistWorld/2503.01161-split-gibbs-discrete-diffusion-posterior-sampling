@@ -5,9 +5,9 @@ Every experiment is scored on the hidden test by `bash scripts/evaluate_test.sh`
 | Experiment | Weight | What is sampled |
 |---|---:|---|
 | `synthetic_d2` | 0.20 | Table 2 task, `D=2`, coordinatewise observation |
-| `synthetic_d5` | 0.25 | Table 2 task, `D=5`, coordinatewise observation |
+| `synthetic_d5` | 0.20 | Table 2 task, `D=5`, coordinatewise observation |
 | `synthetic_d10` | 0.25 | Table 2 task, `D=10`, coordinatewise observation |
-| `synthetic_l1_d10` | 0.30 | `D=10`, a single scalar observation of the L1 norm (coupled posterior) |
+| `synthetic_chain_d10` | 0.35 | `D=10`, pairwise distances between neighbouring coordinates (coupled, multimodal posterior) |
 
 Metrics per experiment (lower is better; coefficient in parentheses):
 

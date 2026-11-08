@@ -37,20 +37,21 @@ SLICE_NAME = "test"
 NUM_SAMPLES = 50000
 VOCAB_SIZE = 50
 PRIOR = {"type": "discretized_gaussian", "std": 2.0, "grid_min": -5.0, "grid_max": 5.0}
-LIKELIHOOD_SIGMA = 3.0
 SAMPLER_TIMEOUT_SECONDS = 3600
 WORST = {"hellinger": 1.0, "total_variation": 1.0, "all_pairs_hellinger": 1.0}
 
-# Hidden problem instances: (experiment, instance id, dim, likelihood type, observation, seed).
+# Hidden problem instances:
+# (experiment, instance id, dim, likelihood type, sigma, observation, seed).
+# Chain observations are |x*_{d+1} - x*_d| of a latent x* drawn from the prior.
 INSTANCES = (
-    ("synthetic_d2", "t2a", 2, "coordinatewise", [9.5, 7.5], 61031),
-    ("synthetic_d2", "t2b", 2, "coordinatewise", [7.5, 8.5], 74471),
-    ("synthetic_d5", "t5a", 5, "coordinatewise", [8.5, 9.5, 7.5, 9.5, 8.5], 52183),
-    ("synthetic_d5", "t5b", 5, "coordinatewise", [7.5, 7.5, 9.5, 8.5, 9.5], 90907),
-    ("synthetic_d10", "t10a", 10, "coordinatewise", [9.5, 8.5, 7.5, 8.5, 9.5, 7.5, 8.5, 9.5, 8.5, 7.5], 38261),
-    ("synthetic_d10", "t10b", 10, "coordinatewise", [7.5, 9.5, 8.5, 9.5, 7.5, 8.5, 9.5, 7.5, 8.5, 9.5], 27449),
-    ("synthetic_l1_d10", "tl1a", 10, "l1_norm", 111.0, 83117),
-    ("synthetic_l1_d10", "tl1b", 10, "l1_norm", 119.0, 45989),
+    ("synthetic_d2", "t2a", 2, "coordinatewise", 3.0, [9.5, 7.5], 61031),
+    ("synthetic_d2", "t2b", 2, "coordinatewise", 3.0, [7.5, 8.5], 74471),
+    ("synthetic_d5", "t5a", 5, "coordinatewise", 3.0, [8.5, 9.5, 7.5, 9.5, 8.5], 52183),
+    ("synthetic_d5", "t5b", 5, "coordinatewise", 3.0, [7.5, 7.5, 9.5, 8.5, 9.5], 90907),
+    ("synthetic_d10", "t10a", 10, "coordinatewise", 3.0, [9.5, 8.5, 7.5, 8.5, 9.5, 7.5, 8.5, 9.5, 8.5, 7.5], 38261),
+    ("synthetic_d10", "t10b", 10, "coordinatewise", 3.0, [7.5, 9.5, 8.5, 9.5, 7.5, 8.5, 9.5, 7.5, 8.5, 9.5], 27449),
+    ("synthetic_chain_d10", "tca", 10, "chain", 1.0, [14, 4, 9, 11, 12, 16, 9, 2, 2], 58147),
+    ("synthetic_chain_d10", "tcb", 10, "chain", 1.0, [16, 5, 16, 11, 2, 14, 20, 15, 11], 66403),
 )
 
 
@@ -59,7 +60,7 @@ class InvalidOutput(Exception):
 
 
 def make_spec(instance: tuple, num_samples: int) -> dict:
-    _, instance_id, dim, kind, observation, seed = instance
+    _, instance_id, dim, kind, sigma, observation, seed = instance
     return {
         "instance_id": instance_id,
         "dim": dim,
@@ -67,7 +68,7 @@ def make_spec(instance: tuple, num_samples: int) -> dict:
         "num_samples": num_samples,
         "seed": seed,
         "prior": dict(PRIOR),
-        "likelihood": {"type": kind, "sigma": LIKELIHOOD_SIGMA, "observation": observation},
+        "likelihood": {"type": kind, "sigma": sigma, "observation": observation},
     }
 
 
@@ -108,22 +109,30 @@ def pair_targets(spec: dict) -> dict[tuple[int, int], np.ndarray]:
             _normalize_log(log_prior - (dist - obs[d]) ** 2 / (dim * sigma2)) for d in range(dim)
         ]
         return {(i, j): np.outer(marginals[i], marginals[j]) for i, j in pairs}
-    if lik["type"] == "l1_norm":
-        y = float(lik["observation"])
-        offset = dist.min()
-        steps = np.rint(dist - offset).astype(np.int64)
-        step_prior = np.bincount(steps, weights=prior)
-        rest = np.array([1.0])
-        for _ in range(dim - 2):
-            rest = np.convolve(rest, step_prior)
-        with np.errstate(divide="ignore"):
-            log_rest = np.log(rest)
-        pair_steps = np.arange(2 * len(step_prior) - 1)
-        totals = pair_steps[:, None] + np.arange(len(rest))[None, :] + dim * offset
-        log_g = _logsumexp(log_rest[None, :] - (totals - y) ** 2 / sigma2, axis=1)
-        log_pair = log_prior[:, None] + log_prior[None, :] + log_g[steps[:, None] + steps[None, :]]
-        target = _normalize_log(log_pair)
-        return {pair: target for pair in pairs}
+    if lik["type"] == "chain":
+        obs = np.asarray(lik["observation"], dtype=np.float64)
+        gaps = np.abs(np.arange(vocab)[:, None] - np.arange(vocab)[None, :])
+        links = [np.exp(-((gaps - obs[d]) ** 2) / sigma2) for d in range(dim - 1)]
+        forward = [prior / prior.sum()]
+        for d in range(dim - 1):
+            message = (forward[-1] @ links[d]) * prior
+            forward.append(message / message.sum())
+        backward = [None] * dim
+        backward[dim - 1] = np.ones(vocab)
+        for d in range(dim - 2, -1, -1):
+            message = links[d] @ (prior * backward[d + 1])
+            backward[d] = message / message.sum()
+        targets = {}
+        for i in range(dim):
+            block = np.diag(forward[i])
+            for k in range(i, dim - 1):
+                block = block @ links[k]
+                j = k + 1
+                pair = block * (prior * backward[j])[None, :]
+                targets[(i, j)] = pair / pair.sum()
+                block = block * prior[None, :]
+                block = block / block.sum()
+        return targets
     raise ValueError(f"unknown likelihood type {lik['type']}")
 
 

@@ -35,17 +35,17 @@ SLICE_NAME = "train"
 NUM_SAMPLES = 50000
 VOCAB_SIZE = 50
 PRIOR = {"type": "discretized_gaussian", "std": 2.0, "grid_min": -5.0, "grid_max": 5.0}
-LIKELIHOOD_SIGMA = 3.0
 SAMPLER_TIMEOUT_SECONDS = 3600
 METRICS = ("hellinger", "total_variation", "all_pairs_hellinger")
 
 # Public train instances. The paper's synthetic observation is y = |x - c| with
-# x the discretization of 5/3, i.e. y = 8.5 on every coordinate.
+# x the discretization of 5/3, i.e. y = 8.5 on every coordinate. The chain
+# observation is |x*_{d+1} - x*_d| for a latent x* drawn from the prior.
 TRAIN_INSTANCES = (
-    {"experiment": "synthetic_d2", "instance_id": "train_d2", "dim": 2, "type": "coordinatewise", "observation": [8.5] * 2, "seed": 1002},
-    {"experiment": "synthetic_d5", "instance_id": "train_d5", "dim": 5, "type": "coordinatewise", "observation": [8.5] * 5, "seed": 1005},
-    {"experiment": "synthetic_d10", "instance_id": "train_d10", "dim": 10, "type": "coordinatewise", "observation": [8.5] * 10, "seed": 1010},
-    {"experiment": "synthetic_l1_d10", "instance_id": "train_l1_d10", "dim": 10, "type": "l1_norm", "observation": 115.0, "seed": 1110},
+    {"experiment": "synthetic_d2", "instance_id": "train_d2", "dim": 2, "type": "coordinatewise", "sigma": 3.0, "observation": [8.5] * 2, "seed": 1002},
+    {"experiment": "synthetic_d5", "instance_id": "train_d5", "dim": 5, "type": "coordinatewise", "sigma": 3.0, "observation": [8.5] * 5, "seed": 1005},
+    {"experiment": "synthetic_d10", "instance_id": "train_d10", "dim": 10, "type": "coordinatewise", "sigma": 3.0, "observation": [8.5] * 10, "seed": 1010},
+    {"experiment": "synthetic_chain_d10", "instance_id": "train_chain_d10", "dim": 10, "type": "chain", "sigma": 1.0, "observation": [15, 11, 8, 20, 12, 12, 5, 6, 10], "seed": 1210},
 )
 
 
@@ -61,7 +61,7 @@ def problem_spec(instance: dict, num_samples: int) -> dict:
         "num_samples": num_samples,
         "seed": instance["seed"],
         "prior": dict(PRIOR),
-        "likelihood": {"type": instance["type"], "sigma": LIKELIHOOD_SIGMA, "observation": instance["observation"]},
+        "likelihood": {"type": instance["type"], "sigma": instance["sigma"], "observation": instance["observation"]},
     }
 
 
@@ -94,21 +94,28 @@ def exact_pair_marginals(spec: dict) -> dict[tuple[int, int], np.ndarray]:
         y = np.broadcast_to(np.asarray(spec["likelihood"]["observation"], dtype=np.float64), (dim,))
         single = [softmax_from_logits(log_prior - (radius - y[d]) ** 2 / (dim * sigma2)) for d in range(dim)]
         return {(i, j): np.outer(single[i], single[j]) for (i, j) in pairs}
-    if kind == "l1_norm":
-        y = float(spec["likelihood"]["observation"])
-        base = radius.min()
-        level = np.rint(radius - base).astype(np.int64)
-        level_prob = np.bincount(level, weights=prior)
-        others = np.ones(1)
-        for _ in range(dim - 2):
-            others = np.convolve(others, level_prob)
-        with np.errstate(divide="ignore"):
-            log_others = np.log(others)
-        both = np.arange(2 * len(level_prob) - 1)
-        norm = both[:, None] + np.arange(len(others))[None, :] + dim * base
-        log_factor = stable_logsumexp(log_others[None, :] - (norm - y) ** 2 / sigma2, axis=1)
-        joint = softmax_from_logits(log_prior[:, None] + log_prior[None, :] + log_factor[level[:, None] + level[None, :]])
-        return {pair: joint for pair in pairs}
+    if kind == "chain":
+        y = np.asarray(spec["likelihood"]["observation"], dtype=np.float64)
+        token = np.arange(vocab)
+        potentials = [np.exp(-((np.abs(token[:, None] - token[None, :]) - y[d]) ** 2) / sigma2) for d in range(dim - 1)]
+        left = [prior.copy()]
+        for d in range(dim - 1):
+            nxt = prior * (left[d] @ potentials[d])
+            left.append(nxt / nxt.sum())
+        right = [np.ones(vocab) for _ in range(dim)]
+        for d in reversed(range(dim - 1)):
+            prev = potentials[d] @ (prior * right[d + 1])
+            right[d] = prev / prev.sum()
+        out = {}
+        for i in range(dim):
+            carry = left[i][:, None] * np.eye(vocab)
+            for j in range(i + 1, dim):
+                carry = carry @ potentials[j - 1]
+                joint = carry * (prior * right[j])[None, :]
+                out[(i, j)] = joint / joint.sum()
+                carry = carry * prior[None, :]
+                carry /= carry.sum()
+        return out
     raise ValueError(f"unknown likelihood type {kind}")
 
 

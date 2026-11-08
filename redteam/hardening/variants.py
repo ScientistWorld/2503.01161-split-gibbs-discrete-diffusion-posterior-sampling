@@ -83,36 +83,43 @@ def _gumbel_argmax(logits, rng):
 
 def exact_posterior_samples(problem: SyntheticProblem, rng) -> np.ndarray:
     """SHORTCUT: compute the posterior analytically from the problem file and
-    sample it exactly (per-coordinate enumeration, or a dynamic program over
-    the L1 sum). Possible only because the synthetic prior is closed-form."""
+    sample it exactly (per-coordinate enumeration, or forward filtering /
+    backward sampling on the chain). Possible only because the synthetic prior
+    is closed-form."""
     vocab, dim, n = problem.vocab_size, problem.dim, problem.num_samples
-    log_p0 = np.log(prior_probs_1d(problem))
-    radius = np.abs(np.arange(vocab) - problem.center)
+    p0 = prior_probs_1d(problem)
+    log_p0 = np.log(p0)
     sigma2 = problem.likelihood_sigma**2
     out = np.empty((n, dim), dtype=np.int64)
     if problem.likelihood_type == "coordinatewise":
+        radius = np.abs(np.arange(vocab) - problem.center)
         for d in range(dim):
             logits = log_p0 - (radius - problem.observation[d]) ** 2 / (dim * sigma2)
             out[:, d] = _gumbel_argmax(np.broadcast_to(logits, (n, vocab)), rng)
         return out
-    offset = radius.min()
-    level = np.rint(radius - offset).astype(np.int64)
-    smax = int(level.max()) * dim
-    s = np.arange(smax + 1)
-    y = problem.observation[0]
-    messages = [None] * (dim + 1)
-    messages[dim] = -((s + dim * offset - y) ** 2) / sigma2
-    for k in range(dim - 1, -1, -1):
-        idx = s[:, None] + level[None, :]
-        vals = np.where(idx <= smax, log_p0[None, :] + messages[k + 1][np.minimum(idx, smax)], -np.inf)
-        messages[k] = _logsumexp(vals, axis=1)
-    partial = np.zeros(n, dtype=np.int64)
-    for k in range(dim):
-        logits = log_p0[None, :] + messages[k + 1][np.minimum(partial[:, None] + level[None, :], smax)]
-        choice = _gumbel_argmax(logits, rng)
-        out[:, k] = choice
-        partial += level[choice]
+    y = np.asarray(problem.observation)
+    gaps = np.abs(np.arange(vocab)[:, None] - np.arange(vocab)[None, :])
+    log_links = [-((gaps - y[d]) ** 2) / sigma2 for d in range(dim - 1)]
+    log_alpha = [log_p0]
+    for d in range(dim - 1):
+        msg = _logsumexp(log_alpha[-1][:, None] + log_links[d], axis=0) + log_p0
+        log_alpha.append(msg - msg.max())
+    out[:, dim - 1] = _gumbel_argmax(np.broadcast_to(log_alpha[dim - 1], (n, vocab)), rng)
+    for d in range(dim - 2, -1, -1):
+        logits = log_alpha[d][None, :] + log_links[d][:, out[:, d + 1]].T
+        out[:, d] = _gumbel_argmax(logits, rng)
     return out
+
+
+def kernel_consistent_weight(eta: float, vocab_size: int) -> float:
+    """VARIANT: Hamming potential matched to the uniform-kernel transition
+    probability of one specific token, log(beta / ((N-1)(1-beta))), i.e. the
+    coupling the diffusion prior step actually samples, instead of Eq. 10's
+    log(beta / (1-beta))."""
+    return sgdd_paper_weight(eta, vocab_size) - float(np.log(vocab_size - 1.0))
+
+
+sgdd_paper_weight = sgdd.hamming_log_transition_weight
 
 
 # --------------------------------------------------------------------- registry
@@ -124,6 +131,12 @@ def run(name: str, problem: SyntheticProblem, output_dir: Path) -> None:
     meta = None
     if name == "legacy_euler":
         samples, meta = legacy_euler(problem)
+    elif name in ("consistent_potential", "consistent_potential_long"):
+        sgdd.hamming_log_transition_weight = kernel_consistent_weight
+        if name == "consistent_potential":
+            samples, meta = sgdd.run_sgdd(problem)
+        else:
+            samples, meta = sgdd.run_sgdd(problem, iterations=50, mh_steps=50)
     elif name == "exact_posterior":
         samples = exact_posterior_samples(problem, rng)
     elif name == "binary_flag":
@@ -132,7 +145,7 @@ def run(name: str, problem: SyntheticProblem, output_dir: Path) -> None:
     elif name == "cached_train":
         # SHORTCUT: answers rebuilt from the public train instance of the same
         # experiment shape, submitted regardless of the problem actually given.
-        public_obs = [8.5] * dim if problem.likelihood_type == "coordinatewise" else [115.0]
+        public_obs = [8.5] * dim if problem.likelihood_type == "coordinatewise" else [15, 11, 8, 20, 12, 12, 5, 6, 10]
         public = dataclasses.replace(problem, observation=tuple(public_obs))
         samples = exact_posterior_samples(public, rng)
     elif name == "two_latents":
@@ -154,7 +167,7 @@ def run(name: str, problem: SyntheticProblem, output_dir: Path) -> None:
         samples = np.zeros((n, dim), dtype=np.int64)
         meta = {"hellinger": 0.0, "total_variation": 0.0, "all_pairs_hellinger": 0.0, "uses_likelihood_gradient": 0}
         forged = {"experiments": {}}
-        for exp in ("synthetic_d2", "synthetic_d5", "synthetic_d10", "synthetic_l1_d10"):
+        for exp in ("synthetic_d2", "synthetic_d5", "synthetic_d10", "synthetic_chain_d10"):
             forged["experiments"][exp] = {"results": {"shortcut_forged_scores": {k: 0.0 for k in ("hellinger", "total_variation", "all_pairs_hellinger")}}}
         for target in ("scoring/scores_test.json", "scoring/scores_train.json"):
             (ROOT / target).write_text(json.dumps(forged, indent=2) + "\n")
