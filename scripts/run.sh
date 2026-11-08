@@ -1,4 +1,9 @@
 #!/bin/bash
-set -euo pipefail
+
+set -e
+
 cd /home/user
-python redteam/audit.py suite
+
+bash scripts/evaluate_train.sh /home/user/checkpoints
+bash scripts/evaluate_test.sh /home/user/checkpoints
+python validate.py --compare

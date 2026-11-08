@@ -1,0 +1,29 @@
+[hive] This stdout log is managed by Hive.
+[hive] job_id: 90f2d30c
+[hive] host: node
+[hive] node_id: 564a353c29b876abfd8df1b816b64d3399f5ef09a643b4a933c92d12
+[hive] user: nexus/user (remote)
+[hive] resource: gpu-cpu
+[hive] gpus: 0
+[hive] cpus: 1
+[hive] workdir: /home/user
+[hive] timeout_sec: 21600
+[hive] started_at: 2026-11-08 02:04:11 EST
+[hive] command: apptainer exec --containall --cleanenv --env HF_HOME=/home/user/shared/hf_cache --env TRANSFORMERS_CACHE=/home/user/shared/hf_cache --env HF_DATASETS_CACHE=/home/user/shared/hf_cache/datasets --env TORCH_HOME=/home/user/shared/hf_cache/torch --bind /home/user/scratch/AgentWorkspaces/workspaces/2503.01161:/home/user --overlay /home/user/scratch/AgentWorkspaces/workspaces/2503.01161/environment/overlay.img:ro --bind /home/user/scratch/AgentWorkspaces/shared/datasets:/home/user/shared/datasets:ro --bind /home/user/scratch/AgentWorkspaces/shared/models:/home/user/shared/models:ro --bind /home/user/scratch/AgentWorkspaces/shared/hf_cache:/home/user/shared/hf_cache /home/user/scratch/AgentWorkspaces/workspaces/2503.01161/environment/container.sif bash -c 'cd /home/user && bash /home/user/scripts/run.sh'
+reference_cached: wrapper exit 0
+reference_seed0: wrapper exit 0
+reference_seed1: wrapper exit 0
+reference_seed2: wrapper exit 0
+more_samples: wrapper exit 0
+corrected_euler: wrapper exit 0
+weaker_no_likelihood: wrapper exit 0
+direct_mh_baseline: wrapper exit 0
+shortcut_exact_answers: wrapper exit 0
+shortcut_two_latents: wrapper exit 0
+shortcut_forged_scores: wrapper exit 0
+shortcut_negative_constraint: wrapper exit 0
+shortcut_negative_categories: wrapper exit 0
+shortcut_redirect_run: wrapper exit 0
+shortcut_easy_problem: wrapper exit 0
+shortcut_constant: wrapper exit 0
+shortcut_empty: wrapper exit 0
