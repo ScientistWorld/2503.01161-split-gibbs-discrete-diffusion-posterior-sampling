@@ -1,0 +1,126 @@
+{
+  "direct_mh": {
+    "gain_vs_reference": 0.025727212624772455,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.013657497491143495,
+        "hellinger": 0.06234534364667149,
+        "total_variation": 0.04878690227073069,
+        "all_pairs_hellinger": 0.06234534364667149
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.01009320676048141,
+        "hellinger": 0.07517460587342534,
+        "total_variation": 0.060665310565506544,
+        "all_pairs_hellinger": 0.07575676446581843
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.009621510744862921,
+        "hellinger": 0.08450036544716948,
+        "total_variation": 0.06868414221092313,
+        "all_pairs_hellinger": 0.08356285398733232
+      },
+      "synthetic_l1_d10": {
+        "weighted_gain": -0.007645002371715373,
+        "hellinger": 0.10125041799439467,
+        "total_variation": 0.11264853227125668,
+        "all_pairs_hellinger": 0.09999135010526908
+      }
+    }
+  },
+  "sgdd": {
+    "gain_vs_reference": 0.0,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09324307440345786,
+        "total_variation": 0.08535505447162722,
+        "all_pairs_hellinger": 0.09324307440345786
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09150787017243858,
+        "total_variation": 0.08706427978609826,
+        "all_pairs_hellinger": 0.09215712688693314
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09914657682662731,
+        "total_variation": 0.09628812815486812,
+        "all_pairs_hellinger": 0.09811773405458604
+      },
+      "synthetic_l1_d10": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.08986004824662261,
+        "total_variation": 0.09840069215304015,
+        "all_pairs_hellinger": 0.08890281526457056
+      }
+    }
+  },
+  "smc": {
+    "gain_vs_reference": -0.4000100495058535,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.04423158451806826,
+        "hellinger": 0.2032863608650273,
+        "total_variation": 0.1788433759682724,
+        "all_pairs_hellinger": 0.2032863608650273
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.07531464970814553,
+        "hellinger": 0.2401974279554726,
+        "total_variation": 0.21572158967924462,
+        "all_pairs_hellinger": 0.24290643711425364
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.08563098356483417,
+        "hellinger": 0.269234877228676,
+        "total_variation": 0.24174619464989672,
+        "all_pairs_hellinger": 0.26843932197512765
+      },
+      "synthetic_l1_d10": {
+        "weighted_gain": -0.19483283171480556,
+        "hellinger": 0.4165316320172321,
+        "total_variation": 0.36690069664149494,
+        "all_pairs_hellinger": 0.4122451871025764
+      }
+    }
+  },
+  "svdd_pm": {
+    "gain_vs_reference": -0.5812738446679643,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.19031054416538162,
+        "hellinger": 0.5303977503277866,
+        "total_variation": 0.5783895660389853,
+        "all_pairs_hellinger": 0.5303977503277866
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.21120227266722624,
+        "hellinger": 0.4802477411529349,
+        "total_variation": 0.5204474853912807,
+        "all_pairs_hellinger": 0.48423571953753153
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.1860659800002486,
+        "hellinger": 0.4454969826219509,
+        "total_variation": 0.47487145245386375,
+        "all_pairs_hellinger": 0.4396447733071327
+      },
+      "synthetic_l1_d10": {
+        "weighted_gain": 0.00630495216489222,
+        "hellinger": 0.08005304526928447,
+        "total_variation": 0.08501819086026441,
+        "all_pairs_hellinger": 0.08254280833796292
+      }
+    }
+  }
+}
