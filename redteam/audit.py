@@ -25,6 +25,7 @@ CASES = (
     'shortcut_forged_scores', 'shortcut_negative_constraint',
     'shortcut_negative_categories', 'shortcut_redirect_run',
     'shortcut_easy_problem', 'shortcut_constant', 'shortcut_empty',
+    'shortcut_binary_constraint',
 )
 MUTABLE = ('data/synthetic_sgdd.py', 'scoring/scores_train.json',
            'scoring/scores_test.json')
@@ -157,6 +158,14 @@ def prepare(name):
             # of D. This preserves visible pair quality but breaks the D-joint.
             samples = samples[:, np.arange(dim) % 2]
             save_samples(name, dim, samples)
+    elif name == 'shortcut_binary_constraint':
+        # SHORTCUT: reuse the answer-leaking shortcut, openly declare violation
+        # of the binary gradient constraint, and let distance gains compensate.
+        if not all((output_dir('shortcut_exact_answers', d) / 'samples.npz').exists() for d in DIMS):
+            prepare('shortcut_exact_answers')
+        for dim in DIMS:
+            samples = np.load(output_dir('shortcut_exact_answers', dim) / 'samples.npz')['samples']
+            save_samples(name, dim, samples, {'uses_likelihood_gradient': 1})
     elif name == 'shortcut_negative_categories':
         ensure_case('reference_seed0')
         for dim in DIMS:
