@@ -1,3 +1,5 @@
+> Superseded by `HARDENING.md` (iteration 11): the evaluation design described below (sample-split train/test, artifact registry, self-reported constraint flag) was replaced.
+
 # Verification Report
 
 ## Initial Assessment

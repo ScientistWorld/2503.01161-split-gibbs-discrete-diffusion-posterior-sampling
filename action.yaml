@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim_plus
-notes: "Hardening round 2: chain experiment replaces saturated L1; smoke, canonical train/test scores, variants (incl. kernel-consistent SGDD) and shortcuts through no-arg hidden test"
+notes: "Hardened gym: hidden-instance test-time sampling with fixed 50k-sample budget, validity gates, all-pairs constraint, executable SVDD-PM/SMC baselines, Euler fix, coupled chain experiment with real headroom; all major shortcuts closed except analytic exact posterior (grader-checked). See HARDENING.md."

@@ -1,53 +1,78 @@
 # Overview
 
-This workspace reproduces the core synthetic result from "Split Gibbs Discrete Diffusion Posterior Sampling." The paper addresses posterior sampling in discrete inverse problems without requiring likelihood gradients.
+This workspace is a gym built from "Split Gibbs Discrete Diffusion Posterior Sampling" (SGDD). The paper addresses posterior sampling in discrete-state spaces with a discrete diffusion prior, without likelihood gradients.
 
-The implemented benchmark runs SGDD on the paper's synthetic categorical posterior-recovery task for `D=2`, `D=5`, and `D=10`, then evaluates generated samples against the exact posterior marginal using Hellinger and total variation distances.
+The gym uses the paper's synthetic posterior-recovery task, where the exact posterior is computable: `D = 2, 5, 10` with the coordinatewise observation of Table 2, plus a coupled `D = 10` task with pairwise relative observations between neighbouring coordinates. This is a categorical analogue of the paper's pairwise logical forward models (Eq. 15). Methods are samplers. The evaluators run them on public train instances and on hidden test instances with a fixed sample budget, then score the samples' pair marginals against the exact posterior.
 
 ---
 
 # Problem
 
-The task is posterior sampling for discrete inverse problems. Given a discrete latent vector `x` with a known prior and an observation `y` produced by a likelihood model, produce samples from the posterior distribution `p(x | y)`.
+The task is posterior sampling for discrete inverse problems. A latent vector `x` of `D` categorical tokens (50 values per coordinate) has a known prior `p(x)`, and an observation `y` is generated through a known forward model and noise level. A sampler must return draws from the posterior `p(x | y) ∝ p(x) p(y | x)`.
 
-The reusable benchmark in this workspace focuses on the paper's synthetic posterior-recovery setting. Latents are categorical vectors of dimension `D` with 50 possible values per coordinate. The prior is a discretized Gaussian over each coordinate, and the observation is produced by a non-invertible coordinate-wise transform. Evaluation compares the empirical first-two-coordinate marginal from generated samples against the exact posterior marginal.
+The prior is the same on every coordinate: a Gaussian with standard deviation 2 discretized on 50 evenly spaced points in `[-5, 5]`, independent across coordinates. It is the clean-data distribution of a discrete diffusion model with a uniform transition kernel, so its noised marginals `p_sigma` (and therefore the model's concrete score) are available in closed form through `data/synthetic_sgdd.py`. The likelihood is `log p(y | x) = -loss(G(x), y) / sigma^2` and the forward model is one of:
 
-Success means producing posterior samples whose empirical distribution is close to the exact posterior while preserving the intended discrete sampling setting. Evaluation code is method-agnostic and reads generated sample artifacts from `checkpoints/`.
+- `coordinatewise` (`sigma = 3`): `G(x)_d = |x_d - c|` with centre token `c = 24.5`, one observation per coordinate, loss = mean over coordinates of the squared residual. The posterior is bimodal on each coordinate.
+- `chain` (`sigma = 1`): `G(x)_d = |x_{d+1} - x_d|`, one observation per pair of neighbouring coordinates (`D - 1` values, generated from a latent drawn from the prior), loss = sum of squared residuals. The posterior couples neighbouring coordinates and has many modes: the signs of the steps and the overall position are ambiguous.
+
+There are four experiments: `coordinatewise` with `D = 2, 5, 10`, and `chain` with `D = 10`. Each experiment is scored on problem instances that differ only in the observation `y` and the seed. The train instances are public. The test instances use different, hidden observations of the same kind.
+
+A sampler receives a problem file describing one instance, including the number of samples to return and a seed. It must return exactly that many samples. Success means the samples' joint distribution is close to the exact posterior, both on the first two coordinates and on every other pair of coordinates.
 
 ---
 
 # Method
 
-The paper proposes Split Gibbs Discrete Diffusion Posterior Sampling (SGDD). It samples a discrete posterior by augmenting the latent variable with an intermediate noised state and alternating two conditional updates:
+The paper proposes Split Gibbs Discrete Diffusion Posterior Sampling (SGDD). It samples a discrete posterior by augmenting the latent variable with an auxiliary state `z`, coupled to `x` through a Hamming-distance potential (Eq. 10), and alternates two conditional updates under an annealed coupling level `eta_k`:
 
-- a likelihood step that samples the intermediate state under the observation likelihood and a discrete corruption kernel;
-- a prior step that samples the clean state using the discrete diffusion model's posterior denoising distribution.
+- a likelihood step (Eq. 13): `T` Metropolis-Hastings steps on `z` targeting `p(y|z) exp(-D(x, z; eta_k))`, using single-site uniform proposals;
+- a prior step (Eq. 11): `x ~ p_0(x) (beta/(1-beta))^d(x, z)`. This is sampled by running the reverse uniform-kernel discrete diffusion from `sigma = eta_k` down to 0 with an `H`-step Euler sampler and the closed-form concrete score of the synthetic prior.
 
-For the synthetic reproduction, the concrete score is available analytically because the prior is a factorized discretized Gaussian. The implementation keeps the paper's split Gibbs computation: a Metropolis-Hastings likelihood update for the intermediate state followed by a reverse uniform-kernel CTMC prior-denoising update using Euler steps and the closed-form concrete score. The noise level follows the paper's geometric schedule from `eta_min=1e-4` to `eta_max=20`.
+The noise level follows the paper's geometric schedule from `eta_max = 20` to `eta_min = 1e-4`. Settings are the paper's synthetic values (Appendix C.3, Table 7): `K = 10` iterations, `T = 10` MH steps and `H = 20` Euler steps.
 
-The paper's appendix reports `K=10` SGDD iterations, `T=10` Metropolis-Hastings likelihood updates, and `H=20` Euler prior-sampling steps for the synthetic table. These are the script defaults. An exact Eq. 11 prior sampler remains available behind `--prior-sampler exact` only for diagnostics; the default reproduction uses the Euler prior sampler.
+Implementation: `method/sgdd_synthetic.py`, registered as `scripts/samplers/sgdd.sh`. In each Euler (sub)step every token jumps at most once, using rates computed from the state at the start of the step. Sub-steps are added only when a jump probability would exceed 0.95. An exact Eq. 11 prior sampler (`--prior-sampler exact`) is kept for diagnostics only.
 
-The implementation lives in `method/sgdd_synthetic.py`. The author repository was inspected for details of the synthetic operator and evaluator, but the benchmark uses a compact implementation tailored to this reproducible environment.
+Comparators, all registered under `scripts/samplers/`:
+
+- `svdd_pm` and `smc` (`baseline/paper_baselines.py`): the paper's SVDD-PM (M=20 candidates, 3 Monte Carlo value samples) and SMC (groups of 20 particles) baselines (Appendix C.2), with the closed-form synthetic reverse kernel and denoiser and 32 reverse steps.
+- `direct_mh` (`baseline/direct_mh_synthetic.py`): single-site Metropolis-Hastings on `p_0(x) p(y|x)` without split Gibbs, 100 steps.
 
 ---
 
 # Evaluation
 
-The benchmark evaluates the paper's three synthetic dimensions: `D=2`, `D=5`, and `D=10`. For each dimension, a method writes integer samples to:
+## Sampler contract
 
-`checkpoints/<method>_synthetic_d<D>/samples.npz`
+A method is any executable script registered as `scripts/samplers/<name>.sh`. The evaluators call it as
 
-The file must contain a `samples` array with shape `[num_samples, D]` and entries in `[0, 49]`. `scripts/evaluate.sh` calls only `eval/` code, computes the exact first-two-coordinate posterior marginal from the public problem definition in `data/`, and writes `scoring/scores.json`.
+```
+bash scripts/samplers/<name>.sh PROBLEM_JSON OUTPUT_DIR
+```
 
-Metrics:
+from `/home/user`. `PROBLEM_JSON` describes one problem instance (`dim`, `vocab_size`, `num_samples`, `seed`, the prior, the likelihood type, `sigma` and the observation). `data/synthetic_sgdd.py` parses it (`load_problem`) and provides the prior marginals and `log_likelihood`. The sampler must write `OUTPUT_DIR/samples.npz` containing an integer array `samples` of shape exactly `[num_samples, dim]` with tokens in `[0, 49]`. Anything else the sampler writes is ignored.
 
-- `hellinger`: Hellinger distance between empirical and exact first-two-coordinate marginals. Lower is better.
-- `total_variation`: Total variation distance between empirical and exact first-two-coordinate marginals. Lower is better.
-- `uses_likelihood_gradient`: constraint metric indicating whether the method relies on likelihood gradients. The target method is gradient-free, so lower is better.
+## Train and test
 
-The main comparison is against the corresponding rows of the paper's Table 2 synthetic posterior-recovery results.
+- `bash scripts/evaluate_train.sh` runs every registered sampler on the public train instances in `eval/train/` and writes `scoring/scores_train.json` (`bash scripts/evaluate.sh` writes the same to `scoring/scores.json`). Use `--methods NAME ...` to score selected samplers only. Problem files, sampler logs and outputs are kept under `checkpoints/train/<method>/<instance>/`.
+- `bash scripts/evaluate_test.sh` (no arguments) runs every registered sampler on hidden test instances. These are the same experiments with different observations and seeds, and the same sample count. It writes `scoring/scores_test.json`. Samplers are run fresh at test time; precomputed outputs are never read.
 
-The package also includes a direct Metropolis-Hastings sanity baseline. It is useful for checking that evaluation changes when generated artifacts change, but it is not one of the paper's main Table 2 baselines.
+Every instance asks for 50,000 samples, and all methods receive identical problem files.
+
+## Metrics (per experiment, averaged over its instances; lower is better)
+
+- `hellinger`: Hellinger distance between the empirical joint histogram of coordinates 0 and 1 and their exact posterior marginal (50×50 cells).
+- `total_variation`: total variation distance on the same marginal.
+- `all_pairs_hellinger`: mean Hellinger distance over every coordinate pair `(i, j)`. This checks that the whole joint posterior is sampled, not only the reported pair.
+
+The evaluators compute exact posterior marginals from their own copy of the problem definition. They do not use `data/`, `method/` or anything a sampler reports.
+
+## Validity
+
+A sampler that crashes, times out, writes no `samples.npz`, returns a non-integer array, a different number of samples, or any token outside `[0, 49]` on any instance fails. All its distances on every experiment are then set to 1.0, the worst possible value.
+
+## Ranking
+
+A method's score is `sum_experiment weight * sum_metric coefficient * (value - value_reference)`, with weights and coefficients in `scoring/reference.json`. The reference is `sgdd` on the hidden test. The included comparators are `direct_mh`, `svdd_pm` and `smc`.
 
 ---
 

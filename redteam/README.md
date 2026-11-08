@@ -1,3 +1,5 @@
+> Iteration 11 replaced the evaluator this harness targets; `audit.py` no longer runs against the current gym. The current audit is `redteam/hardening/` (see `HARDENING.md`).
+
 # Scoring audit runs
 
 Run `python redteam/audit.py suite` in the gym container on a compute job.

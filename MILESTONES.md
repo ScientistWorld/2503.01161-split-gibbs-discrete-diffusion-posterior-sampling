@@ -36,5 +36,10 @@
 - Regenerated auxiliary train/test scores after deterministic split cleanup.
 - `python validate.py --compare` passed with no validation warnings.
 
+### [2026-11-08 09:00] - core_claim_plus
+- Hardening (iteration 11): test-time evaluation of every registered sampler on hidden observations, exactly 50,000 samples per instance, validity gates, an all-pairs constraint metric, and the self-reported gradient flag removed from scoring.
+- Fixed the SGDD Euler prior step so each token jumps at most once per sub-step. Made the paper's SVDD-PM and SMC baselines executable; SGDD beats both on every experiment.
+- Added the coupled, multimodal `synthetic_chain_d10` experiment, where the reference is far from the exact-sample bound. Details and audit results are in `HARDENING.md`.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

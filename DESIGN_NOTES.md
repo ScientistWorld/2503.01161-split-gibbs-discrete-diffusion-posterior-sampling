@@ -1,3 +1,5 @@
+> Superseded by `HARDENING.md` (iteration 11): the evaluation design described below (sample-split train/test, artifact registry, self-reported constraint flag) was replaced.
+
 # Train/Test Evaluation Design Notes
 
 Checked the split evaluators, wrapper scripts, and scoring schema for shortcut risk.

@@ -1,3 +1,5 @@
+> Iteration 11 (hardening) replaced the evaluation design and added baselines and a coupled chain experiment; current state and results are in `HARDENING.md`. The notes below describe earlier iterations.
+
 # Progress
 
 ## What Works

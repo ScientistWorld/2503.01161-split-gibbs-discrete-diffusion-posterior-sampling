@@ -25,27 +25,27 @@
       "results": {
         "sgdd": {
           "type": "proposed",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0932,
+          "total_variation": 0.0854,
+          "all_pairs_hellinger": 0.0932
         },
         "direct_mh": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0623,
+          "total_variation": 0.0488,
+          "all_pairs_hellinger": 0.0623
         },
         "svdd_pm": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.5304,
+          "total_variation": 0.5784,
+          "all_pairs_hellinger": 0.5304
         },
         "smc": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.2033,
+          "total_variation": 0.1788,
+          "all_pairs_hellinger": 0.2033
         },
         "_paper_svdd_pm_m20": {
           "type": "baseline",
@@ -98,27 +98,27 @@
       "results": {
         "sgdd": {
           "type": "proposed",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0915,
+          "total_variation": 0.0871,
+          "all_pairs_hellinger": 0.0922
         },
         "direct_mh": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0752,
+          "total_variation": 0.0607,
+          "all_pairs_hellinger": 0.0758
         },
         "svdd_pm": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.4802,
+          "total_variation": 0.5204,
+          "all_pairs_hellinger": 0.4842
         },
         "smc": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.2402,
+          "total_variation": 0.2157,
+          "all_pairs_hellinger": 0.2429
         },
         "_paper_svdd_pm_m20": {
           "type": "baseline",
@@ -171,27 +171,27 @@
       "results": {
         "sgdd": {
           "type": "proposed",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0991,
+          "total_variation": 0.0963,
+          "all_pairs_hellinger": 0.0981
         },
         "direct_mh": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.0845,
+          "total_variation": 0.0687,
+          "all_pairs_hellinger": 0.0836
         },
         "svdd_pm": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.4455,
+          "total_variation": 0.4749,
+          "all_pairs_hellinger": 0.4396
         },
         "smc": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.2692,
+          "total_variation": 0.2417,
+          "all_pairs_hellinger": 0.2684
         },
         "_paper_svdd_pm_m20": {
           "type": "baseline",
@@ -244,27 +244,27 @@
       "results": {
         "sgdd": {
           "type": "proposed",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.5266,
+          "total_variation": 0.5362,
+          "all_pairs_hellinger": 0.4662
         },
         "direct_mh": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.4669,
+          "total_variation": 0.4824,
+          "all_pairs_hellinger": 0.5266
         },
         "svdd_pm": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.6563,
+          "total_variation": 0.6997,
+          "all_pairs_hellinger": 0.4508
         },
         "smc": {
           "type": "baseline",
-          "hellinger": null,
-          "total_variation": null,
-          "all_pairs_hellinger": null
+          "hellinger": 0.6727,
+          "total_variation": 0.7026,
+          "all_pairs_hellinger": 0.536
         }
       }
     }
