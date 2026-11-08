@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
 test: false
-notes: "Run bundled scoring audit: reference seeds, honest quality variants, baseline, and nine shortcut/rejection attempts; save per-attempt hidden-test scores under redteam/."
+notes: "Finish audit with one additional no-argument hidden-test run: reuse answer-rebuilding shortcut with binary constraint flag 1; completed cases are skipped and summary is refreshed."

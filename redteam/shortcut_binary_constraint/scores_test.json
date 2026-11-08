@@ -1,0 +1,44 @@
+{
+  "slice": "test",
+  "experiments": {
+    "synthetic_d10": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_binary_constraint/outputs/sgdd_synthetic_d10"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.06003677728927683,
+          "total_variation": 0.04821910236509539,
+          "uses_likelihood_gradient": 1.0
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_binary_constraint/outputs/sgdd_synthetic_d2"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.04516979000644608,
+          "total_variation": 0.03555802423208858,
+          "uses_likelihood_gradient": 1.0
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "test",
+      "_run_dirs": {
+        "sgdd": "/home/user/redteam/shortcut_binary_constraint/outputs/sgdd_synthetic_d5"
+      },
+      "results": {
+        "sgdd": {
+          "hellinger": 0.055625798877538137,
+          "total_variation": 0.042701133920494766,
+          "uses_likelihood_gradient": 1.0
+        }
+      }
+    }
+  }
+}
