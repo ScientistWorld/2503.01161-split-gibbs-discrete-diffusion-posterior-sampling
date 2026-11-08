@@ -2,6 +2,33 @@
   "slice": "test",
   "num_samples": 50000,
   "experiments": {
+    "synthetic_chain_d10": {
+      "_slice": "test",
+      "_instances": 2,
+      "_failures": {},
+      "results": {
+        "direct_mh": {
+          "hellinger": 0.46694982440462507,
+          "total_variation": 0.48236686260681505,
+          "all_pairs_hellinger": 0.5265598465947579
+        },
+        "sgdd": {
+          "hellinger": 0.5265951392335841,
+          "total_variation": 0.5361547246824925,
+          "all_pairs_hellinger": 0.466179543004455
+        },
+        "smc": {
+          "hellinger": 0.6726802283793156,
+          "total_variation": 0.7025730656113833,
+          "all_pairs_hellinger": 0.5359823012457955
+        },
+        "svdd_pm": {
+          "hellinger": 0.6562710424488871,
+          "total_variation": 0.6997190193221614,
+          "all_pairs_hellinger": 0.45080093921352493
+        }
+      }
+    },
     "synthetic_d10": {
       "_slice": "test",
       "_instances": 2,
@@ -80,33 +107,6 @@
           "hellinger": 0.4802477411529349,
           "total_variation": 0.5204474853912807,
           "all_pairs_hellinger": 0.48423571953753153
-        }
-      }
-    },
-    "synthetic_l1_d10": {
-      "_slice": "test",
-      "_instances": 2,
-      "_failures": {},
-      "results": {
-        "direct_mh": {
-          "hellinger": 0.10125041799439467,
-          "total_variation": 0.11264853227125668,
-          "all_pairs_hellinger": 0.09999135010526908
-        },
-        "sgdd": {
-          "hellinger": 0.08986004824662261,
-          "total_variation": 0.09840069215304015,
-          "all_pairs_hellinger": 0.08890281526457056
-        },
-        "smc": {
-          "hellinger": 0.4165316320172321,
-          "total_variation": 0.36690069664149494,
-          "all_pairs_hellinger": 0.4122451871025764
-        },
-        "svdd_pm": {
-          "hellinger": 0.08005304526928447,
-          "total_variation": 0.08501819086026441,
-          "all_pairs_hellinger": 0.08254280833796292
         }
       }
     }

@@ -1,0 +1,54 @@
+{
+  "slice": "test",
+  "num_samples": 50000,
+  "experiments": {
+    "synthetic_chain_d10": {
+      "_slice": "test",
+      "_instances": 2,
+      "_failures": {},
+      "results": {
+        "shortcut_easy_problem": {
+          "hellinger": 0.9999983239099136,
+          "total_variation": 0.9999988762925758,
+          "all_pairs_hellinger": 0.9999118420729233
+        }
+      }
+    },
+    "synthetic_d10": {
+      "_slice": "test",
+      "_instances": 2,
+      "_failures": {},
+      "results": {
+        "shortcut_easy_problem": {
+          "hellinger": 0.9999226635169263,
+          "total_variation": 0.9999998978890817,
+          "all_pairs_hellinger": 0.9999258473667424
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "test",
+      "_instances": 2,
+      "_failures": {},
+      "results": {
+        "shortcut_easy_problem": {
+          "hellinger": 0.9999999937468993,
+          "total_variation": 0.9999999999888413,
+          "all_pairs_hellinger": 0.9999999937468993
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "test",
+      "_instances": 2,
+      "_failures": {},
+      "results": {
+        "shortcut_easy_problem": {
+          "hellinger": 0.9999951451437956,
+          "total_variation": 0.9999999970944884,
+          "all_pairs_hellinger": 0.9999936718566311
+        }
+      }
+    }
+  }
+}

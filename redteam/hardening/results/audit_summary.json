@@ -1,0 +1,761 @@
+{
+  "direct_mh": {
+    "gain_vs_reference": 0.05295833174211648,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.013657497491143495,
+        "hellinger": 0.06234534364667149,
+        "total_variation": 0.04878690227073069,
+        "all_pairs_hellinger": 0.06234534364667149
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.008074565408385128,
+        "hellinger": 0.07517460587342534,
+        "total_variation": 0.060665310565506544,
+        "all_pairs_hellinger": 0.07575676446581843
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.009621510744862921,
+        "hellinger": 0.08450036544716948,
+        "total_variation": 0.06868414221092313,
+        "all_pairs_hellinger": 0.08356285398733232
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.021604758097724937,
+        "hellinger": 0.46694982440462507,
+        "total_variation": 0.48236686260681505,
+        "all_pairs_hellinger": 0.5265598465947579
+      }
+    }
+  },
+  "direct_mh_long": {
+    "gain_vs_reference": 0.2183858609640086,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.013884580524941043,
+        "hellinger": 0.06167216763652961,
+        "total_variation": 0.04857748368110584,
+        "all_pairs_hellinger": 0.06167216763652961
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.008084351054230995,
+        "hellinger": 0.07530573602337479,
+        "total_variation": 0.06017904103278436,
+        "all_pairs_hellinger": 0.07598017114672748
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.010233382636705809,
+        "hellinger": 0.08345628812254302,
+        "total_variation": 0.06630507760906382,
+        "all_pairs_hellinger": 0.08361091102407331
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.18618354674813076,
+        "hellinger": 0.22333295387964586,
+        "total_variation": 0.21758306606029626,
+        "all_pairs_hellinger": 0.3910839226410768
+      }
+    }
+  },
+  "sgdd": {
+    "gain_vs_reference": 0.0,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09324307440345786,
+        "total_variation": 0.08535505447162722,
+        "all_pairs_hellinger": 0.09324307440345786
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09150787017243858,
+        "total_variation": 0.08706427978609826,
+        "all_pairs_hellinger": 0.09215712688693314
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.09914657682662731,
+        "total_variation": 0.09628812815486812,
+        "all_pairs_hellinger": 0.09811773405458604
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.0,
+        "hellinger": 0.5265951392335841,
+        "total_variation": 0.5361547246824925,
+        "all_pairs_hellinger": 0.466179543004455
+      }
+    }
+  },
+  "sgdd_consistent_potential": {
+    "gain_vs_reference": -0.2124261984542695,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.09537266735964384,
+        "hellinger": 0.30745828747154136,
+        "total_variation": 0.34458924979845046,
+        "all_pairs_hellinger": 0.30745828747154136
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.061046061750317404,
+        "hellinger": 0.22470005248524705,
+        "total_variation": 0.2523011819670481,
+        "all_pairs_hellinger": 0.2379490971473505
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.03796218704137537,
+        "hellinger": 0.1667456437961398,
+        "total_variation": 0.18414776048529888,
+        "all_pairs_hellinger": 0.16118553765004717
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.018045282302932873,
+        "hellinger": 0.5558298834300099,
+        "total_variation": 0.5733199368250474,
+        "all_pairs_hellinger": 0.4662276989144396
+      }
+    }
+  },
+  "sgdd_consistent_potential_long": {
+    "gain_vs_reference": 0.04512036984567068,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.021160912342356578,
+        "hellinger": 0.13769396565450104,
+        "total_variation": 0.15056876253032409,
+        "all_pairs_hellinger": 0.13769396565450104
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.039428603788194544,
+        "hellinger": 0.1759745729089493,
+        "total_variation": 0.19624205508029785,
+        "all_pairs_hellinger": 0.18649642894281765
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.04664620061694277,
+        "hellinger": 0.18498371008632747,
+        "total_variation": 0.19830768560945197,
+        "all_pairs_hellinger": 0.17718960352522728
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.15235608659316457,
+        "hellinger": 0.3004793787233795,
+        "total_variation": 0.27941087579833335,
+        "all_pairs_hellinger": 0.3558974735820577
+      }
+    }
+  },
+  "sgdd_fixed_eta": {
+    "gain_vs_reference": -0.226043446781508,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.05474967334868024,
+        "hellinger": 0.22808368519142244,
+        "total_variation": 0.2045008054073844,
+        "all_pairs_hellinger": 0.22808368519142244
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.021472424630372706,
+        "hellinger": 0.14641752934853075,
+        "total_variation": 0.12961690541536536,
+        "all_pairs_hellinger": 0.14599890408335534
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.0028349260568960046,
+        "hellinger": 0.10687964656217085,
+        "total_variation": 0.09591029248711525,
+        "all_pairs_hellinger": 0.10578440583997045
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.14698642274555904,
+        "hellinger": 0.7564086453877849,
+        "total_variation": 0.8203455021451218,
+        "all_pairs_hellinger": 0.5054460134298073
+      }
+    }
+  },
+  "sgdd_legacy_euler": {
+    "gain_vs_reference": 0.0013389417889886183,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.00020326321701765295,
+        "hellinger": 0.09265849088909697,
+        "total_variation": 0.08512265311571567,
+        "all_pairs_hellinger": 0.09265849088909697
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.0006920192189508417,
+        "hellinger": 0.08934359658972173,
+        "total_variation": 0.0855210385818837,
+        "all_pairs_hellinger": 0.09141737130791591
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.0008692425721957351,
+        "hellinger": 0.0976962440724333,
+        "total_variation": 0.0933446603584751,
+        "all_pairs_hellinger": 0.0975966203410798
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.0004255832191756114,
+        "hellinger": 0.5277496027537456,
+        "total_variation": 0.5370274878364214,
+        "all_pairs_hellinger": 0.4652552042889923
+      }
+    }
+  },
+  "sgdd_long": {
+    "gain_vs_reference": 0.1075757733058198,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.051810385734041245,
+        "hellinger": 0.21345860856483997,
+        "total_variation": 0.21656943351851562,
+        "all_pairs_hellinger": 0.21345860856483997
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.036360632094233916,
+        "hellinger": 0.17160375694137714,
+        "total_variation": 0.18342822446416857,
+        "all_pairs_hellinger": 0.17993494067771076
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.026813639185050787,
+        "hellinger": 0.14678263327055724,
+        "total_variation": 0.15811651056803377,
+        "all_pairs_hellinger": 0.1431606757513337
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.22256043031914574,
+        "hellinger": 0.1732340338135099,
+        "total_variation": 0.17784259464458607,
+        "all_pairs_hellinger": 0.3311024223521155
+      }
+    }
+  },
+  "sgdd_more_mh": {
+    "gain_vs_reference": 0.09392406484866653,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.03111189593967645,
+        "hellinger": 0.16529951327765538,
+        "total_variation": 0.16447975678343713,
+        "all_pairs_hellinger": 0.16529951327765538
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.026604316327829183,
+        "hellinger": 0.14842121933758362,
+        "total_variation": 0.15899612437249389,
+        "all_pairs_hellinger": 0.1580553783312601
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.030893676953751354,
+        "hellinger": 0.15431384997533196,
+        "total_variation": 0.16624535031272317,
+        "all_pairs_hellinger": 0.1509839367977615
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.1825339540699235,
+        "hellinger": 0.23050913995054195,
+        "total_variation": 0.23754853315216867,
+        "all_pairs_hellinger": 0.3736278052930794
+      }
+    }
+  },
+  "sgdd_no_likelihood": {
+    "gain_vs_reference": -0.4633820104253165,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.15952644551290068,
+        "hellinger": 0.4565285300072897,
+        "total_variation": 0.5065284614028864,
+        "all_pairs_hellinger": 0.4565285300072897
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.0711055999681691,
+        "hellinger": 0.24800611809773107,
+        "total_variation": 0.2770837026289762,
+        "all_pairs_hellinger": 0.2621933233065856
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.04155292646904811,
+        "hellinger": 0.17352346753867887,
+        "total_variation": 0.19212724654604119,
+        "all_pairs_hellinger": 0.16678042231346019
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.1911970384751986,
+        "hellinger": 0.8268164439763512,
+        "total_variation": 0.8888058397275411,
+        "all_pairs_hellinger": 0.535110101037426
+      }
+    }
+  },
+  "sgdd_seed1": {
+    "gain_vs_reference": 0.0010595642352255186,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.00017477719828134456,
+        "hellinger": 0.09218153735137916,
+        "total_variation": 0.08655242044947944,
+        "all_pairs_hellinger": 0.09218153735137916
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.00012689742123728643,
+        "hellinger": 0.091362996455639,
+        "total_variation": 0.08678258092877225,
+        "all_pairs_hellinger": 0.09151593873695066
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.0012543065149862869,
+        "hellinger": 0.09646559827994423,
+        "total_variation": 0.0927745617772708,
+        "all_pairs_hellinger": 0.09766151868117869
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.0004964168992793991,
+        "hellinger": 0.5278025739523291,
+        "total_variation": 0.5374074710292651,
+        "all_pairs_hellinger": 0.4650980459467202
+      }
+    }
+  },
+  "sgdd_seed2": {
+    "gain_vs_reference": 0.0009785509740459267,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.00016121681923065678,
+        "hellinger": 0.0934854011319762,
+        "total_variation": 0.08609271114392017,
+        "all_pairs_hellinger": 0.0934854011319762
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.0003800765494914454,
+        "hellinger": 0.09000076677697866,
+        "total_variation": 0.0864783366884493,
+        "all_pairs_hellinger": 0.0920736999001173
+      },
+      "synthetic_d10": {
+        "weighted_gain": 1.2953158821521137e-05,
+        "hellinger": 0.09929052464393605,
+        "total_variation": 0.09627596610634812,
+        "all_pairs_hellinger": 0.0977408076076204
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.000746738084963617,
+        "hellinger": 0.5256239613282584,
+        "total_variation": 0.5346718643535987,
+        "all_pairs_hellinger": 0.4656342564385584
+      }
+    }
+  },
+  "shortcut_binary_flag": {
+    "gain_vs_reference": 0.38410222470816224,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.01435932682880291,
+        "hellinger": 0.06096713183024663,
+        "total_variation": 0.04638385399796438,
+        "all_pairs_hellinger": 0.06096713183024663
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.008517509995113437,
+        "hellinger": 0.0740006189905075,
+        "total_variation": 0.059292475773997634,
+        "all_pairs_hellinger": 0.07532269411418169
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.010010648699324005,
+        "hellinger": 0.08354920804429894,
+        "total_variation": 0.0674410252619693,
+        "all_pairs_hellinger": 0.08384380549612933
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.3512147391849219,
+        "hellinger": 0.03273282538038282,
+        "total_variation": 0.023991763622273732,
+        "all_pairs_hellinger": 0.061558357212137704
+      }
+    }
+  },
+  "shortcut_cached_train": {
+    "gain_vs_reference": -0.05124469092241091,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.023917833725051182,
+        "hellinger": 0.1455462334468775,
+        "total_variation": 0.15391243790517128,
+        "all_pairs_hellinger": 0.1455462334468775
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.004722920013994752,
+        "hellinger": 0.1021272362896864,
+        "total_variation": 0.09970596438040873,
+        "all_pairs_hellinger": 0.10297757327921248
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.004165356922313487,
+        "hellinger": 0.09470681041526427,
+        "total_variation": 0.0806636775398929,
+        "all_pairs_hellinger": 0.09242375223677449
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.02676929410567846,
+        "hellinger": 0.4887543066968967,
+        "total_variation": 0.5667795393349907,
+        "all_pairs_hellinger": 0.6580788253844233
+      }
+    }
+  },
+  "shortcut_constant": {
+    "gain_vs_reference": -1.5937979158234836,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.38178447085357,
+        "hellinger": 0.9999999990373418,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 0.9999999990373418
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.38203347584049335,
+        "hellinger": 0.9999952431736674,
+        "total_variation": 0.9999999998851612,
+        "all_pairs_hellinger": 0.9999942751705335
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.473477137676333,
+        "hellinger": 0.999923105470929,
+        "total_variation": 0.9999999761303412,
+        "all_pairs_hellinger": 0.9999275606060787
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35650283145308737,
+        "hellinger": 1.0,
+        "total_variation": 0.9999999999999999,
+        "all_pairs_hellinger": 0.9999145279653995
+      }
+    }
+  },
+  "shortcut_empty": {
+    "gain_vs_reference": -1.5938426797172867,
+    "failed": true,
+    "failure": {
+      "synthetic_d2": "t2a: samples have shape (0, 2), expected exactly (50000, 2)",
+      "synthetic_d5": "t2a: samples have shape (0, 2), expected exactly (50000, 2)",
+      "synthetic_d10": "t2a: samples have shape (0, 2), expected exactly (50000, 2)",
+      "synthetic_chain_d10": "t2a: samples have shape (0, 2), expected exactly (50000, 2)"
+    },
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.3817844711423674,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.3820349997024872,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.47350541981328964,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35651778905914244,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      }
+    }
+  },
+  "shortcut_exact_posterior": {
+    "gain_vs_reference": 0.38410222470816224,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.01435932682880291,
+        "hellinger": 0.06096713183024663,
+        "total_variation": 0.04638385399796438,
+        "all_pairs_hellinger": 0.06096713183024663
+      },
+      "synthetic_d5": {
+        "weighted_gain": 0.008517509995113437,
+        "hellinger": 0.0740006189905075,
+        "total_variation": 0.059292475773997634,
+        "all_pairs_hellinger": 0.07532269411418169
+      },
+      "synthetic_d10": {
+        "weighted_gain": 0.010010648699324005,
+        "hellinger": 0.08354920804429894,
+        "total_variation": 0.0674410252619693,
+        "all_pairs_hellinger": 0.08384380549612933
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": 0.3512147391849219,
+        "hellinger": 0.03273282538038282,
+        "total_variation": 0.023991763622273732,
+        "all_pairs_hellinger": 0.061558357212137704
+      }
+    }
+  },
+  "shortcut_forged_scores": {
+    "gain_vs_reference": -1.5937979158234836,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.38178447085357,
+        "hellinger": 0.9999999990373418,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 0.9999999990373418
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.38203347584049335,
+        "hellinger": 0.9999952431736674,
+        "total_variation": 0.9999999998851612,
+        "all_pairs_hellinger": 0.9999942751705335
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.473477137676333,
+        "hellinger": 0.999923105470929,
+        "total_variation": 0.9999999761303412,
+        "all_pairs_hellinger": 0.9999275606060787
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35650283145308737,
+        "hellinger": 1.0,
+        "total_variation": 0.9999999999999999,
+        "all_pairs_hellinger": 0.9999145279653995
+      }
+    }
+  },
+  "shortcut_more_samples": {
+    "gain_vs_reference": -1.5938426797172867,
+    "failed": true,
+    "failure": {
+      "synthetic_d2": "t2a: samples have shape (100000, 2), expected exactly (50000, 2)",
+      "synthetic_d5": "t2a: samples have shape (100000, 2), expected exactly (50000, 2)",
+      "synthetic_d10": "t2a: samples have shape (100000, 2), expected exactly (50000, 2)",
+      "synthetic_chain_d10": "t2a: samples have shape (100000, 2), expected exactly (50000, 2)"
+    },
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.3817844711423674,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.3820349997024872,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.47350541981328964,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35651778905914244,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      }
+    }
+  },
+  "shortcut_negative_categories": {
+    "gain_vs_reference": -1.5938426797172867,
+    "failed": true,
+    "failure": {
+      "synthetic_d2": "t2a: tokens outside [0, 49]",
+      "synthetic_d5": "t2a: tokens outside [0, 49]",
+      "synthetic_d10": "t2a: tokens outside [0, 49]",
+      "synthetic_chain_d10": "t2a: tokens outside [0, 49]"
+    },
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.3817844711423674,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.3820349997024872,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.47350541981328964,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35651778905914244,
+        "hellinger": 1.0,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 1.0
+      }
+    }
+  },
+  "shortcut_negative_flag": {
+    "gain_vs_reference": -1.5937979158234836,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.38178447085357,
+        "hellinger": 0.9999999990373418,
+        "total_variation": 1.0,
+        "all_pairs_hellinger": 0.9999999990373418
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.38203347584049335,
+        "hellinger": 0.9999952431736674,
+        "total_variation": 0.9999999998851612,
+        "all_pairs_hellinger": 0.9999942751705335
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.473477137676333,
+        "hellinger": 0.999923105470929,
+        "total_variation": 0.9999999761303412,
+        "all_pairs_hellinger": 0.9999275606060787
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.35650283145308737,
+        "hellinger": 1.0,
+        "total_variation": 0.9999999999999999,
+        "all_pairs_hellinger": 0.9999145279653995
+      }
+    }
+  },
+  "shortcut_two_latents": {
+    "gain_vs_reference": -0.08693863697766925,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": 0.013657497491143495,
+        "hellinger": 0.06234534364667149,
+        "total_variation": 0.04878690227073069,
+        "all_pairs_hellinger": 0.06234534364667149
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.0267844626993848,
+        "hellinger": 0.07517460587342534,
+        "total_variation": 0.060665310565506544,
+        "all_pairs_hellinger": 0.42434704554351765
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.037065402566577615,
+        "hellinger": 0.08450036544716948,
+        "total_variation": 0.06868414221092313,
+        "all_pairs_hellinger": 0.4570581604788566
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.03674626920285033,
+        "hellinger": 0.46694982440462507,
+        "total_variation": 0.48236686260681505,
+        "all_pairs_hellinger": 0.8599942883123308
+      }
+    }
+  },
+  "smc": {
+    "gain_vs_reference": -0.2884074033377265,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.04423158451806826,
+        "hellinger": 0.2032863608650273,
+        "total_variation": 0.1788433759682724,
+        "all_pairs_hellinger": 0.2032863608650273
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.06025171976651642,
+        "hellinger": 0.2401974279554726,
+        "total_variation": 0.21572158967924462,
+        "all_pairs_hellinger": 0.24290643711425364
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.08563098356483417,
+        "hellinger": 0.269234877228676,
+        "total_variation": 0.24174619464989672,
+        "all_pairs_hellinger": 0.26843932197512765
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.09829311548830767,
+        "hellinger": 0.6726802283793156,
+        "total_variation": 0.7025730656113833,
+        "all_pairs_hellinger": 0.5359823012457955
+      }
+    }
+  },
+  "svdd_pm": {
+    "gain_vs_reference": -0.6223821546356849,
+    "failed": false,
+    "failure": {},
+    "experiments": {
+      "synthetic_d2": {
+        "weighted_gain": -0.19031054416538162,
+        "hellinger": 0.5303977503277866,
+        "total_variation": 0.5783895660389853,
+        "all_pairs_hellinger": 0.5303977503277866
+      },
+      "synthetic_d5": {
+        "weighted_gain": -0.168961818133781,
+        "hellinger": 0.4802477411529349,
+        "total_variation": 0.5204474853912807,
+        "all_pairs_hellinger": 0.48423571953753153
+      },
+      "synthetic_d10": {
+        "weighted_gain": -0.1860659800002486,
+        "hellinger": 0.4454969826219509,
+        "total_variation": 0.47487145245386375,
+        "all_pairs_hellinger": 0.4396447733071327
+      },
+      "synthetic_chain_d10": {
+        "weighted_gain": -0.07704381233627373,
+        "hellinger": 0.6562710424488871,
+        "total_variation": 0.6997190193221614,
+        "all_pairs_hellinger": 0.45080093921352493
+      }
+    }
+  }
+}
