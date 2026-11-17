@@ -1,0 +1,230 @@
+{
+  "slice": "train",
+  "num_samples": 50000,
+  "experiments": {
+    "synthetic_chain_d10": {
+      "_slice": "train",
+      "_failures": {},
+      "_per_instance": {
+        "direct_mh": {
+          "train_chain_d10": {
+            "hellinger": 0.44067250452499895,
+            "total_variation": 0.4394962572406559,
+            "all_pairs_hellinger": 0.5109370296829476
+          }
+        },
+        "sgdd": {
+          "train_chain_d10": {
+            "hellinger": 0.5282918450308097,
+            "total_variation": 0.5357404915268982,
+            "all_pairs_hellinger": 0.49054874257539133
+          }
+        },
+        "smc": {
+          "train_chain_d10": {
+            "hellinger": 0.6612496004164176,
+            "total_variation": 0.6867006067754109,
+            "all_pairs_hellinger": 0.5789336811185483
+          }
+        },
+        "svdd_pm": {
+          "train_chain_d10": {
+            "hellinger": 0.6440361683187368,
+            "total_variation": 0.6832396747611551,
+            "all_pairs_hellinger": 0.4928820832936195
+          }
+        }
+      },
+      "results": {
+        "direct_mh": {
+          "hellinger": 0.44067250452499895,
+          "total_variation": 0.4394962572406559,
+          "all_pairs_hellinger": 0.5109370296829476
+        },
+        "sgdd": {
+          "hellinger": 0.5282918450308097,
+          "total_variation": 0.5357404915268982,
+          "all_pairs_hellinger": 0.49054874257539133
+        },
+        "smc": {
+          "hellinger": 0.6612496004164176,
+          "total_variation": 0.6867006067754109,
+          "all_pairs_hellinger": 0.5789336811185483
+        },
+        "svdd_pm": {
+          "hellinger": 0.6440361683187368,
+          "total_variation": 0.6832396747611551,
+          "all_pairs_hellinger": 0.4928820832936195
+        }
+      }
+    },
+    "synthetic_d10": {
+      "_slice": "train",
+      "_failures": {},
+      "_per_instance": {
+        "direct_mh": {
+          "train_d10": {
+            "hellinger": 0.08398850975095984,
+            "total_variation": 0.06780018190017634,
+            "all_pairs_hellinger": 0.08410614812000308
+          }
+        },
+        "sgdd": {
+          "train_d10": {
+            "hellinger": 0.09664937722919102,
+            "total_variation": 0.09276667165075397,
+            "all_pairs_hellinger": 0.09653542862321456
+          }
+        },
+        "smc": {
+          "train_d10": {
+            "hellinger": 0.27372178657749724,
+            "total_variation": 0.24391574330224786,
+            "all_pairs_hellinger": 0.2667415399768498
+          }
+        },
+        "svdd_pm": {
+          "train_d10": {
+            "hellinger": 0.4442775004330555,
+            "total_variation": 0.47558966287160354,
+            "all_pairs_hellinger": 0.4434839923221004
+          }
+        }
+      },
+      "results": {
+        "direct_mh": {
+          "hellinger": 0.08398850975095984,
+          "total_variation": 0.06780018190017634,
+          "all_pairs_hellinger": 0.08410614812000308
+        },
+        "sgdd": {
+          "hellinger": 0.09664937722919102,
+          "total_variation": 0.09276667165075397,
+          "all_pairs_hellinger": 0.09653542862321456
+        },
+        "smc": {
+          "hellinger": 0.27372178657749724,
+          "total_variation": 0.24391574330224786,
+          "all_pairs_hellinger": 0.2667415399768498
+        },
+        "svdd_pm": {
+          "hellinger": 0.4442775004330555,
+          "total_variation": 0.47558966287160354,
+          "all_pairs_hellinger": 0.4434839923221004
+        }
+      }
+    },
+    "synthetic_d2": {
+      "_slice": "train",
+      "_failures": {},
+      "_per_instance": {
+        "direct_mh": {
+          "train_d2": {
+            "hellinger": 0.06306979411025261,
+            "total_variation": 0.048518857003065026,
+            "all_pairs_hellinger": 0.06306979411025261
+          }
+        },
+        "sgdd": {
+          "train_d2": {
+            "hellinger": 0.09494381839286052,
+            "total_variation": 0.09003310997252648,
+            "all_pairs_hellinger": 0.09494381839286052
+          }
+        },
+        "smc": {
+          "train_d2": {
+            "hellinger": 0.20322001104198964,
+            "total_variation": 0.17787792935452684,
+            "all_pairs_hellinger": 0.20322001104198964
+          }
+        },
+        "svdd_pm": {
+          "train_d2": {
+            "hellinger": 0.526148576014834,
+            "total_variation": 0.5767254447248022,
+            "all_pairs_hellinger": 0.526148576014834
+          }
+        }
+      },
+      "results": {
+        "direct_mh": {
+          "hellinger": 0.06306979411025261,
+          "total_variation": 0.048518857003065026,
+          "all_pairs_hellinger": 0.06306979411025261
+        },
+        "sgdd": {
+          "hellinger": 0.09494381839286052,
+          "total_variation": 0.09003310997252648,
+          "all_pairs_hellinger": 0.09494381839286052
+        },
+        "smc": {
+          "hellinger": 0.20322001104198964,
+          "total_variation": 0.17787792935452684,
+          "all_pairs_hellinger": 0.20322001104198964
+        },
+        "svdd_pm": {
+          "hellinger": 0.526148576014834,
+          "total_variation": 0.5767254447248022,
+          "all_pairs_hellinger": 0.526148576014834
+        }
+      }
+    },
+    "synthetic_d5": {
+      "_slice": "train",
+      "_failures": {},
+      "_per_instance": {
+        "direct_mh": {
+          "train_d5": {
+            "hellinger": 0.07514913859290995,
+            "total_variation": 0.06009844768678427,
+            "all_pairs_hellinger": 0.07562591633776086
+          }
+        },
+        "sgdd": {
+          "train_d5": {
+            "hellinger": 0.09178844588545239,
+            "total_variation": 0.08742649288854165,
+            "all_pairs_hellinger": 0.09143182492870558
+          }
+        },
+        "smc": {
+          "train_d5": {
+            "hellinger": 0.2511854230076494,
+            "total_variation": 0.22933756294478902,
+            "all_pairs_hellinger": 0.24493877967814237
+          }
+        },
+        "svdd_pm": {
+          "train_d5": {
+            "hellinger": 0.4895551074976372,
+            "total_variation": 0.5289848221986428,
+            "all_pairs_hellinger": 0.4880069366000157
+          }
+        }
+      },
+      "results": {
+        "direct_mh": {
+          "hellinger": 0.07514913859290995,
+          "total_variation": 0.06009844768678427,
+          "all_pairs_hellinger": 0.07562591633776086
+        },
+        "sgdd": {
+          "hellinger": 0.09178844588545239,
+          "total_variation": 0.08742649288854165,
+          "all_pairs_hellinger": 0.09143182492870558
+        },
+        "smc": {
+          "hellinger": 0.2511854230076494,
+          "total_variation": 0.22933756294478902,
+          "all_pairs_hellinger": 0.24493877967814237
+        },
+        "svdd_pm": {
+          "hellinger": 0.4895551074976372,
+          "total_variation": 0.5289848221986428,
+          "all_pairs_hellinger": 0.4880069366000157
+        }
+      }
+    }
+  }
+}

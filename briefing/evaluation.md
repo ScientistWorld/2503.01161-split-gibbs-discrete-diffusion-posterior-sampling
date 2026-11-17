@@ -1,34 +1,23 @@
 # Evaluation
 
-## Sampler contract
+Register each method as `scripts/samplers/NAME.sh`. Evaluation calls it from `/home/user` as:
 
-A method is any executable script registered as `scripts/samplers/<name>.sh`. The evaluators call it as
-
-```
-bash scripts/samplers/<name>.sh PROBLEM_JSON OUTPUT_DIR
+```sh
+bash scripts/samplers/NAME.sh PROBLEM_JSON OUTPUT_DIR
 ```
 
-from `/home/user`. `PROBLEM_JSON` describes one problem instance (`dim`, `vocab_size`, `num_samples`, `seed`, the prior, the likelihood type, `sigma` and the observation). `data/synthetic_sgdd.py` parses it (`load_problem`) and provides the prior marginals and `log_likelihood`. The sampler must write `OUTPUT_DIR/samples.npz` containing an integer array `samples` of shape exactly `[num_samples, dim]` with tokens in `[0, 49]`. Anything else the sampler writes is ignored.
+Write `OUTPUT_DIR/samples.npz`, containing an integer `samples` array of shape exactly `(128, 1024)`, with every token 0 or 1. Images are flattened in row order. Boolean, float, nonfinite, negative, oversized and empty outputs are invalid. Other output files and reported metrics are ignored. `data/image_problem.py` provides an optional public input loader and model interface.
 
-## Train and test
+Run `bash scripts/evaluate_train.sh` for development. It runs every registered method and writes `scoring/scores_train.json`. `bash scripts/evaluate.sh` additionally copies these numbers to `scoring/scores.json`. `bash scripts/evaluate_test.sh` takes no arguments, runs every registered method on unseen inputs, and writes `scoring/scores_test.json`. Only numbers under each experiment's `results` are ranked. Fresh evaluation always runs the procedure; saved samples can be rescored explicitly with `--rescore`. Public logs, inputs and outputs live under `checkpoints/train/METHOD/EXPERIMENT/`. Hidden run artifacts stay under `eval/test/results/runs/METHOD/EXPERIMENT/`; a hidden sampler can read its own run directory, while other hidden artifacts remain inaccessible.
 
-- `bash scripts/evaluate_train.sh` runs every registered sampler on the public train instances in `eval/train/` and writes `scoring/scores_train.json` (`bash scripts/evaluate.sh` writes the same to `scoring/scores.json`). Use `--methods NAME ...` to score selected samplers only. Problem files, sampler logs and outputs are kept under `checkpoints/train/<method>/<instance>/`.
-- `bash scripts/evaluate_test.sh` (no arguments) runs every registered sampler on hidden test instances. These are the same experiments with different observations and seeds, and the same sample count. It writes `scoring/scores_test.json`. Samplers are run fresh at test time; precomputed outputs are never read.
+The evaluator computes three quantities from the raw images:
 
-Every instance asks for 50,000 samples, and all methods receive identical problem files.
+- `psnr`: mean image PSNR in dB, data range 1. Exact recovery uses an MSE floor of one pixel, so the finite best value is 30.103 dB.
+- `accuracy`: fraction for which a fixed, evaluator-owned classifier assigns the same class to reconstruction and underlying image. This is classifier consistency as measured in the paper, rather than accuracy against a method-supplied label. Both images use the same 0/128 classifier preprocessing.
+- `measurement_error`: fraction of logical measurement bits violated. Lower is better; this measures data consistency independently of visual quality.
 
-## Metrics (per experiment, averaged over its instances; lower is better)
+A run must reach PSNR ≥6 dB, classifier consistency ≥20%, and measurement error ≤10% in both experiments. A crash, malformed output, impossible number or failed gate makes every metric of every experiment its worst value: PSNR 0, accuracy 0, measurement error 1. Failure cannot be compensated by another metric, and no failed entry is left empty. The evaluator owns all inputs, targets, dimensions, thresholds and comparison models. Test targets are constructed in evaluator memory after inference; the inference process cannot read `eval/test/`.
 
-- `hellinger`: Hellinger distance between the empirical joint histogram of coordinates 0 and 1 and their exact posterior marginal (50×50 cells).
-- `total_variation`: total variation distance on the same marginal.
-- `all_pairs_hellinger`: mean Hellinger distance over every coordinate pair `(i, j)`. This checks that the whole joint posterior is sampled, not only the reported pair.
+Rank improvement is the sum over experiments and metrics of `experiment_weight × abs(coefficient) × directed_improvement / population_std`. Directed improvement is positive in the metric's `higher_is_better` direction relative to the stored reference. The standard deviation is computed across the attempts being ranked on that metric; a zero-variance metric contributes zero. Missing or impossible entries first receive all worst values. Coefficient signs and measurement units do not change priorities. `eval/ranking.py` implements this calculation for audits; scalar audit gains are not additional ranked metrics.
 
-The evaluators compute exact posterior marginals from their own copy of the problem definition. They do not use `data/`, `method/` or anything a sampler reports.
-
-## Validity
-
-A sampler that crashes, times out, writes no `samples.npz`, returns a non-integer array, a different number of samples, or any token outside `[0, 49]` on any instance fails. All its distances on every experiment are then set to 1.0, the worst possible value.
-
-## Ranking
-
-A method's score is `sum_experiment weight * sum_metric coefficient * (value - value_reference)`, with weights and coefficients in `scoring/reference.json`. The reference is `sgdd` on the hidden test. The included comparators are `direct_mh`, `svdd_pm` and `smc`.
+All methods see the same 128 inputs and fixed sampling seeds. The public and hidden evaluators are independent implementations with different source partitions and private generation seeds. Inference uses fixed iteration counts, runs serially and has no evaluator wall-clock cutoff. Download data and weights before a job; hidden evaluation never trains a model.

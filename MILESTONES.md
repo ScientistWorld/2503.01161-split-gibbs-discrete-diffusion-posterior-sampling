@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: none**
 
 ## Progress Log
 
@@ -43,3 +43,7 @@
 
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.
+
+### [2026-11-17] - none
+- Prepared a replacement image gym using the original pretrained SEDD model and paper SGDD settings after REVIEW.md found structural problems in the old synthetic benchmark.
+- Active image reproduction and final hardening claims await the bundled compute job; historical synthetic milestones above are not claims about the new task.

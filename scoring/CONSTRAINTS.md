@@ -1,21 +1,11 @@
 # Constraints
 
-## Fixed problem (owned by `eval/`)
+Return exactly 128 reconstructions of 1,024 binary integer pixels for each experiment. The evaluator checks shape, dtype and category range before casting or computing metrics. It never reads method-written metrics, flags, targets, model choices, thresholds or artifact registries.
 
-- The prior (discretized Gaussian, std 2, grid `[-5, 5]`, 50 tokens), the forward models, the noise levels (`sigma = 3` coordinatewise, `sigma = 1` chain), the observations, the seeds and the sample count (50,000 per instance) are defined in `eval/train/` and `eval/test/`. Methods receive them through the problem file.
-- `data/synthetic_sgdd.py` only parses the problem file for samplers. Editing it changes what your sampler sees, not the target it is scored against.
-- The test instances are hidden. Samplers are run on them at test time, and outputs from earlier runs are never reused.
+Both experiments require PSNR ≥6 dB, classifier consistency ≥20%, and logical measurement error ≤10%. Failure of any experiment or constraint assigns PSNR=0, accuracy=0 and measurement_error=1 in every experiment. A failed method therefore cannot outrank a successful method through another metric. Missing entries are also failures.
 
-## Output validity (enforced; any violation fails the method on every experiment)
+Measurements, source partitions, test size, thresholds and the frozen evaluation classifier are evaluator-owned. The method may implement any reconstruction procedure and may use public resources. It may not read hidden evaluation code or answers, change evaluation resources, or submit another method's saved outputs. Hidden inference is denied filesystem reads beneath `eval/test/`; answers are constructed after it returns.
 
-- `samples.npz` with an integer array `samples` of shape exactly `[num_samples, dim]`;
-- every token in `[0, 49]`;
-- the sampler exits with status 0 on every instance, within the time limit.
+The paper's gradient-free claim is verified from the reference procedure, which uses inference-only model calls and discrete likelihood evaluations. A self-declared gradient-use flag is not measurable evidence and earns no score. Future attempts' compliance with scientific eligibility and hidden-data rules is checked by the separate shortcut grader; this evaluator does not claim to prove arbitrary code uses no gradients.
 
-## Eligibility rules (checked by review of the method, not by the evaluator)
-
-- **Gradient-free.** The paper's claim is posterior sampling without likelihood gradients. Do not use gradients of the likelihood with respect to a continuous relaxation of the tokens. A metadata flag is not scored and does not satisfy this rule.
-- **No analytic posterior.** Use the prior only through its diffusion-model interface (the noised marginals / concrete score), and the likelihood only as a black-box `log p(y|x)` on full token sequences. Do not compute posterior marginals or normalizers in closed form and sample from them, for example by exploiting the factorization of the coordinatewise likelihood or by forward-backward / dynamic programming along the chain. Exact-posterior samples score at the bound but are not a sampling method.
-- **No target leakage.** Do not read `eval/`, score files, or other methods' outputs inside a sampler.
-- **i.i.d.-style samples.** Do not deterministically allocate tokens to match histogram cells (stratified or quota tricks). The metric assumes posterior draws.
-- Use the seed in the problem file, so runs are reproducible and comparisons are paired.
+The scheduler's job allocation is the only execution deadline. Evaluation does not score latency or stop a method based on wall-clock load. Fixed inference counts and seeds make the recorded numbers independent of machine contention.

@@ -1,7 +1,6 @@
 #!/bin/bash
-# Reproduce the gym end to end (CPU only, about 15 minutes on one core):
-# run every registered sampler (SGDD reference and baselines) on the public
-# train instances and on the hidden test instances, then validate.
+# Reproduce the reference and shipped comparators end to end. One GPU, serial.
+# Download public artifacts with scripts/download.sh before submitting the job.
 set -euo pipefail
 cd /home/user
 bash scripts/evaluate_train.sh

@@ -1,15 +1,10 @@
 #!/bin/bash
-# Run baselines on the public train instances and score them.
-#   bash scripts/baseline.sh                # direct_mh svdd_pm smc
-#   bash scripts/baseline.sh svdd_pm smc    # selected baselines
-# svdd_pm and smc are the paper's SVDD-PM and SMC baselines (Appendix C.2);
-# direct_mh is direct Metropolis-Hastings on prior x likelihood.
+# Public sampler interface: BASELINE PROBLEM_JSON OUTPUT_DIR.
 set -euo pipefail
 cd /home/user
-if [ "$#" -gt 0 ]; then
-  BASELINES=("$@")
-else
-  BASELINES=(direct_mh svdd_pm smc)
-fi
-python -m eval.train.evaluate_synthetic --methods "${BASELINES[@]}" --output checkpoints/train/scores_baselines.json
-cat checkpoints/train/scores_baselines.json
+name="$1"
+shift
+case "$name" in
+ direct_mh|svdd_mc|smc) bash "scripts/samplers/$name.sh" "$@" ;;
+ *) echo 'baseline must be direct_mh, svdd_mc or smc' >&2; exit 2 ;;
+esac

@@ -1,15 +1,11 @@
-# Method
+# Reference implementation and provenance
 
-The paper proposes Split Gibbs Discrete Diffusion Posterior Sampling (SGDD). It samples a discrete posterior by augmenting the latent variable with an auxiliary state `z`, coupled to `x` through a Hamming-distance potential (Eq. 10), and alternates two conditional updates under an annealed coupling level `eta_k`:
+The reference implements the paper's split Gibbs sampler with a Hamming coupling, single-site Metropolis–Hastings likelihood updates, annealed coupling, and reverse discrete diffusion prior updates. It uses the authors' original 90M-parameter MNIST SEDD EMA checkpoint without retraining. XOR uses K=50, T=2000, H=20; AND uses K=100, T=5000, H=20, with geometric noise from 20 to 1e-4, as in Appendix C.3.
 
-- a likelihood step (Eq. 13): `T` Metropolis-Hastings steps on `z` targeting `p(y|z) exp(-D(x, z; eta_k))`, using single-site uniform proposals;
-- a prior step (Eq. 11): `x ~ p_0(x) (beta/(1-beta))^d(x, z)`. This is sampled by running the reverse uniform-kernel discrete diffusion from `sigma = eta_k` down to 0 with an `H`-step Euler sampler and the closed-form concrete score of the synthetic prior.
+`method/sgdd_image.py` follows the authors' released `sampling/sgdd.py`: prior update followed by likelihood update, returning the last likelihood state. The release uses an analytic CTMC predictor with a final denoising step; the paper describes the prior solver as Euler. We preserve the released inference procedure and disclose this discrepancy. Computing the MH likelihood difference from incident edges is an exact optimization, checked against complete likelihood differences. Bernoulli categorical sampling has the same distribution as the release's exponential race.
 
-The noise level follows the paper's geometric schedule from `eta_max = 20` to `eta_min = 1e-4`. Settings are the paper's synthetic values (Appendix C.3, Table 7): `K = 10` iterations, `T = 10` MH steps and `H = 20` Euler steps.
+`data/sedd/` contains the authors' full architecture, with PyTorch SDPA replacing the optional FlashAttention extension. Architecture and weights are unchanged. Upstream commit, modifications and artifact sources are recorded in `data/sedd/PROVENANCE.md` and `scripts/download.sh`.
 
-Implementation: `method/sgdd_synthetic.py`, registered as `scripts/samplers/sgdd.sh`. In each Euler (sub)step every token jumps at most once, using rates computed from the state at the start of the step. Sub-steps are added only when a jump probability would exceed 0.95. An exact Eq. 11 prior sampler (`--prior-sampler exact`) is kept for diagnostics only.
+The two diffusion comparators implement Appendix C.2 candidate selection and sequential importance resampling, with M=20 and three Monte Carlo value samples. `svdd_mc` uses the soft value in Eq.55, not the posterior-mean approximation of the reported SVDD-PM baseline. Both comparators use the same released analytic prior integrator as the reference; their one-step conditional draws are the small-H setting discussed in Appendix B.2. The likelihood follows the release’s squared-noise convention, exp(−mismatch/σ²). Their reverse path uses 16 rather than 128 steps to fit the bundled audit budget; this reduces scale, not the selection/resampling procedure. The direct MH comparator uses the likelihood alone, as in Appendix B.3, for K×T updates. It is not an exact posterior sampler for the learned image prior.
 
-Comparators, all registered under `scripts/samplers/`:
-
-- `svdd_pm` and `smc` (`baseline/paper_baselines.py`): the paper's SVDD-PM (M=20 candidates, 3 Monte Carlo value samples) and SMC (groups of 20 particles) baselines (Appendix C.2), with the closed-form synthetic reverse kernel and denoiser and 32 reverse steps.
-- `direct_mh` (`baseline/direct_mh_synthetic.py`): single-site Metropolis-Hastings on `p_0(x) p(y|x)` without split Gibbs, 100 steps.
+Full 1,024-bit resolution and the original pretrained models are preserved. Evaluation uses 128 rather than 1,000 images, and modest deformations to prevent public-source lookup. Sparse AND uses γ=2 from Appendix B.3 rather than γ=4 in Table 4. Consequently the original Table 4 numbers are archival, not gym-scale targets. No diffusion training is substituted or approximated.

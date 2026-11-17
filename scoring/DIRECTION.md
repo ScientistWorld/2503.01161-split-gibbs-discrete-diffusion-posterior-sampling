@@ -1,7 +1,7 @@
-# Research Direction
+# Direction and weighting
 
-Improve discrete posterior sampling with a discrete diffusion prior. Within the fixed budget of 50,000 returned samples per instance, a better method returns samples whose joint distribution is closer to the exact posterior. This is measured on hidden observations, for both the coordinatewise tasks and the coupled, multimodal chain task.
+Higher PSNR and fixed-classifier consistency are better; lower logical measurement error is better. A scientific improvement reconstructs unseen images more accurately while fitting the observations. Returning more images does not improve a score: it violates the output contract.
 
-Acceptable directions include better categorical proposals, annealing or tempering schedules, mixing improvements and moves between modes for coupled posteriors, better use of the diffusion prior's noised marginals, and more computation per sample where it buys accuracy.
+The sum uses experiment weights 0.4 (XOR) and 0.6 (sparse AND), metric coefficient magnitudes 1.0, 0.7 and 0.3, directed differences from the reference, and a shared per-metric population standard deviation across attempts. Only coefficient magnitudes matter. The standard deviation removes units; a zero-variance metric contributes zero. `eval/ranking.py` is the audit implementation.
 
-Not acceptable: computing the exact posterior analytically and sampling it, hard-coding observations or posterior probabilities, reading evaluator code or targets, returning a different number of samples, quota or stratified tricks that match histograms instead of drawing samples, or likelihood gradients. See `scoring/CONSTRAINTS.md`.
+Raw scientific quantities, not agreement with published values, are ranked. All-invalid or missing submissions receive the finite worst value in every experiment and metric before ranking. No auxiliary success flag or scalar verdict outside experiment `results` affects ranking.

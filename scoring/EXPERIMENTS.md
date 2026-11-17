@@ -1,19 +1,9 @@
-# Experiments
+# Scored experiments
 
-All experiments ask for 50,000 posterior samples per problem instance and are scored on hidden observations. `hellinger` and `total_variation` measure the first two coordinates (the paper's Table 2 measurement). `all_pairs_hellinger` measures every pair of coordinates.
+`mnist_xor` measures recovery of real binary handwritten digits from 512 XOR measurements of random pixel pairs. The measurements determine relations but leave many pixels and component orientations ambiguous. The experiment tests whether recovered images preserve both the underlying digit and the observed logical relations.
 
-## synthetic_d2
+`mnist_and_sparse` measures recovery from 2,048 AND measurements of random pixel pairs. Zeros are ambiguous and sparse positive measurements leave substantial missing information. This is the sparse regime of the paper's empirical prior-value study. It tests reconstruction quality where observations alone do not identify the digit.
 
-The smallest Table 2 setting. Each coordinate's posterior is clearly bimodal and far from the prior, so this tests whether a sampler can move mass to where the observation puts it.
+Each experiment uses 128 independently deformed MNIST images, with the same instances for every method. Both report whole-image PSNR, fixed-classifier consistency with the underlying image, and the fraction of measurement bits violated. The last quantity prevents a visually plausible but observation-inconsistent image from counting as successful reconstruction. Validity and task gates are documented in `CONSTRAINTS.md`.
 
-## synthetic_d5
-
-The middle Table 2 setting. More nuisance coordinates share one observation-to-latent problem. This tests whether accuracy holds as dimension grows.
-
-## synthetic_d10
-
-The largest Table 2 setting. With many coordinates, any per-coordinate bias accumulates over the joint and the all-pairs check.
-
-## synthetic_chain_d10
-
-Added experiment, not in the paper's table. Ten coordinates are observed only through the distances between neighbours, which mirrors the paper's pairwise measurements on images. Many configurations explain the data almost equally well: steps can go either way, and the whole chain can shift. The prior decides between them. This tests whether a sampler can find and correctly weight many separated modes when the posterior does not split into independent pieces. It carries the largest weight because it is where accurate posterior sampling is hardest and where the paper's own settings leave the most room for improvement.
+XOR has weight 0.4 and sparse AND 0.6. Sparse AND receives greater weight because it tests the paper's missing-information claim and provides a difficult reconstruction regime. Raw metric coefficients are PSNR 1.0, class consistency 0.7, and measurement error 0.3; contributions are normalized by variation across attempts. There are no scored runtime, declared-flag, posterior-histogram, or agreement-with-published-number metrics.

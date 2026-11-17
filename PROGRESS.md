@@ -1,3 +1,5 @@
+> Final hardening is moving the active gym to original-weight, full-resolution MNIST XOR/AND. All patches are bundled before one GPU validation job. Current design and pending evidence: `HARDENING.md`; historical synthetic notes follow.
+
 > Iteration 11 (hardening) replaced the evaluation design and added baselines and a coupled chain experiment; current state and results are in `HARDENING.md`. The notes below describe earlier iterations.
 
 # Progress

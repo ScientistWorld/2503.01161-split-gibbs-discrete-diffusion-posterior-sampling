@@ -233,3 +233,11 @@ tmp/
 protocol.md
 *.egg-info
 core.[0-9]*
+
+# Held-out public source data stays on the test side of the boundary.
+eval/test/assets/
+*.part
+
+# Generated evaluator diagnostics, never source assets.
+eval/train/results/
+eval/test/results/
