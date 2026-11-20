@@ -1,78 +1,62 @@
 # Overview
 
-This workspace is a gym built from "Split Gibbs Discrete Diffusion Posterior Sampling" (SGDD). The paper addresses posterior sampling in discrete-state spaces with a discrete diffusion prior, without likelihood gradients.
+This gym studies reconstruction from discrete, incomplete measurements, using the MNIST XOR/AND image problems in *Split Gibbs Discrete Diffusion Posterior Sampling*. It evaluates whole reconstructed images and measurement consistency, with unseen instances supplied at test time.
 
-The gym uses the paper's synthetic posterior-recovery task, where the exact posterior is computable: `D = 2, 5, 10` with the coordinatewise observation of Table 2, plus a coupled `D = 10` task with pairwise relative observations between neighbouring coordinates. This is a categorical analogue of the paper's pairwise logical forward models (Eq. 15). Methods are samplers. The evaluators run them on public train instances and on hidden test instances with a fixed sample budget, then score the samples' pair marginals against the exact posterior.
+Start with `briefing/problem.md` and `briefing/evaluation.md`. `scripts/download.sh` fetches all public resources. `environment/setup.sh` declares Python dependencies. The ordinary `scripts/run.sh` reproduces the reference and included comparators on both evaluation slices in a serialized GPU job.
 
----
-
-# Problem
-
-The task is posterior sampling for discrete inverse problems. A latent vector `x` of `D` categorical tokens (50 values per coordinate) has a known prior `p(x)`, and an observation `y` is generated through a known forward model and noise level. A sampler must return draws from the posterior `p(x | y) ∝ p(x) p(y | x)`.
-
-The prior is the same on every coordinate: a Gaussian with standard deviation 2 discretized on 50 evenly spaced points in `[-5, 5]`, independent across coordinates. It is the clean-data distribution of a discrete diffusion model with a uniform transition kernel, so its noised marginals `p_sigma` (and therefore the model's concrete score) are available in closed form through `data/synthetic_sgdd.py`. The likelihood is `log p(y | x) = -loss(G(x), y) / sigma^2` and the forward model is one of:
-
-- `coordinatewise` (`sigma = 3`): `G(x)_d = |x_d - c|` with centre token `c = 24.5`, one observation per coordinate, loss = mean over coordinates of the squared residual. The posterior is bimodal on each coordinate.
-- `chain` (`sigma = 1`): `G(x)_d = |x_{d+1} - x_d|`, one observation per pair of neighbouring coordinates (`D - 1` values, generated from a latent drawn from the prior), loss = sum of squared residuals. The posterior couples neighbouring coordinates and has many modes: the signs of the steps and the overall position are ambiguous.
-
-There are four experiments: `coordinatewise` with `D = 2, 5, 10`, and `chain` with `D = 10`. Each experiment is scored on problem instances that differ only in the observation `y` and the seed. The train instances are public. The test instances use different, hidden observations of the same kind.
-
-A sampler receives a problem file describing one instance, including the number of samples to return and a seed. It must return exactly that many samples. Success means the samples' joint distribution is close to the exact posterior, both on the first two coordinates and on every other pair of coordinates.
+The former small Gaussian and chain experiments remain only as historical reproduction/audit source. They no longer affect ranking: their analytical posteriors made them unsuitable as a scientific improvement benchmark.
 
 ---
 
-# Method
+# Binary image reconstruction
 
-The paper proposes Split Gibbs Discrete Diffusion Posterior Sampling (SGDD). It samples a discrete posterior by augmenting the latent variable with an auxiliary state `z`, coupled to `x` through a Hamming-distance potential (Eq. 10), and alternates two conditional updates under an annealed coupling level `eta_k`:
+Recover a 32×32 binary handwritten digit from incomplete, noiseless logical measurements. Each measurement gives the XOR or AND of a specified pair of pixels. Many images satisfy the same measurements; recovering the underlying image requires information about handwritten digits as well as measurement consistency.
 
-- a likelihood step (Eq. 13): `T` Metropolis-Hastings steps on `z` targeting `p(y|z) exp(-D(x, z; eta_k))`, using single-site uniform proposals;
-- a prior step (Eq. 11): `x ~ p_0(x) (beta/(1-beta))^d(x, z)`. This is sampled by running the reverse uniform-kernel discrete diffusion from `sigma = eta_k` down to 0 with an `H`-step Euler sampler and the closed-form concrete score of the synthetic prior.
+There are two scored experiments: XOR with 512 pairs, and sparse AND with 2,048 pairs. Both use real MNIST images with small affine and elastic deformations, padding to 32×32, and thresholding at 128. The deformation prevents a finite catalogue of the public source images from being an answer key. Public and held-out evaluation use the same distribution and difficulty, with separate images and generation seeds.
 
-The noise level follows the paper's geometric schedule from `eta_max = 20` to `eta_min = 1e-4`. Settings are the paper's synthetic values (Appendix C.3, Table 7): `K = 10` iterations, `T = 10` MH steps and `H = 20` Euler steps.
+A problem JSON supplies 128 observations, their pixel pairs, the binary vocabulary, a sampling seed, and the location of a public pretrained image model. Return one reconstruction for each observation. Any reconstruction procedure is allowed subject to the scientific eligibility rules; the public model is available but its use is not required. The hidden evaluator supplies unseen instances when it runs your procedure.
 
-Implementation: `method/sgdd_synthetic.py`, registered as `scripts/samplers/sgdd.sh`. In each Euler (sub)step every token jumps at most once, using rates computed from the state at the start of the step. Sub-steps are added only when a jump probability would exceed 0.95. An exact Eq. 11 prior sampler (`--prior-sampler exact`) is kept for diagnostics only.
+---
 
-Comparators, all registered under `scripts/samplers/`:
+# Reference implementation and provenance
 
-- `svdd_pm` and `smc` (`baseline/paper_baselines.py`): the paper's SVDD-PM (M=20 candidates, 3 Monte Carlo value samples) and SMC (groups of 20 particles) baselines (Appendix C.2), with the closed-form synthetic reverse kernel and denoiser and 32 reverse steps.
-- `direct_mh` (`baseline/direct_mh_synthetic.py`): single-site Metropolis-Hastings on `p_0(x) p(y|x)` without split Gibbs, 100 steps.
+The reference implements the paper's split Gibbs sampler with a Hamming coupling, single-site Metropolis–Hastings likelihood updates, annealed coupling, and reverse discrete diffusion prior updates. It uses the authors' original 90M-parameter MNIST SEDD EMA checkpoint without retraining. XOR uses K=50, T=2000, H=20; AND uses K=100, T=5000, H=20, with geometric noise from 20 to 1e-4, as in Appendix C.3.
+
+`method/sgdd_image.py` follows the authors' released `sampling/sgdd.py`: prior update followed by likelihood update, returning the last likelihood state. The release uses an analytic CTMC predictor with a final denoising step; the paper describes the prior solver as Euler. We preserve the released inference procedure and disclose this discrepancy. Computing the MH likelihood difference from incident edges is an exact optimization, checked against complete likelihood differences. Bernoulli categorical sampling has the same distribution as the release's exponential race.
+
+`data/sedd/` contains the authors' full architecture, with PyTorch SDPA replacing the optional FlashAttention extension. Architecture and weights are unchanged. Upstream commit, modifications and artifact sources are recorded in `data/sedd/PROVENANCE.md` and `scripts/download.sh`.
+
+The two diffusion comparators implement Appendix C.2 candidate selection and sequential importance resampling, with M=20 and three Monte Carlo value samples. `svdd_mc` uses the soft value in Eq.55, not the posterior-mean approximation of the reported SVDD-PM baseline. Both comparators use the same released analytic prior integrator as the reference; their one-step conditional draws are the small-H setting discussed in Appendix B.2. The likelihood follows the release’s squared-noise convention, exp(−mismatch/σ²). Their reverse path uses 16 rather than 128 steps to fit the bundled audit budget; this reduces scale, not the selection/resampling procedure. The direct MH comparator uses the likelihood alone, as in Appendix B.3, for K×T updates. It is not an exact posterior sampler for the learned image prior.
+
+Full 1,024-bit resolution and the original pretrained models are preserved. Evaluation uses 128 rather than 1,000 images, and modest deformations to prevent public-source lookup. Sparse AND uses γ=2 from Appendix B.3 rather than γ=4 in Table 4. Consequently the original Table 4 numbers are archival, not gym-scale targets. No diffusion training is substituted or approximated.
 
 ---
 
 # Evaluation
 
-## Sampler contract
+Register each method as `scripts/samplers/NAME.sh`. Evaluation calls it from `/home/user` as:
 
-A method is any executable script registered as `scripts/samplers/<name>.sh`. The evaluators call it as
-
-```
-bash scripts/samplers/<name>.sh PROBLEM_JSON OUTPUT_DIR
+```sh
+bash scripts/samplers/NAME.sh PROBLEM_JSON OUTPUT_DIR
 ```
 
-from `/home/user`. `PROBLEM_JSON` describes one problem instance (`dim`, `vocab_size`, `num_samples`, `seed`, the prior, the likelihood type, `sigma` and the observation). `data/synthetic_sgdd.py` parses it (`load_problem`) and provides the prior marginals and `log_likelihood`. The sampler must write `OUTPUT_DIR/samples.npz` containing an integer array `samples` of shape exactly `[num_samples, dim]` with tokens in `[0, 49]`. Anything else the sampler writes is ignored.
+Write `OUTPUT_DIR/samples.npz`, containing an integer `samples` array of shape exactly `(128, 1024)`, with every token 0 or 1. Images are flattened in row order. Boolean, float, nonfinite, negative, oversized and empty outputs are invalid. Other output files and reported metrics are ignored. `data/image_problem.py` provides an optional public input loader and model interface.
 
-## Train and test
+Run `bash scripts/evaluate_train.sh` for development. It runs every registered method and writes `scoring/scores_train.json`. `bash scripts/evaluate.sh` additionally copies these numbers to `scoring/scores.json`. `bash scripts/evaluate_test.sh` takes no arguments, runs every registered method on unseen inputs, and writes `scoring/scores_test.json`. Only numbers under each experiment's `results` are ranked. Fresh evaluation always runs the procedure; saved samples can be rescored explicitly with `--rescore`. Public logs, inputs and outputs live under `checkpoints/train/METHOD/EXPERIMENT/`. Hidden run artifacts stay under `eval/test/results/runs/METHOD/EXPERIMENT/`; a hidden sampler can read its own run directory, while other hidden artifacts remain inaccessible.
 
-- `bash scripts/evaluate_train.sh` runs every registered sampler on the public train instances in `eval/train/` and writes `scoring/scores_train.json` (`bash scripts/evaluate.sh` writes the same to `scoring/scores.json`). Use `--methods NAME ...` to score selected samplers only. Problem files, sampler logs and outputs are kept under `checkpoints/train/<method>/<instance>/`.
-- `bash scripts/evaluate_test.sh` (no arguments) runs every registered sampler on hidden test instances. These are the same experiments with different observations and seeds, and the same sample count. It writes `scoring/scores_test.json`. Samplers are run fresh at test time; precomputed outputs are never read.
+The evaluator computes three quantities from the raw images:
 
-Every instance asks for 50,000 samples, and all methods receive identical problem files.
+- `psnr`: mean image PSNR in dB, data range 1. Exact recovery uses an MSE floor of one pixel, so the finite best value is 30.103 dB.
+- `accuracy`: fraction for which a fixed, evaluator-owned classifier assigns the same class to reconstruction and underlying image. This is classifier consistency as measured in the paper, rather than accuracy against a method-supplied label. Both images use the same 0/128 classifier preprocessing.
+- `measurement_error`: fraction of logical measurement bits violated. Lower is better; this measures data consistency independently of visual quality.
 
-## Metrics (per experiment, averaged over its instances; lower is better)
+A run must reach PSNR ≥6 dB, classifier consistency ≥20%, and measurement error ≤10% in both experiments. A crash, malformed output, impossible number or failed gate makes every metric of every experiment its worst value: PSNR 0, accuracy 0, measurement error 1. Failure cannot be compensated by another metric, and no failed entry is left empty. The evaluator owns all inputs, targets, dimensions, thresholds and comparison models. Test targets are constructed in evaluator memory after inference; the inference process cannot read private file contents in `eval/test/`. Directory enumeration remains available for package discovery.
 
-- `hellinger`: Hellinger distance between the empirical joint histogram of coordinates 0 and 1 and their exact posterior marginal (50×50 cells).
-- `total_variation`: total variation distance on the same marginal.
-- `all_pairs_hellinger`: mean Hellinger distance over every coordinate pair `(i, j)`. This checks that the whole joint posterior is sampled, not only the reported pair.
+Rank improvement is the sum over experiments and metrics of `experiment_weight × abs(coefficient) × directed_improvement / population_std`. Directed improvement is positive in the metric's `higher_is_better` direction relative to the stored reference. The standard deviation is computed across the attempts being ranked on that metric; a zero-variance metric contributes zero. Missing or impossible entries first receive all worst values. Coefficient signs and measurement units do not change priorities. `eval/ranking.py` implements this calculation for audits; scalar audit gains are not additional ranked metrics.
 
-The evaluators compute exact posterior marginals from their own copy of the problem definition. They do not use `data/`, `method/` or anything a sampler reports.
+All methods see the same 128 inputs and fixed sampling seeds. The public and hidden evaluators are independent implementations with different source partitions and private generation seeds. Inference uses fixed iteration counts, runs serially and has no evaluator wall-clock cutoff. Download data and weights before a job; hidden evaluation never trains a model.
 
-## Validity
-
-A sampler that crashes, times out, writes no `samples.npz`, returns a non-integer array, a different number of samples, or any token outside `[0, 49]` on any instance fails. All its distances on every experiment are then set to 1.0, the worst possible value.
-
-## Ranking
-
-A method's score is `sum_experiment weight * sum_metric coefficient * (value - value_reference)`, with weights and coefficients in `scoring/reference.json`. The reference is `sgdd` on the hidden test. The included comparators are `direct_mh`, `svdd_pm` and `smc`.
+For recovery from a lost worker, `--resume` explicitly reuses a saved raw array only when its input JSON matches and its shape, dtype and tokens validate; every metric is recomputed. It runs missing or malformed outputs. Use this option only when method code and resources are unchanged. Default evaluation runs every procedure afresh. Scores and completion flags never authorize reuse.
 
 ---
 
@@ -470,12 +454,56 @@ A method's score is `sum_experiment weight * sum_metric coefficient * (value - v
 
 </details>
 
+### Iteration 11: gpt-6.1-sol (hardener)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 48m | **GPU**: 3.0h
+- **Jobs**: 11 total (8 completed, 3 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 21:15] - core_claim
+- Completed a CPU compute-container run of SGDD on `synthetic_d5` and `synthetic_d10`.
+- Validation passed and reproduced SGDD beats the paper's reported synthetic baselines on the active dimensions while preserving `uses_likelihood_gradient=0`.
+
+### [2026-06-02 21:25] - core_claim_plus
+- Audited the existing implementation against the paper: the method uses split Gibbs alternation, the Hamming potential, Metropolis-Hastings likelihood updates, and a closed-form synthetic prior-denoising step.
+- Prepared a follow-up run that also evaluates the direct-MH sanity baseline for the active target dimensions.
+
+### [2026-06-02 22:05] - core_claim
+- Continuation audit found that the old default prior step sampled the synthetic Eq. 11 conditional exactly instead of running the paper's Euler reverse discrete-diffusion prior sampler.
+- Replaced the default prior step with a closed-form concrete-score Euler CTMC sampler and restored the paper's synthetic `K=10`, `T=10`, `H=20` defaults.
+- Fixed evaluator issues: method-agnostic artifact paths, explicit run arguments, and metadata-based `uses_likelihood_gradient`.
+
+### [2026-06-02 22:35] - core_claim_plus
+- Corrected CPU compute-container job `cb3d9782-268` completed on `synthetic_d2`, `synthetic_d5`, and `synthetic_d10`.
+- SGDD preserves `uses_likelihood_gradient=0`, is close to the paper's `D=2` result, and improves over the paper's SGDD results on `D=5` and `D=10`.
+- Updated the standard run path to evaluate the generated direct-MH sanity baseline separately from the paper-compatible `scoring/scores.json`.
+
+### [2026-06-02 22:45] - core_claim_plus
+- Job `af393454-f57` failed validation only because the direct-MH sanity baseline was placed in `scoring/scores.json`, where the validator expects methods from `reference.json`.
+- Moved direct-MH sanity evaluation to `scoring/sanity_scores.json` and restored `scoring/scores.json` as the official paper-comparison output.
+
+### [2026-06-02 22:55] - core_claim_plus
+- Job `4f4fee48-166` completed successfully and passed `python validate.py --compare`.
+- Official `scoring/scores.json` contains the corrected SGDD results for all three synthetic Table 2 dimensions.
+- Optional direct-MH sanity metrics are regenerated separately in `scoring/sanity_scores.json`.
+
+### [2026-06-02 23:00] - core_claim_plus
+- Final verification job `56df88b2-3db` completed successfully on a CPU node.
+- Regenerated auxiliary train/test scores after deterministic split cleanup.
+- `python validate.py --compare` passed with no validation warnings.
+
+### [2026-11-08 09:00] - core_claim_plus
+- Hardening (iteration 11): test-time evaluation of every registered sampler on hidden observations, exactly 50,000 samples per instance, validity gates, an all-pairs constraint metric, and the self-reported gradient flag removed from scoring.
+- Fixed the SGDD Euler prior step so each token jumps at most once per sub-step. Made the paper's SVDD-PM and SMC baselines executable; SGDD beats both on every experiment.
+- Added the coupled, multimodal `synthetic_chain_d10` experiment, where the reference is far from the exact-sample bound. Details and audit results are in `HARDENING.md`.
+
+</details>
+
 
 ---
 
 # Reproduction Milestones
 
 **Current: core_claim_plus**
-
-## Stop Justification
-- Completed at milestone `core_claim_plus`.
