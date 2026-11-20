@@ -17,11 +17,17 @@
           "psnr": 0.0,
           "accuracy": 0.0,
           "measurement_error": 1.0
+        },
+        "svdd_mc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
         }
       },
       "_failures": {
         "direct_mh": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 3.0538321883791655, 'accuracy': 0.0859375, 'measurement_error': 0.0164337158203125}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 5.951310203307134, 'accuracy': 0.125, 'measurement_error': 0.0}",
-        "smc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.538274395349708, 'accuracy': 0.5625, 'measurement_error': 0.128326416015625}"
+        "smc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.538274395349708, 'accuracy': 0.5625, 'measurement_error': 0.128326416015625}",
+        "svdd_mc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.49737140547148, 'accuracy': 0.515625, 'measurement_error': 0.1295928955078125}"
       }
     },
     "mnist_and_sparse": {
@@ -41,11 +47,17 @@
           "psnr": 0.0,
           "accuracy": 0.0,
           "measurement_error": 1.0
+        },
+        "svdd_mc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
         }
       },
       "_failures": {
         "direct_mh": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 3.0538321883791655, 'accuracy': 0.0859375, 'measurement_error': 0.0164337158203125}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 5.951310203307134, 'accuracy': 0.125, 'measurement_error': 0.0}",
-        "smc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.538274395349708, 'accuracy': 0.5625, 'measurement_error': 0.128326416015625}"
+        "smc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.538274395349708, 'accuracy': 0.5625, 'measurement_error': 0.128326416015625}",
+        "svdd_mc": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 11.49737140547148, 'accuracy': 0.515625, 'measurement_error': 0.1295928955078125}"
       }
     }
   }

@@ -74,3 +74,83 @@ Job `ddc4395a-9bc` verified package discovery and private-file denial in the com
 The recovery patch changes no model, data, method, metric, threshold or operating point. An explicit `--resume` option validates the existing raw array and exact input JSON before reuse, then recomputes every metric; it runs missing or malformed outputs. Default evaluation still runs every on-disk method afresh. Every registered method is initialized to all worst values before inference, so an interrupted procedure cannot disappear from the rank. Partial metric and paired-point files are now saved atomically after each method. The audit persists the original registry so a worker loss during temporary variant registration can also resume safely. No method-written score, flag or verdict is used to authorize recovery. Code and resources must remain unchanged to use it.
 
 The next bundled job reuses completed reference/comparator inference, finishes the missing comparator, and runs the predeclared honest variants and shortcut replays. Final hardening conclusions still await that audit.
+
+
+
+
+## Final bundled job measurements
+
+These gains use the final metric directions, coefficient magnitudes and population standard deviations across all attempts in this audit. Before/after scalar gains use different experiments and are not numerically comparable. Only the canonical four methods are retained in the official split score files.
+
+| Method | Gain over final reference | Outcome |
+|---|---:|---|
+| longer_accurate | +0.160067 | valid |
+| longer | +0.126059 | valid |
+| seed1 | +0.016194 | valid |
+| sgdd | +0.000000 | valid |
+| shortcut_template | -0.522951 | valid |
+| shortcut_rule | -0.670145 | valid |
+| weaker | -1.670260 | valid |
+| direct_mh | -4.516171 | failed, all worst values |
+| shortcut_constant | -4.516171 | failed, all worst values |
+| shortcut_copy_reference | -4.516171 | failed, all worst values |
+| shortcut_empty | -4.516171 | failed, all worst values |
+| shortcut_extra | -4.516171 | failed, all worst values |
+| shortcut_float | -4.516171 | failed, all worst values |
+| shortcut_forged | -4.516171 | failed, all worst values |
+| shortcut_nan | -4.516171 | failed, all worst values |
+| shortcut_negative | -4.516171 | failed, all worst values |
+| shortcut_old_exact | -4.516171 | failed, all worst values |
+| shortcut_tamper_problem | -4.516171 | failed, all worst values |
+| shortcut_two_latents | -4.516171 | failed, all worst values |
+| smc | -4.516171 | failed, all worst values |
+| svdd_mc | -4.516171 | failed, all worst values |
+
+Paired uncertainty (4,000 bootstrap resamples of the same image indices across every metric and experiment):
+
+| Variant | Gain | Paired 95% interval | Mean PSNR changes (XOR; AND), dB |
+|---|---:|---|---|
+| longer | +0.126059 | [-0.006014, +0.256227] | mnist_xor: +0.6211; mnist_and_sparse: +0.4378 |
+| longer_accurate | +0.160067 | [+0.031717, +0.291394] | mnist_xor: +0.7798; mnist_and_sparse: +0.4648 |
+| seed1 | +0.016194 | [-0.138235, +0.156835] | mnist_xor: -0.1699; mnist_and_sparse: +0.0340 |
+| weaker | -1.670260 | [-1.878400, -1.452214] | mnist_xor: -6.8691; mnist_and_sparse: -4.1003 |
+
+The independent sampling-seed change has absolute gain 0.016194. Variants with a positive paired interval and a gain exceeding that seed change: longer_accurate.
+
+Simple comparators below reference: True. Fixed-coupling weaker variant below reference: True. Replayed shortcuts below reference: True.
+
+Canonical reference, before: gain 0 by definition on the archived synthetic task. After: gain 0 by definition on the final image task. Final raw quantities:
+
+| Experiment | PSNR, dB | Class consistency | Measurement error |
+|---|---:|---:|---:|
+| mnist_xor | 17.978222 | 0.859375 | 0.001770 |
+| mnist_and_sparse | 12.520452 | 0.632812 | 0.002026 |
+
+Reference metrics at their best bound: none. The sparse AND experiment is the new headroom stress test; below-bound numbers alone are not counted as demonstrated headroom.
+
+Shortcut replay results (the old analytic producer now errors because its factorized/chain model does not describe the new prior; logical and template solvers separately probe replacements):
+
+| Replay | Final gain |
+|---|---:|
+| shortcut_constant | -4.516171 |
+| shortcut_copy_reference | -4.516171 |
+| shortcut_empty | -4.516171 |
+| shortcut_extra | -4.516171 |
+| shortcut_float | -4.516171 |
+| shortcut_forged | -4.516171 |
+| shortcut_nan | -4.516171 |
+| shortcut_negative | -4.516171 |
+| shortcut_old_exact | -4.516171 |
+| shortcut_rule | -0.670145 |
+| shortcut_tamper_problem | -4.516171 |
+| shortcut_template | -0.522951 |
+| shortcut_two_latents | -4.516171 |
+
+Public/hidden reference comparison, with the same metrics and gates:
+
+| Experiment | Train PSNR | Test PSNR | Train accuracy | Test accuracy | Train measurement error | Test measurement error |
+|---|---:|---:|---:|---:|---:|---:|
+| mnist_xor | 17.334907 | 17.978222 | 0.851562 | 0.859375 | 0.002136 | 0.001770 |
+| mnist_and_sparse | 12.424918 | 12.520452 | 0.656250 | 0.632812 | 0.002407 | 0.002026 |
+
+Detailed measurements, failure explanations and paired image measurements are in `redteam/final_hardening/results/`. No timing measurements enter these scores. Training/test comparison is retained in `canonical_train.json` and `canonical_test.json`.

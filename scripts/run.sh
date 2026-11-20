@@ -1,5 +1,9 @@
 #!/bin/bash
-# Resume after worker loss. Rescore completed raw outputs; run missing work.
+# Reproduce the reference and shipped comparators end to end. One GPU, serial.
+# Download public artifacts with scripts/download.sh before submitting the job.
 set -euo pipefail
 cd /home/user
-exec bash redteam/final_hardening/run_job.sh --rescore-train --resume-test
+bash scripts/evaluate_train.sh
+cp scoring/scores_train.json scoring/scores.json
+bash scripts/evaluate_test.sh
+python validate.py --compare

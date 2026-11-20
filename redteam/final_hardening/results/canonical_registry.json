@@ -1,0 +1,6 @@
+{
+  "direct_mh.sh": "#!/bin/bash\nset -euo pipefail\npython -m method.sgdd_image --kind direct_mh --problem \"$1\" --output-dir \"$2\"\n",
+  "sgdd.sh": "#!/bin/bash\nset -euo pipefail\npython -m method.sgdd_image --problem \"$1\" --output-dir \"$2\"\n",
+  "svdd_mc.sh": "#!/bin/bash\nset -euo pipefail\npython -m baseline.image_baselines svdd_mc --problem \"$1\" --output-dir \"$2\" --steps 16\n",
+  "smc.sh": "#!/bin/bash\nset -euo pipefail\npython -m baseline.image_baselines smc --problem \"$1\" --output-dir \"$2\" --steps 16\n"
+}

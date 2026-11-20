@@ -1,5 +1,5 @@
 action: submit
 gpus: 1
 test: false
-milestone: method_runs
-notes: "Resume bundled hardening validation: check public imports and private-file denial, rescore completed training outputs, then rerun all hidden reference/comparator methods, paired variants and shortcut replays serially. Restore end-to-end launcher atomically."
+milestone: core_claim
+notes: "Recover from worker loss using validated raw outputs and recomputed metrics; finish missing SVDD-MC experiment, run paired honest variants and shortcut replays serially, and restore canonical score files and end-to-end launcher."

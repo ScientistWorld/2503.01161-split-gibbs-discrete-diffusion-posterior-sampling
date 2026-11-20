@@ -1,51 +1,92 @@
 {
   "gains": {
-    "direct_mh": 0.0,
-    "longer": 0.0,
-    "longer_accurate": 0.0,
-    "seed1": 0.0,
+    "direct_mh": -4.516171207457472,
+    "longer": 0.12605885955198784,
+    "longer_accurate": 0.1600670167233225,
+    "seed1": 0.016194150690658778,
     "sgdd": 0.0,
-    "shortcut_constant": 0.0,
-    "shortcut_copy_reference": 0.0,
-    "shortcut_empty": 0.0,
-    "shortcut_extra": 0.0,
-    "shortcut_float": 0.0,
-    "shortcut_forged": 0.0,
-    "shortcut_nan": 0.0,
-    "shortcut_negative": 0.0,
-    "shortcut_old_exact": 0.0,
-    "shortcut_rule": 0.0,
-    "shortcut_tamper_problem": 0.0,
-    "shortcut_template": 0.0,
-    "shortcut_two_latents": 0.0,
-    "smc": 0.0,
-    "svdd_mc": 0.0,
-    "weaker": 0.0
+    "shortcut_constant": -4.516171207457472,
+    "shortcut_copy_reference": -4.516171207457472,
+    "shortcut_empty": -4.516171207457472,
+    "shortcut_extra": -4.516171207457472,
+    "shortcut_float": -4.516171207457472,
+    "shortcut_forged": -4.516171207457472,
+    "shortcut_nan": -4.516171207457472,
+    "shortcut_negative": -4.516171207457472,
+    "shortcut_old_exact": -4.516171207457472,
+    "shortcut_rule": -0.6701449232039474,
+    "shortcut_tamper_problem": -4.516171207457472,
+    "shortcut_template": -0.5229509991363924,
+    "shortcut_two_latents": -4.516171207457472,
+    "smc": -4.516171207457472,
+    "svdd_mc": -4.516171207457472,
+    "weaker": -1.6702599706536725
   },
-  "paired": {},
-  "seed1_absolute_gain": 0.0,
-  "better_than_noise": [],
-  "baselines_below_reference": false,
-  "weaker_below_reference": false,
-  "shortcuts_below_reference": false,
+  "paired": {
+    "longer": {
+      "gain": 0.12605885955198795,
+      "ci95": [
+        -0.006014151207082448,
+        0.25622654988622934
+      ],
+      "paired_psnr": {
+        "mnist_xor": 0.6211341998428779,
+        "mnist_and_sparse": 0.4378195389791448
+      }
+    },
+    "longer_accurate": {
+      "gain": 0.16006701672332266,
+      "ci95": [
+        0.03171747212112802,
+        0.29139421968472345
+      ],
+      "paired_psnr": {
+        "mnist_xor": 0.7798015883237388,
+        "mnist_and_sparse": 0.4648110525546088
+      }
+    },
+    "seed1": {
+      "gain": 0.016194150690659003,
+      "ci95": [
+        -0.13823497504589946,
+        0.1568351471222016
+      ],
+      "paired_psnr": {
+        "mnist_xor": -0.16989814944700893,
+        "mnist_and_sparse": 0.033983338600214616
+      }
+    },
+    "weaker": {
+      "gain": -1.6702599706536723,
+      "ci95": [
+        -1.878399802244904,
+        -1.4522143898740527
+      ],
+      "paired_psnr": {
+        "mnist_xor": -6.869138866878794,
+        "mnist_and_sparse": -4.10027961266813
+      }
+    }
+  },
+  "seed1_absolute_gain": 0.016194150690658778,
+  "better_than_noise": [
+    "longer_accurate"
+  ],
+  "baselines_below_reference": true,
+  "weaker_below_reference": true,
+  "shortcuts_below_reference": true,
   "reference_at_best_bound": [],
   "failures": {
-    "longer": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "seed1": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_constant": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+    "shortcut_constant": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.2030487060546875}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.0122833251953125}",
     "shortcut_copy_reference": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_empty": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_extra": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_float": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_forged": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_nan": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_negative": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+    "shortcut_empty": "mnist_xor: shape (0, 1024); expected (128, 1024); mnist_and_sparse: shape (0, 1024); expected (128, 1024)",
+    "shortcut_extra": "mnist_xor: shape (256, 1024); expected (128, 1024); mnist_and_sparse: shape (256, 1024); expected (128, 1024)",
+    "shortcut_float": "mnist_xor: integer dtype required; mnist_and_sparse: integer dtype required",
+    "shortcut_forged": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.2030487060546875}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.0122833251953125}",
+    "shortcut_nan": "mnist_xor: integer dtype required; mnist_and_sparse: integer dtype required",
+    "shortcut_negative": "mnist_xor: tokens must be 0 or 1; mnist_and_sparse: tokens must be 0 or 1",
     "shortcut_old_exact": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_rule": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_tamper_problem": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_template": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "shortcut_two_latents": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "weaker": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
-    "longer_accurate": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1"
+    "shortcut_tamper_problem": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.2030487060546875}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.0122833251953125}",
+    "shortcut_two_latents": "mnist_xor: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.2030487060546875}; mnist_and_sparse: task gate: PSNR>=6dB, class accuracy>=20%, mismatch<=10% required; {'psnr': 10.102444427203018, 'accuracy': 0.0, 'measurement_error': 0.0122833251953125}"
   }
 }
