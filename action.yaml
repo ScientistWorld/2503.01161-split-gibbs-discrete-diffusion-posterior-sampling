@@ -1,5 +1,3 @@
-action: submit
-gpus: 1
-test: false
-milestone: core_claim
-notes: "Recover from worker loss using validated raw outputs and recomputed metrics; finish missing SVDD-MC experiment, run paired honest variants and shortcut replays serially, and restore canonical score files and end-to-end launcher."
+action: done
+milestone: core_claim_plus
+notes: "Final hardening verified: paired improvement exceeds noise, weaker variant and all 13 shortcut replays lose, canonical scores regenerated, published results preserved, and validation passes."

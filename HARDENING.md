@@ -1,6 +1,6 @@
 # Final hardening
 
-The previous claim that the gym rewarded scientific progress was too strong. `REVIEW.md` found direct MH ahead of the reference (+0.052958, and +0.218386 with more steps), and an analytic posterior at the bound (+0.384). Those are structural failures of the small synthetic task. They are addressed together here by moving the scored gym to the paper's real, full-resolution MNIST inverse problems and original pretrained model. Results of the bundled validation job will be appended below; no new success claim is made before that job.
+The previous claim that the gym rewarded scientific progress was too strong. `REVIEW.md` found direct MH ahead of the reference (+0.052958, and +0.218386 with more steps), and an analytic posterior at the bound (+0.384). Those are structural failures of the small synthetic task. They are addressed together here by moving the scored gym to the paper's real, full-resolution MNIST inverse problems and original pretrained model. The completed serial audit (`cba2826c-061`, exit 0) now ranks the tested stronger variant above the reference beyond paired uncertainty, the weaker variant below it, and every replayed shortcut below it. The stronger variant gains +0.160067 (paired 95% interval [+0.031717, +0.291394]); the independent seed change gains +0.016194. This establishes measured headroom, with the limitations listed below.
 
 ## Changes decided from the reports
 
@@ -16,27 +16,27 @@ Any crash, malformed output, impossible number or failed task gate receives PSNR
 
 No wall-clock timeout remains in the active method or evaluator path. All canonical methods and audit alternatives run serially with fixed inference counts and seeds. The frozen diffusion backbone and evaluation classifier are shared. Paired comparisons use the same 128 input images, including the same image indices across XOR and AND; the report includes paired bootstrap intervals and an independent reference sampling seed.
 
-## Before/after evidence to check
+## Before/after evidence
 
 Before values below are from `REDTEAM.md`, the previous `HARDENING.md`, and `REVIEW.md`; their raw records are retained in `redteam/final_hardening/before/` and `redteam/hardening/results/`. The old and new scalar scales differ, so before/after gains diagnose whether something pays rather than comparing their numerical sizes.
 
-| Major finding or shortcut | Before | Fix / final replay |
-|---|---:|---|
-| Direct MH outranks reference | +0.052958; long +0.218386 | Restore original learned image prior and full paper inference; rerun direct MH end to end at K×T likelihood steps. |
-| Factorized/chain closed-form posterior | +0.384 at bound | Replace analytically soluble target with real images and learned prior. Replay the actual old producer (`shortcut_old_exact`); also test logical and template solvers on the new problem. |
-| Copying a previous sampler’s reconstruction | Exact reference tie if artifacts remain public | Keep hidden run artifacts below the denied test subtree; allow only the current sampler’s directory. Replay `shortcut_copy_reference`. |
-| Public answer rebuilding | +0.272674 in original red team | Hidden deformed instances; generator and source denied to sampler; no public posterior answer helper. |
-| Impossible self-reported constraint value | +0.751481 | No declared flag is scored. Constant/forged replay writes the old negative flag and exaggerated metrics, all ignored. |
-| Binary flag compensation | +0.072674 originally; +0.384 via exact posterior later | Remove flag scoring and analytic target; task gate failure gives all worst values. Actual gradient eligibility remains with source review, not a trusted flag. |
-| Replace mutable public target | +0.351456 originally | Evaluator owns targets; input-copy tampering (`shortcut_tamper_problem`) cannot change its in-memory problem. |
-| Redirect `_run_dirs` registry | +0.024855 originally | No method-written registry is read; `shortcut_forged` rewrites it during inference. |
-| Copy only two latent coordinates | +0.025157 originally | Whole-image metrics and logical constraints; `shortcut_two_latents` repeats two reference pixels. |
-| Negative category wraparound | exact tie (0) originally | Validate raw dtype/range; `shortcut_negative` subtracts 2 from reference outputs. |
-| More outputs improve histogram estimate | +0.205383 originally | Exactly one reconstruction per image; `shortcut_extra` doubles the count and fails. |
-| Empty output avoids scores | crash / no score originally | `shortcut_empty` receives every worst value; float and NaN outputs are also replayed. |
-| Forged reported metrics / constant output | −1.248519 originally | Recompute metrics from samples; replayed unchanged in purpose. |
+| Major finding or shortcut | Before gain | Fix | Final gain |
+|---|---:|---|---:|
+| Direct MH outranks reference | +0.052958; long +0.218386 | Original learned image prior and full paper inference. Direct MH rerun at the full K×T likelihood-step budget. | −4.516171 |
+| Factorized/chain closed-form posterior | +0.384, at bound | Real images and learned prior replace the soluble target. Old exact producer errors; new logical and template solvers also tested. | old exact −4.516171; rule −0.670145; template −0.522951 |
+| Copy previous sampler's reconstruction | Exact reference tie | Hidden artifacts inaccessible except current sampler directory. | −4.516171 |
+| Public answer rebuilding | +0.272674 | Private deformed instances and generator; no public posterior answer helper. Old producer and replacement logical/template solvers tested. | −4.516171; −0.670145; −0.522951 |
+| Impossible self-reported constraint value | +0.751481 | Ignore flags and reported metrics; forged constant output fails raw-image gates. | −4.516171 |
+| Binary flag compensation | +0.072674; exact posterior later +0.384 | Remove flag rewards and analytic target; failed constraints receive all worst values. Gradient eligibility requires source review. | forged −4.516171; rule −0.670145 |
+| Replace mutable public target | +0.351456 | Evaluator-owned in-memory problem ignores tampering with the input copy. | −4.516171 |
+| Redirect `_run_dirs` registry | +0.024855 | Evaluator never reads method-written registries; forged replay rewrites the old registry. | −4.516171 |
+| Copy only two latent coordinates | +0.025157 | Whole-image metrics and logical constraints; replay repeats two pixels. | −4.516171 |
+| Negative category wraparound | 0, exact tie | Validate raw integer categories before conversion. | −4.516171 |
+| More outputs improve histogram estimate | +0.205383 | Exact output count of one image per observation. | −4.516171 |
+| Empty output avoids scores | Crash / missing score | Every metric gets its worst value. Float and NaN replays also fail. | −4.516171 each |
+| Forged reported metrics / constant output | −1.248519 | Recompute every quantity from raw images. | −4.516171 each |
 
-Honest alternatives are twice as many split iterations (`longer`), a different sampling seed (`seed1`), and fixed η=0.5 (`weaker`, the Appendix B.1 ablation). A predeclared fallback doubles both iterations and prior resolution (`longer_accurate`) if the first improvement does not clear the paired uncertainty/seed check. All changes are inference variants of the paper's procedure, on identical inputs. Before, longer SGDD gained +0.108 and fixed η lost −0.226, but direct MH and the analytic solver invalidated that headroom interpretation. The final measurements below determine whether the new alternatives demonstrate headroom beyond noise.
+Honest alternatives are twice as many split iterations (`longer`), a different sampling seed (`seed1`), and fixed η=0.5 (`weaker`, the Appendix B.1 ablation). A predeclared fallback doubles both iterations and prior resolution (`longer_accurate`) if the first improvement does not clear the paired uncertainty/seed check. All changes are inference variants of the paper's procedure, on identical inputs. Before, longer SGDD gained +0.108 and fixed η lost −0.226, but direct MH and the analytic solver invalidated that headroom interpretation. After hardening, longer SGDD gains +0.126059, the fixed-coupling variant loses −1.670260, and the fallback gains +0.160067. Only the fallback clears the paired interval and observed seed-change check; it remains far from every metric bound.
 
 ## Headroom, weights and resource choices
 
@@ -46,7 +46,7 @@ PSNR's finite best value is 30.103 dB (a one-pixel MSE floor for exact recovery)
 
 The paper uses 1,000 images; this test uses 128 to fit the final job and reduce paired uncertainty relative to a tiny test. Deformations prevent a public-source lookup answer key. The particle comparators retain M=20, MC=3 and their selection/resampling steps. The SVDD comparator is explicitly named `svdd_mc`: it estimates the Eq.55 soft value, rather than claiming the paper’s SVDD-PM posterior-mean approximation. Both use the released analytic prior kernel with one-step conditional draws (the small-H setting in Appendix B.2), and the release’s squared-noise likelihood convention. They use 16 reverse time steps rather than 128 because the full reference, both slices, alternatives and shortcut searches share a six-hour allocation. This baseline scaling can weaken these comparators, and is disclosed; direct MH is independently included at the reference's full likelihood-step budget. The reference K/T/H and pretrained model are not scaled down. No training is performed by the hidden test.
 
-Published Table 2 values remain unchanged in the archived underscore-prefixed reference object. Original Table 4 PSNR/accuracy values are also stored under `_paper_table4_unchanged`; none is a target to fit on the altered test distribution. Active reference results are replaced only by the new canonical test measurements. `scores_train.json`, `scores_test.json` and `scores.json` will contain only the reference and the three shipped comparators; shortcut scores remain in this report and audit records.
+Published Table 2 values remain unchanged in the archived underscore-prefixed reference object. Original Table 4 PSNR/accuracy values are also stored under `_paper_table4_unchanged`; none is a target to fit on the altered test distribution. Active reference results are replaced only by the new canonical test measurements. `scores_train.json`, `scores_test.json` and `scores.json` contain only the reference and the three shipped comparators; shortcut scores remain in this report and audit records.
 
 ## Remaining scope and limitations
 
@@ -56,7 +56,7 @@ Published Table 2 values remain unchanged in the archived underscore-prefixed re
 - This is an image reconstruction gym, not a calibration test for an entire posterior distribution. PSNR, classifier consistency and measurement fit match the paper's image study; a correct point estimate is an honest alternative on these quantities.
 - The original DPS baseline and the paper's DNA/music/FFHQ studies are not reproduced here. The old synthetic code and red-team records are historical only.
 - Bit-for-bit reproducibility across different accelerator architectures is not promised. Seeds and model parameters are fixed; no score depends on elapsed time or a wall-clock deadline.
-- Exact restored-source lookup after optimizing arbitrary continuous deformations is not exhaustively ruled out. The finite-catalogue shortcut is tested. Any shortcut or headroom failure observed in the final job is reported explicitly below rather than declared solved.
+- Exact restored-source lookup after optimizing arbitrary continuous deformations is not exhaustively ruled out. The finite-catalogue shortcut is tested. The tested logical and finite-catalogue procedures lose to both the reference and the honest improvement. Optimized continuous source lookup was not tested; this remains a limitation, rather than a proved exclusion of every possible search procedure.
 
 ## First bundled job and resumed verification
 
@@ -64,7 +64,7 @@ Job `620f95a2-5f2` completed the public-slice reference and all three comparator
 
 The policy now allows directory enumeration while continuing to deny hidden file contents, except the current sampler's own directory. The bundled regression check now imports the actual public method and audit packages under that policy, in addition to checking private-file denial. The audit refuses to freeze a failed reference. Launcher restoration now replaces its file atomically, avoiding the exit-127 shell error caused by overwriting a script still being read.
 
-Completed public SGDD measurements were XOR PSNR 17.334907 dB, classifier consistency 0.851562, error 0.002136; sparse AND PSNR 12.424918 dB, consistency 0.656250, error 0.002407. The resumed job recomputes these metrics from saved raw training reconstructions because neither the training procedure nor its evaluator changed. It reruns every hidden reference, comparator, honest variant and shortcut from the corrected final interface, serially, without an inference time limit. Final conclusions await those measurements.
+Completed public SGDD measurements were XOR PSNR 17.334907 dB, classifier consistency 0.851562, error 0.002136; sparse AND PSNR 12.424918 dB, consistency 0.656250, error 0.002407. Subsequent jobs recomputed these metrics from saved raw training reconstructions because neither the training procedure nor its evaluator changed. Hidden reference and comparator inference was rerun from the corrected interface; final evidence follows below.
 
 
 ## Worker loss and raw-output recovery
@@ -73,9 +73,7 @@ Job `ddc4395a-9bc` verified package discovery and private-file denial in the com
 
 The recovery patch changes no model, data, method, metric, threshold or operating point. An explicit `--resume` option validates the existing raw array and exact input JSON before reuse, then recomputes every metric; it runs missing or malformed outputs. Default evaluation still runs every on-disk method afresh. Every registered method is initialized to all worst values before inference, so an interrupted procedure cannot disappear from the rank. Partial metric and paired-point files are now saved atomically after each method. The audit persists the original registry so a worker loss during temporary variant registration can also resume safely. No method-written score, flag or verdict is used to authorize recovery. Code and resources must remain unchanged to use it.
 
-The next bundled job reuses completed reference/comparator inference, finishes the missing comparator, and runs the predeclared honest variants and shortcut replays. Final hardening conclusions still await that audit.
-
-
+Job `cba2826c-061` reused the completed raw reference/comparator inference, finished SVDD-MC, and completed every predeclared honest variant and shortcut replay, including the conditional fallback. All metrics were recomputed. The reference and its comparators ran serially with nothing computing beside them; no scientific setting changed during recovery. The job passed bundled correctness checks and `python validate.py --compare`. The validator emitted two heuristic output-path warnings; both evaluators explicitly load `OUTPUT_DIR/samples.npz` in `load_valid_samples`, and malformed-output replays demonstrate that those raw files determine the score. The canonical four-method registry, both official split files, and end-to-end `scripts/run.sh` were restored.
 
 
 ## Final bundled job measurements
@@ -126,6 +124,16 @@ Canonical reference, before: gain 0 by definition on the archived synthetic task
 | mnist_xor | 17.978222 | 0.859375 | 0.001770 |
 | mnist_and_sparse | 12.520452 | 0.632812 | 0.002026 |
 
+
+The retired reference raw values were as follows (lower was better for all three distances). They are archived evidence, not comparable units to the new image metrics:
+
+| Retired experiment | Hellinger | Total variation | All-pairs Hellinger |
+|---|---:|---:|---:|
+| synthetic_chain_d10 | 0.526595 | 0.536155 | 0.466180 |
+| synthetic_d10 | 0.099147 | 0.096288 | 0.098118 |
+| synthetic_d2 | 0.093243 | 0.085355 | 0.093243 |
+| synthetic_d5 | 0.091508 | 0.087064 | 0.092157 |
+
 Reference metrics at their best bound: none. The sparse AND experiment is the new headroom stress test; below-bound numbers alone are not counted as demonstrated headroom.
 
 Shortcut replay results (the old analytic producer now errors because its factorized/chain model does not describe the new prior; logical and template solvers separately probe replacements):
@@ -152,5 +160,17 @@ Public/hidden reference comparison, with the same metrics and gates:
 |---|---:|---:|---:|---:|---:|---:|
 | mnist_xor | 17.334907 | 17.978222 | 0.851562 | 0.859375 | 0.002136 | 0.001770 |
 | mnist_and_sparse | 12.424918 | 12.520452 | 0.656250 | 0.632812 | 0.002407 | 0.002026 |
+
+
+Raw comparator measurements before gate propagation show that the reference advantage is not created only by the failure policy. SMC and SVDD-MC miss the XOR consistency gate; direct MH misses reconstruction gates. Their official results are therefore all worst values, including sparse AND. Particle-comparator scaling is disclosed above.
+
+| Experiment | Method | Raw PSNR | Raw class consistency | Raw measurement error |
+|---|---|---:|---:|---:|
+| mnist_xor | direct_mh | 3.053832 | 0.085938 | 0.016434 |
+| mnist_xor | smc | 11.538274 | 0.562500 | 0.128326 |
+| mnist_xor | svdd_mc | 11.497371 | 0.515625 | 0.129593 |
+| mnist_and_sparse | direct_mh | 5.951310 | 0.125000 | 0.000000 |
+| mnist_and_sparse | smc | 10.456002 | 0.453125 | 0.010029 |
+| mnist_and_sparse | svdd_mc | 10.547057 | 0.507812 | 0.009968 |
 
 Detailed measurements, failure explanations and paired image measurements are in `redteam/final_hardening/results/`. No timing measurements enter these scores. Training/test comparison is retained in `canonical_train.json` and `canonical_test.json`.

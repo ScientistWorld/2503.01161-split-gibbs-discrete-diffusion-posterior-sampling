@@ -1,52 +1,13 @@
-> Job `ddc4395a-9bc` verified hidden inference and completed the reference: XOR 17.978 dB / 85.94% class consistency, sparse AND 12.520 dB / 63.28%, both below 0.21% measurement error. The worker node died during the last comparator. Explicit raw-output recovery now preserves completed inference and recalculates every metric; honest-variant and shortcut evidence remain pending.
-
-> The first final-hardening job completed the original-weight, full-resolution public MNIST reproduction: SGDD 17.335 dB (XOR) and 12.425 dB (sparse AND). Hidden inference failed on package discovery, rather than on the method. The boundary and launcher fixes are bundled into a resumed audit; completed training outputs are rescored. Hidden scientific and headroom evidence remain pending in `HARDENING.md`; historical synthetic notes follow.
-
-> Iteration 11 (hardening) replaced the evaluation design and added baselines and a coupled chain experiment; current state and results are in `HARDENING.md`. The notes below describe earlier iterations.
-
 # Progress
 
-## What Works
+The final image gym is complete through **core_claim_plus**. Job `cba2826c-061` finished with exit 0 after resuming unchanged raw outputs from a lost worker. No reference model, input distribution, inference setting or metric changed during recovery.
 
-- Implemented the paper's synthetic SGDD computation with alternating likelihood Metropolis-Hastings updates and reverse discrete-diffusion prior-denoising updates.
-- Implemented method-agnostic synthetic data definitions and exact marginal evaluation.
-- Added scripts for download, method execution, evaluation, and end-to-end reproduction.
-- Completed CPU compute-container runs for the full synthetic target set `D=2`, `D=5`, and `D=10`.
-- Updated the run and reproduce entry points so they regenerate SGDD outputs and the included direct-MH sanity baseline artifacts before validation.
-- Confirmed job `4f4fee48-166` passes the full validation path with SGDD-only official scores and separate direct-MH sanity scores.
-- Fixed the audit finding that the previous default prior step sampled Eq. 11 exactly instead of exercising the paper's Euler reverse discrete-diffusion prior step. The method now defaults to a closed-form concrete-score Euler prior sampler with the paper's synthetic `K=10`, `T=10`, `H=20` settings.
+The reference implements the authors' released SGDD procedure with the original full-resolution 90M MNIST SEDD checkpoint and paper K/T/H settings. Hidden XOR achieves PSNR 17.978222 dB, class consistency 0.859375, measurement error 0.001770; sparse AND achieves 12.520452 dB, 0.632812, 0.002026. Public-slice results are comparable. Scaled SMC and SVDD-MC, plus full-budget direct MH, have lower raw reconstruction quality and fail the task gates.
 
-## Results Achieved
+The paired stronger fallback gains +0.160067 with a 95% interval [+0.031717, +0.291394], exceeding the observed independent-seed gain of +0.016194. The fixed-coupling weaker variant loses −1.670260. Every replayed shortcut scores below the reference; logical solving gains −0.670145 and exhaustive training-template search −0.522951. No reference metric is at its best bound.
 
-The successful corrected job `cb3d9782-268` produced:
+`scoring/scores_train.json`, `scores_test.json` and `scores.json` contain only the canonical reference and three comparators. Active reference values match the serialized hidden run; the paper's reported values are unchanged in archival keys. The sampler registry and ordinary end-to-end launcher are restored. Bundled correctness checks and `python validate.py --compare` passed. Two validator path-name heuristics warn despite both evaluators explicitly loading raw reconstruction files.
 
-| Experiment | Paper SGDD Hellinger | Repro Hellinger | Paper SGDD TV | Repro TV |
-|---|---:|---:|---:|---:|
-| `synthetic_d2` | 0.149 | 0.162 | 0.125 | 0.132 |
-| `synthetic_d5` | 0.214 | 0.165 | 0.222 | 0.152 |
-| `synthetic_d10` | 0.334 | 0.181 | 0.365 | 0.163 |
+`HARDENING.md` contains before/after scores, the REVIEW.md fixes, paired uncertainty, remaining limitations and resource scaling. The original DPS baseline and DNA/music/FFHQ studies are outside this reproduction. Continuous deformation-aware source lookup was not exhaustively tested; arbitrary-code gradient eligibility remains with the separate shortcut grader.
 
-All retained reproduced SGDD runs preserve `uses_likelihood_gradient=0`. The corrected Euler-prior implementation is close to the paper's `D=2` score and improves on the paper's SGDD Hellinger and total variation for `D=5` and `D=10`, including the hardest synthetic setting. This restores the synthetic `core_claim_plus` reproduction.
-
-## Deviations From Paper
-
-- This reproduction targets the synthetic Table 2 setting rather than the image inpainting or text infilling experiments. The synthetic task is sufficient for the core algorithmic claim and does not require training a diffusion model.
-- The implementation uses the analytic factorized concrete score for the synthetic task, matching the paper's synthetic setup.
-- The paper's appendix lists `K=10` SGDD iterations, `T=10` Metropolis-Hastings likelihood updates, and `H=20` Euler prior steps for the synthetic setting. The runnable defaults now match those values.
-
-## What Remains
-
-- The reusable synthetic reproduction environment is complete through `core_claim_plus`.
-- If extending beyond the synthetic core, add image or text posterior sampling experiments.
-- Add paper baselines such as SMC or DPS if extending beyond the synthetic core reproduction.
-- Paper baselines such as SMC or DPS remain paper-reported references rather than reproduced implementations.
-
-## Issues Encountered
-
-- The markdown paper did not include all low-level synthetic operator details; the released author code was inspected to recover the exact SingleModal setup.
-- A tiny login-node smoke test could not run because the local Python outside the compute container lacks `numpy`; dependencies are declared in `environment/setup.sh`, so execution is being tested through the scheduler.
-- The first container build failed because the base image used `ghcr.io`; it was changed to the portable Docker Hub image `python:3.11-slim-bookworm`.
-- Validator attempt 1 rejected the old `D=2` score as too far from Table 2; the corrected Euler-prior job now lands near the paper's reported `D=2` result.
-- The continuation audit found stale score provenance, an SGDD-specific evaluator path convention, and a hard-coded constraint metric. The evaluator now supports explicit method/run arguments, uses method-agnostic checkpoint naming, and reads `uses_likelihood_gradient` from run metadata.
-- Job `af393454-f57` correctly computed direct-MH sanity metrics, but validation failed because `direct_mh` is not a paper-reported reference method. The standard score file now remains SGDD-only and sanity metrics are written to `scoring/sanity_scores.json`.
-- Job `4f4fee48-166` confirmed the corrected scoring split passes `python validate.py --compare`.
+Earlier synthetic reproduction milestones are historical, recorded in `MILESTONES.md` and git history. The factorized and chain tasks no longer affect ranking because their exact posteriors and simple MH solutions invalidated scientific headroom.

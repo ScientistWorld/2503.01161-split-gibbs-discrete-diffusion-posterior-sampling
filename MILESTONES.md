@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim**
+**Current: core_claim_plus**
 
 ## Progress Log
 
@@ -42,7 +42,7 @@
 - Added the coupled, multimodal `synthetic_chain_d10` experiment, where the reference is far from the exact-sample bound. Details and audit results are in `HARDENING.md`.
 
 ## Current status
-- The active image method completes both slices and outperforms the reproduced, scaled particle comparators while satisfying the data-consistency constraint. Headroom and shortcut validation remain in progress; historical synthetic milestones above do not establish the image gym's milestone.
+- The full-resolution, original-weight image reference completes both slices and outperforms the reproduced, scaled particle comparators while satisfying data consistency. The paired audit establishes improvement beyond noise and rejects every replayed shortcut. Historical synthetic milestones above are retained as history and do not establish the current image gym milestone.
 
 ### [2026-11-17] - none
 - Prepared a replacement image gym using the original pretrained SEDD model and paper SGDD settings after REVIEW.md found structural problems in the old synthetic benchmark.
@@ -57,3 +57,9 @@
 - Job `ddc4395a-9bc` verified the repaired hidden interface and completed SGDD: XOR PSNR 17.978 dB, consistency 85.94%, measurement error 0.177%; sparse AND 12.520 dB, consistency 63.28%, error 0.203%. Public scores are comparable.
 - SMC completed on both hidden experiments with lower PSNR and class consistency; SVDD-MC completed XOR with lower values. These comparators use the disclosed 16-step scale, while SGDD retains the original K/T/H and original pretrained weights.
 - The worker node died during the last comparator experiment, without a sampler exception. The next job resumes from validated raw outputs and recomputes all metrics; missing work and all unrun audit alternatives remain in the same serialized job.
+
+### [2026-11-20] - core_claim_plus
+- Job `cba2826c-061` completed the resumed serial audit (exit 0), including the last comparator, stronger and weaker variants, independent seed, all 13 shortcut replays, and the predeclared stronger fallback.
+- The stronger fallback gained +0.160067 (paired 95% interval [+0.031717, +0.291394]), versus an observed seed gain of +0.016194. The weaker variant lost −1.670260. Neither the reference nor the improvement is at a metric bound.
+- Logical solving, exhaustive public training-template search and every malformed/forged artifact replay scored below the reference. Reference PSNR remains 17.978 dB (XOR) and 12.520 dB (sparse AND).
+- Official scores contain only the reference and three comparators, with every failed comparator assigned all worst values. Published paper values are unchanged. Restored the ordinary end-to-end launcher; `python validate.py --compare` passed. Limitations and scaled comparator settings are explicit in `HARDENING.md`.
