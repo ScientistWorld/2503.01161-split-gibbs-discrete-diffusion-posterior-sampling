@@ -1,5 +1,5 @@
 action: submit
 gpus: 1
 test: false
-milestone: none
-notes: "One serialized final hardening job: original MNIST SGDD and comparators on train/test, paired honest variants with a predeclared accuracy fallback, and shortcut replays; restore end-to-end reference launcher and canonical scores."
+milestone: method_runs
+notes: "Resume bundled hardening validation: check public imports and private-file denial, rescore completed training outputs, then rerun all hidden reference/comparator methods, paired variants and shortcut replays serially. Restore end-to-end launcher atomically."
