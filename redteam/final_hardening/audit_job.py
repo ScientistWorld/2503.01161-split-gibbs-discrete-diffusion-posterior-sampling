@@ -1,4 +1,5 @@
 """Run all predeclared checks together; preserve canonical scores separately."""
+import argparse
 import json
 import shutil
 import subprocess
@@ -23,6 +24,8 @@ def freeze_reference():
     # Preserve every published number; replace only gym-scale measurements.
     path=ROOT/'scoring/reference.json';reference=json.loads(path.read_text())
     canonical=json.loads((OUT/'canonical_test.json').read_text())
+    if any('sgdd' in e.get('_failures',{}) for e in canonical['experiments'].values()):
+        raise RuntimeError('Reference failed hidden inference; do not freeze or audit against a failed reference')
     for exp,e in reference['experiments'].items():
         for name,row in canonical['experiments'][exp]['results'].items():
             e['results'][name]={'type':'proposed' if name=='sgdd' else 'baseline',**row}
@@ -31,9 +34,13 @@ def freeze_reference():
 
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--rescore-train',action='store_true',
+                        help='Reuse complete raw training outputs when only hidden evaluation changed')
+    args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     # Runs are deliberately serialized. No audit process computes beside these.
-    command('bash','scripts/evaluate_train.sh')
+    command('bash','scripts/evaluate_train.sh',*(['--rescore'] if args.rescore_train else []))
     shutil.copyfile('eval/train/results/points.json',OUT/'train_points.json')
     shutil.copyfile('scoring/scores_train.json',OUT/'canonical_train.json')
     shutil.copyfile('scoring/scores_train.json','scoring/scores.json')

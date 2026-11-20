@@ -6,7 +6,7 @@ The previous claim that the gym rewarded scientific progress was too strong. `RE
 
 The active experiments are now the paper's XOR problem (γ=0.5) and its sparse AND study (γ=2, Appendix B.3). The 1,024-bit image dimension and original 90M SEDD EMA checkpoint are preserved. The reference uses the paper's K/T/H values, the Hamming coupling, discrete likelihood MH, and an annealed reverse-diffusion prior. This is the authors' released inference procedure, including its analytic predictor and final denoiser; the paper calls the prior solver Euler. It is not an end-to-end reconstruction surrogate or a small substitute prior.
 
-Test images are real held-out MNIST with modest affine and elastic deformation. Images, private generation seeds, deformation details and answer-generation code stay in `eval/test/`. The method receives only measurements and the public input contract. An unprivileged Linux Landlock policy denies reads below `eval/test/` during the sampler subprocess, including the source images, generator and other methods’ reconstructions. Only that sampler’s own run directory is readable. This also closes copying an earlier reference output from the same evaluation job. Targets used for scoring are constructed in evaluator memory after inference returns. Public train uses a separate source partition and seed, independently implemented with no train/test imports. All methods see the same inputs within a comparison.
+Test images are real held-out MNIST with modest affine and elastic deformation. Images, private generation seeds, deformation details and answer-generation code stay in `eval/test/`. The method receives only measurements and the public input contract. An unprivileged Linux Landlock policy denies private file-content reads below `eval/test/` during the sampler subprocess, including the source images, generator and other methods’ reconstructions. Only that sampler’s own run directory is readable. This also closes copying an earlier reference output from the same evaluation job. Targets used for scoring are constructed in evaluator memory after inference returns. Public train uses a separate source partition and seed, independently implemented with no train/test imports. All methods see the same inputs within a comparison.
 
 The original factorized/chain analytic posterior is no longer the task. Enumerating all 2^1024 binary images is infeasible, and a logical solution to the public measurements does not determine the hidden image. The audit also searches all 60,000 public MNIST training templates with its own copy of the measurement objective, and tests a short logical solver, rather than relying on a declared search counter. Public-image deformations make a finite source catalogue approximate. More sophisticated learned reconstruction and optimization remain expressible through the unrestricted sampler interface.
 
@@ -58,79 +58,10 @@ Published Table 2 values remain unchanged in the archived underscore-prefixed re
 - Bit-for-bit reproducibility across different accelerator architectures is not promised. Seeds and model parameters are fixed; no score depends on elapsed time or a wall-clock deadline.
 - Exact restored-source lookup after optimizing arbitrary continuous deformations is not exhaustively ruled out. The finite-catalogue shortcut is tested. Any shortcut or headroom failure observed in the final job is reported explicitly below rather than declared solved.
 
+## First bundled job and resumed verification
 
+Job `620f95a2-5f2` completed the public-slice reference and all three comparators, then failed hidden inference before any samples were produced. Python package discovery requires directory enumeration at the workspace root; the original read policy granted public child directories but omitted the root's directory-list permission. Every hidden attempt therefore raised `ModuleNotFoundError`. Those tied, failed hidden scores do not establish scientific validity or headroom.
 
-## Final bundled job measurements
+The policy now allows directory enumeration while continuing to deny hidden file contents, except the current sampler's own directory. The bundled regression check now imports the actual public method and audit packages under that policy, in addition to checking private-file denial. The audit refuses to freeze a failed reference. Launcher restoration now replaces its file atomically, avoiding the exit-127 shell error caused by overwriting a script still being read.
 
-These gains use the final metric directions, coefficient magnitudes and population standard deviations across all attempts in this audit. Before/after scalar gains use different experiments and are not numerically comparable. Only the canonical four methods are retained in the official split score files.
-
-| Method | Gain over final reference | Outcome |
-|---|---:|---|
-| direct_mh | +0.000000 | failed, all worst values |
-| longer | +0.000000 | failed, all worst values |
-| longer_accurate | +0.000000 | failed, all worst values |
-| seed1 | +0.000000 | failed, all worst values |
-| sgdd | +0.000000 | failed, all worst values |
-| shortcut_constant | +0.000000 | failed, all worst values |
-| shortcut_copy_reference | +0.000000 | failed, all worst values |
-| shortcut_empty | +0.000000 | failed, all worst values |
-| shortcut_extra | +0.000000 | failed, all worst values |
-| shortcut_float | +0.000000 | failed, all worst values |
-| shortcut_forged | +0.000000 | failed, all worst values |
-| shortcut_nan | +0.000000 | failed, all worst values |
-| shortcut_negative | +0.000000 | failed, all worst values |
-| shortcut_old_exact | +0.000000 | failed, all worst values |
-| shortcut_rule | +0.000000 | failed, all worst values |
-| shortcut_tamper_problem | +0.000000 | failed, all worst values |
-| shortcut_template | +0.000000 | failed, all worst values |
-| shortcut_two_latents | +0.000000 | failed, all worst values |
-| smc | +0.000000 | failed, all worst values |
-| svdd_mc | +0.000000 | failed, all worst values |
-| weaker | +0.000000 | failed, all worst values |
-
-Paired uncertainty (4,000 bootstrap resamples of the same image indices across every metric and experiment):
-
-| Variant | Gain | Paired 95% interval | Mean PSNR changes (XOR; AND), dB |
-|---|---:|---|---|
-
-The independent sampling-seed change has absolute gain 0.000000. Variants with a positive paired interval and a gain exceeding that seed change: NONE; headroom has not been established.
-
-Simple comparators below reference: False. Fixed-coupling weaker variant below reference: False. Replayed shortcuts below reference: False.
-
-Canonical reference, before: gain 0 by definition on the archived synthetic task. After: gain 0 by definition on the final image task. Final raw quantities:
-
-| Experiment | PSNR, dB | Class consistency | Measurement error |
-|---|---:|---:|---:|
-| mnist_xor | 0.000000 | 0.000000 | 1.000000 |
-| mnist_and_sparse | 0.000000 | 0.000000 | 1.000000 |
-
-Reference metrics at their best bound: none. The sparse AND experiment is the new headroom stress test; below-bound numbers alone are not counted as demonstrated headroom.
-
-Shortcut replay results (the old analytic producer now errors because its factorized/chain model does not describe the new prior; logical and template solvers separately probe replacements):
-
-| Replay | Final gain |
-|---|---:|
-| shortcut_constant | +0.000000 |
-| shortcut_copy_reference | +0.000000 |
-| shortcut_empty | +0.000000 |
-| shortcut_extra | +0.000000 |
-| shortcut_float | +0.000000 |
-| shortcut_forged | +0.000000 |
-| shortcut_nan | +0.000000 |
-| shortcut_negative | +0.000000 |
-| shortcut_old_exact | +0.000000 |
-| shortcut_rule | +0.000000 |
-| shortcut_tamper_problem | +0.000000 |
-| shortcut_template | +0.000000 |
-| shortcut_two_latents | +0.000000 |
-
-Public/hidden reference comparison, with the same metrics and gates:
-
-| Experiment | Train PSNR | Test PSNR | Train accuracy | Test accuracy | Train measurement error | Test measurement error |
-|---|---:|---:|---:|---:|---:|---:|
-| mnist_xor | 17.334907 | 0.000000 | 0.851562 | 0.000000 | 0.002136 | 1.000000 |
-| mnist_and_sparse | 12.424918 | 0.000000 | 0.656250 | 0.000000 | 0.002407 | 1.000000 |
-
-**Unresolved:** an honest improvement beyond noise is unproved; a simple comparator still pays; the designated weaker variant still pays; a replayed shortcut still pays. The gym must not be described as fully hardened until these findings are resolved.
-
-Detailed measurements, failure explanations and paired image measurements are in `redteam/final_hardening/results/`. No timing measurements enter these scores. Training/test comparison is retained in `canonical_train.json` and `canonical_test.json`.
+Completed public SGDD measurements were XOR PSNR 17.334907 dB, classifier consistency 0.851562, error 0.002136; sparse AND PSNR 12.424918 dB, consistency 0.656250, error 0.002407. The resumed job recomputes these metrics from saved raw training reconstructions because neither the training procedure nor its evaluator changed. It reruns every hidden reference, comparator, honest variant and shortcut from the corrected final interface, serially, without an inference time limit. Final conclusions await those measurements.

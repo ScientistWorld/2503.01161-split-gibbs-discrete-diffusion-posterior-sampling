@@ -1,9 +1,6 @@
 #!/bin/bash
-# Reproduce the reference and shipped comparators end to end. One GPU, serial.
-# Download public artifacts with scripts/download.sh before submitting the job.
+# Resume the bundled audit after fixing hidden Python package discovery.
+# The completed training outputs are rescored; hidden methods all run afresh.
 set -euo pipefail
 cd /home/user
-bash scripts/evaluate_train.sh
-cp scoring/scores_train.json scoring/scores.json
-bash scripts/evaluate_test.sh
-python validate.py --compare
+exec bash redteam/final_hardening/run_job.sh --rescore-train

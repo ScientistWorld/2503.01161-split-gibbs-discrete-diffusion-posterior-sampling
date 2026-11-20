@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: none**
+**Current: method_runs**
 
 ## Progress Log
 
@@ -41,9 +41,14 @@
 - Fixed the SGDD Euler prior step so each token jumps at most once per sub-step. Made the paper's SVDD-PM and SMC baselines executable; SGDD beats both on every experiment.
 - Added the coupled, multimodal `synthetic_chain_d10` experiment, where the reference is far from the exact-sample bound. Details and audit results are in `HARDENING.md`.
 
-## Stop Justification
-- Completed at milestone `core_claim_plus`.
+## Current status
+- The active image method runs on the public slice. Hidden evaluation and headroom validation remain in progress; historical synthetic milestones above do not establish the image gym's milestone.
 
 ### [2026-11-17] - none
 - Prepared a replacement image gym using the original pretrained SEDD model and paper SGDD settings after REVIEW.md found structural problems in the old synthetic benchmark.
 - Active image reproduction and final hardening claims await the bundled compute job; historical synthetic milestones above are not claims about the new task.
+
+### [2026-11-20] - method_runs
+- Job `620f95a2-5f2` completed all public-slice reference and comparator inference. SGDD achieved XOR PSNR 17.335 dB / class consistency 85.16%, and sparse AND 12.425 dB / 65.63%, with measurement error below 0.25% on both.
+- Hidden inference failed before sampling: the read boundary prevented package discovery from the workspace directory. Added directory-list permission while retaining file-content denial for hidden resources and other hidden runs.
+- Fixed launcher restoration to replace the script atomically. The resumed bundled job rescores the completed training outputs and reruns all hidden reference, comparator, honest-variant and shortcut procedures.

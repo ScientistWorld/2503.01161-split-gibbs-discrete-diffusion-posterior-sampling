@@ -34,7 +34,7 @@ def main():
     private=Path('eval/test/results');private.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(dir=private) as d:
         own=Path(d).resolve();(own/'input.json').write_text('{}')
-        code="from pathlib import Path; assert Path('data/image_problem.py').read_text(); assert Path("+repr(str(own/'input.json'))+").read_text()=='{}'\ntry:Path('eval/test/evaluate_images.py').read_text()\nexcept PermissionError:pass\nelse:raise AssertionError('test generator readable')"
+        code="from pathlib import Path; import method.sgdd_image; import redteam.final_hardening.variants; assert Path('data/image_problem.py').read_text(); assert Path("+repr(str(own/'input.json'))+").read_text()=='{}'\ntry:Path('eval/test/evaluate_images.py').read_text()\nexcept PermissionError:pass\nelse:raise AssertionError('test generator readable')"
         subprocess.run(['python','-c',code],check=True,preexec_fn=lambda:restrict_test_reads(own))
     # No dtype wrapping can turn impossible tokens into valid predictions.
     with tempfile.TemporaryDirectory() as d:
