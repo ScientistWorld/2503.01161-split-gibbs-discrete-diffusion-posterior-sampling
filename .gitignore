@@ -241,3 +241,5 @@ eval/test/assets/
 # Generated evaluator diagnostics, never source assets.
 eval/train/results/
 eval/test/results/
+scoring/*.json.tmp
+scripts/.run.*

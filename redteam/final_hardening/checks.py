@@ -8,7 +8,7 @@ from data.image_problem import load_problem
 from method.sgdd_image import mh
 from eval.test.restrict import restrict_test_reads
 from eval.ranking import gains
-from eval.test.evaluate_images import load_valid_samples,InvalidOutput,WORST
+from eval.test.evaluate_images import load_valid_samples,reusable_output,InvalidOutput,WORST
 
 
 def main():
@@ -39,8 +39,13 @@ def main():
     # No dtype wrapping can turn impossible tokens into valid predictions.
     with tempfile.TemporaryDirectory() as d:
         path=Path(d)
+        spec={'seed':31};input_path=path/'problem.json';input_path.write_text(json.dumps(spec))
+        np.savez(path/'samples.npz',samples=np.zeros((128,1024),dtype=np.int8))
+        assert reusable_output(path,input_path,spec)
+        assert not reusable_output(path,input_path,{'seed':32})
         for arr in [np.full((128,1024),-1),np.full((128,1024),2),np.zeros((0,1024)),np.full((128,1024),np.nan)]:
             np.savez(path/'samples.npz',samples=arr)
+            assert not reusable_output(path,input_path,spec)
             try:load_valid_samples(path)
             except InvalidOutput:pass
             else:raise AssertionError('invalid tokens accepted')

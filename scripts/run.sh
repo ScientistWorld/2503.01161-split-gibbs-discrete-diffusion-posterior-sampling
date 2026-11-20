@@ -1,6 +1,5 @@
 #!/bin/bash
-# Resume the bundled audit after fixing hidden Python package discovery.
-# The completed training outputs are rescored; hidden methods all run afresh.
+# Resume after worker loss. Rescore completed raw outputs; run missing work.
 set -euo pipefail
 cd /home/user
-exec bash redteam/final_hardening/run_job.sh --rescore-train
+exec bash redteam/final_hardening/run_job.sh --rescore-train --resume-test

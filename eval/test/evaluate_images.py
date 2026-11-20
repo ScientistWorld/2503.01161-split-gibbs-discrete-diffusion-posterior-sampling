@@ -119,19 +119,39 @@ def score(x,spec,model):
 def discover(directory):
     return {p.stem:p for p in sorted(directory.glob('*.sh')) if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]*',p.stem)}
 
-def evaluate(samplers,workdir,rescore=False):
+def write_json(path,value):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    temporary=path.with_name(path.name+'.tmp')
+    temporary.write_text(json.dumps(value,indent=2)+'\n')
+    temporary.replace(path)
+
+def reusable_output(output,path,spec):
+    # Explicit recovery mode only. Scores and completion flags are never used.
+    # The caller must keep method code unchanged across the interrupted job.
+    try:
+        if json.loads(path.read_text())!=spec:return False
+        load_valid_samples(output)
+        return True
+    except (InvalidOutput,OSError,ValueError):return False
+
+def evaluate(samplers,workdir,rescore=False,resume=False,details=None):
     torch.set_num_threads(1)
-    specs={e:make_spec(e) for e in EXPERIMENTS};model=classifier()
-    scores={'experiments':{e:{'_slice':test_NAME,'results':{}} for e in EXPERIMENTS}}
+    scores={'experiments':{e:{'_slice':test_NAME,'results':{n:dict(WORST) for n in samplers}} for e in EXPERIMENTS}}
     detail={'experiments':{e:{} for e in EXPERIMENTS}}
+    # An interrupted or failed procedure must never disappear from the rank.
+    write_json(ROOT/'scoring'/f'scores_{test_NAME}.json',scores)
+    specs={e:make_spec(e) for e in EXPERIMENTS};model=classifier()
     for name,script in samplers.items():
         print(f'[{test_NAME}] {name}',flush=True);failure=None;values={};points={}
         for exp,spec in specs.items():
             folder=workdir/name/exp;output=folder/'output';folder.mkdir(parents=True,exist_ok=True)
             try:
-                if not rescore:
+                path=folder/'problem.json'
+                reuse=resume and reusable_output(output,path,spec)
+                if reuse:print(f'resume raw output: {name}/{exp}',flush=True)
+                if not rescore and not reuse:
                     shutil.rmtree(output,ignore_errors=True);output.mkdir()
-                    path=folder/'problem.json';path.write_text(json.dumps(spec))
+                    path.write_text(json.dumps(spec))
                     with (folder/'sampler.log').open('w') as log:
                         # No wall-clock deadline: serialized, fixed-step inference.
                         proc=subprocess.run(['bash',str(script.resolve()),str(path.resolve()),str(output.resolve())],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,preexec_fn=lambda:restrict_test_reads(folder))
@@ -153,16 +173,20 @@ def evaluate(samplers,workdir,rescore=False):
                 entry['results'][name]=values[exp]
             if exp in points:detail['experiments'][exp][name]=points[exp]
         # Save incrementally so completed expensive runs survive interruption.
-        target=ROOT/'scoring'/f'scores_{test_NAME}.json';target.write_text(json.dumps(scores,indent=2)+'\n')
+        target=ROOT/'scoring'/f'scores_{test_NAME}.json';write_json(target,scores)
+        if details:write_json(details,detail)
     return scores,detail
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--samplers-dir',type=Path,default=ROOT/'scripts/samplers')
     p.add_argument('--workdir',type=Path,default=ROOT/'eval/test/results/runs')
-    p.add_argument('--rescore',action='store_true');p.add_argument('--details',type=Path,default=ROOT/'eval/test/results/points.json')
+    mode=p.add_mutually_exclusive_group()
+    mode.add_argument('--rescore',action='store_true')
+    mode.add_argument('--resume',action='store_true',help='Recompute metrics from matching valid raw outputs; run missing outputs. Use only with unchanged methods.')
+    p.add_argument('--details',type=Path,default=ROOT/'eval/test/results/points.json')
     a=p.parse_args();samplers=discover(a.samplers_dir)
     if not samplers:raise SystemExit('no samplers on disk')
-    scores,detail=evaluate(samplers,a.workdir,a.rescore)
-    (ROOT/'scoring'/f'scores_{test_NAME}.json').write_text(json.dumps(scores,indent=2)+'\n')
-    if a.details:a.details.parent.mkdir(parents=True,exist_ok=True);a.details.write_text(json.dumps(detail))
+    scores,detail=evaluate(samplers,a.workdir,a.rescore,a.resume,a.details)
+    write_json(ROOT/'scoring'/f'scores_{test_NAME}.json',scores)
+    if a.details:write_json(a.details,detail)
 if __name__=='__main__':main()

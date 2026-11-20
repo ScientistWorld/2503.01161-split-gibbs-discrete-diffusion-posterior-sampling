@@ -1,3 +1,5 @@
+> Job `ddc4395a-9bc` verified hidden inference and completed the reference: XOR 17.978 dB / 85.94% class consistency, sparse AND 12.520 dB / 63.28%, both below 0.21% measurement error. The worker node died during the last comparator. Explicit raw-output recovery now preserves completed inference and recalculates every metric; honest-variant and shortcut evidence remain pending.
+
 > The first final-hardening job completed the original-weight, full-resolution public MNIST reproduction: SGDD 17.335 dB (XOR) and 12.425 dB (sparse AND). Hidden inference failed on package discovery, rather than on the method. The boundary and launcher fixes are bundled into a resumed audit; completed training outputs are rescored. Hidden scientific and headroom evidence remain pending in `HARDENING.md`; historical synthetic notes follow.
 
 > Iteration 11 (hardening) replaced the evaluation design and added baselines and a coupled chain experiment; current state and results are in `HARDENING.md`. The notes below describe earlier iterations.

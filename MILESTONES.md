@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -42,7 +42,7 @@
 - Added the coupled, multimodal `synthetic_chain_d10` experiment, where the reference is far from the exact-sample bound. Details and audit results are in `HARDENING.md`.
 
 ## Current status
-- The active image method runs on the public slice. Hidden evaluation and headroom validation remain in progress; historical synthetic milestones above do not establish the image gym's milestone.
+- The active image method completes both slices and outperforms the reproduced, scaled particle comparators while satisfying the data-consistency constraint. Headroom and shortcut validation remain in progress; historical synthetic milestones above do not establish the image gym's milestone.
 
 ### [2026-11-17] - none
 - Prepared a replacement image gym using the original pretrained SEDD model and paper SGDD settings after REVIEW.md found structural problems in the old synthetic benchmark.
@@ -52,3 +52,8 @@
 - Job `620f95a2-5f2` completed all public-slice reference and comparator inference. SGDD achieved XOR PSNR 17.335 dB / class consistency 85.16%, and sparse AND 12.425 dB / 65.63%, with measurement error below 0.25% on both.
 - Hidden inference failed before sampling: the read boundary prevented package discovery from the workspace directory. Added directory-list permission while retaining file-content denial for hidden resources and other hidden runs.
 - Fixed launcher restoration to replace the script atomically. The resumed bundled job rescores the completed training outputs and reruns all hidden reference, comparator, honest-variant and shortcut procedures.
+
+### [2026-11-20] - core_claim
+- Job `ddc4395a-9bc` verified the repaired hidden interface and completed SGDD: XOR PSNR 17.978 dB, consistency 85.94%, measurement error 0.177%; sparse AND 12.520 dB, consistency 63.28%, error 0.203%. Public scores are comparable.
+- SMC completed on both hidden experiments with lower PSNR and class consistency; SVDD-MC completed XOR with lower values. These comparators use the disclosed 16-step scale, while SGDD retains the original K/T/H and original pretrained weights.
+- The worker node died during the last comparator experiment, without a sampler exception. The next job resumes from validated raw outputs and recomputes all metrics; missing work and all unrun audit alternatives remain in the same serialized job.
