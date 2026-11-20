@@ -1,0 +1,66 @@
+{
+  "experiments": {
+    "mnist_xor": {
+      "_slice": "test",
+      "results": {
+        "direct_mh": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "sgdd": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "smc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "svdd_mc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        }
+      },
+      "_failures": {
+        "direct_mh": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "sgdd": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "smc": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "svdd_mc": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1"
+      }
+    },
+    "mnist_and_sparse": {
+      "_slice": "test",
+      "results": {
+        "direct_mh": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "sgdd": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "smc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "svdd_mc": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        }
+      },
+      "_failures": {
+        "direct_mh": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "sgdd": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "smc": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "svdd_mc": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1"
+      }
+    }
+  }
+}

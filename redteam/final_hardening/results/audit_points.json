@@ -1,0 +1,6 @@
+{
+  "experiments": {
+    "mnist_xor": {},
+    "mnist_and_sparse": {}
+  }
+}

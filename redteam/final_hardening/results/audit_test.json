@@ -1,0 +1,222 @@
+{
+  "experiments": {
+    "mnist_xor": {
+      "_slice": "test",
+      "results": {
+        "longer": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "seed1": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_constant": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_copy_reference": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_empty": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_extra": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_float": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_forged": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_nan": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_negative": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_old_exact": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_rule": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_tamper_problem": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_template": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_two_latents": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "weaker": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "longer_accurate": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        }
+      },
+      "_failures": {
+        "longer": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "seed1": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_constant": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_copy_reference": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_empty": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_extra": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_float": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_forged": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_nan": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_negative": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_old_exact": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_rule": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_tamper_problem": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_template": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_two_latents": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "weaker": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "longer_accurate": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1"
+      }
+    },
+    "mnist_and_sparse": {
+      "_slice": "test",
+      "results": {
+        "longer": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "seed1": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_constant": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_copy_reference": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_empty": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_extra": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_float": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_forged": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_nan": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_negative": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_old_exact": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_rule": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_tamper_problem": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_template": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "shortcut_two_latents": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "weaker": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        },
+        "longer_accurate": {
+          "psnr": 0.0,
+          "accuracy": 0.0,
+          "measurement_error": 1.0
+        }
+      },
+      "_failures": {
+        "longer": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "seed1": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_constant": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_copy_reference": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_empty": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_extra": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_float": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_forged": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_nan": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_negative": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_old_exact": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_rule": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_tamper_problem": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_template": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "shortcut_two_latents": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "weaker": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1",
+        "longer_accurate": "mnist_xor: sampler exit 1; mnist_and_sparse: sampler exit 1"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
-action: pending
-gpus: 0
+action: submit
+gpus: 1
 test: false
 milestone: none
-notes: "Image-gym hardening prepared; reference measurements await the bundled job."
+notes: "One serialized final hardening job: original MNIST SGDD and comparators on train/test, paired honest variants with a predeclared accuracy fallback, and shortcut replays; restore end-to-end reference launcher and canonical scores."
